@@ -21,6 +21,6 @@
     </session-config>
     <welcome-file-list>
         <!--<welcome-file>faces/Login.xhtml</welcome-file>-->
-        <welcome-file>faces/jsf/administracion/estados.xhtml</welcome-file>
+        <welcome-file>faces/Login.xhtml</welcome-file>
     </welcome-file-list>
 </web-app>
