@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+    <application>
+        <resource-bundle>
+            <base-name>/Language</base-name>
+            <var>language</var>
+        </resource-bundle>
+        <resource-bundle>
+            <base-name>/Bundle</base-name>
+            <var>bundle</var>
+        </resource-bundle>
+    </application>
+    <factory>
+        <exception-handler-factory>
+            com.universitaria.ateliermaven.web.factory.CustomExceptionHandlerFactory
+        </exception-handler-factory>        
+    </factory>  
+    
+    <navigation-rule>
+        <from-view-id>Login.xhtml</from-view-id>
+        <navigation-case>           
+            <from-outcome>exito</from-outcome>
+            <to-view-id>/resources/jsf/principal/principal.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>                
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/resources/jsf/principal/principal.xhtml</from-view-id>
+    </navigation-rule>
+    
+    <managed-bean>
+        <managed-bean-name>menuPrincipalManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.menu.MenuPrincipalManagedBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>loginManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.login.LoginManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>estadoManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.administrador.EstadoManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+</faces-config>
