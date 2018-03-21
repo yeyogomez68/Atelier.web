@@ -20,7 +20,7 @@
                         <h:panelGrid columns="2" cellpadding="5">                             
                            
                            <h:outputText value="Estado: "/>
-                           <p:password  id="descEstado" value="#{estadoManagedBean.nomEstado}"/>                          
+                           <p:inputText  id="descEstado" value="#{estadoManagedBean.nomEstado}"/>                          
                            
                         </h:panelGrid>
                     </p:panel> 
@@ -32,11 +32,11 @@
                                 <h:outputText value="#{estado.estadoId}" />
                             </p:column>
 
-                            <p:column headerText="Year">
+                            <p:column headerText="Descripción">
                                 <h:outputText value="#{estado.estadoDescrip}" />
                             </p:column>
 
-                            <p:column headerText="Brand">
+                            <p:column headerText="Acción">
                                 <p:link styleClass="linkEditar" value="Editar">
                                     <!--<f:param name="productId" value="10" />-->
                                 </p:link>

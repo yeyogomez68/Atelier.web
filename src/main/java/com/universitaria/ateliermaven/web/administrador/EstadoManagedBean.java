@@ -9,6 +9,7 @@ package com.universitaria.ateliermaven.web.administrador;
 
 import com.universitaria.atelier.web.jpa.Estado;
 import com.universitaria.ateliermaven.ejb.administrador.EstadoEJB;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -17,7 +18,7 @@ import javax.ejb.EJB;
  *
  * @author jeisson.gomez
  */
-public class EstadoManagedBean {
+public class EstadoManagedBean implements Serializable{
     
     @EJB
     private EstadoEJB estadoEJB;
@@ -42,11 +43,11 @@ public class EstadoManagedBean {
     
     public List<Estado> getEstados() {        
         if(estados==null || estados.isEmpty()){
-            estados = new ArrayList<>();
+            estados = new ArrayList<>();           
         }else{
-            estados.clear();
-            setEstados(estadoEJB.getEstados());
-        }        
+            estados.clear();           
+        }      
+        setEstados(estadoEJB.getEstados());
         return estados;
     }
 
