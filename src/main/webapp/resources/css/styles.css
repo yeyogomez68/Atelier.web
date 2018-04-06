@@ -1,0 +1,109 @@
+.menuLeft{
+    height: 100%
+}
+
+body{
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+    overflow-y: auto;    
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+    background-color: #fff;
+}
+
+.ui-widget {
+    font-size: 12px !important;
+}
+.ui-layout-north {
+    z-index:20 !important;
+    overflow:visible !important;;
+}
+.ui-layout-north .ui-layout-unit-content {
+    overflow:visible !important;
+}
+.ui-widget-header {
+    text-align: center;
+    text-transform: uppercase;
+}
+.ui-datatable .ui-datatable-footer .footer-section {
+    text-align: left;
+}
+
+.column {
+    font-weight: bold;
+    background-color: menu;
+}
+
+.ui-layout-unit{
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+.ui-layout-resizer{
+    display: none !important;
+}
+
+.ui-menu, .ui-menu .ui-menu-child{
+    width: 100% !important;
+    padding: 0 !important;
+    background-color: #1a2226 !important;
+    background: #1a2226 !important;
+    height: 100% !important;
+}
+
+.ui-menu .ui-menu-list .ui-widget-header{
+    width: 90% !important;
+}
+
+.ui-state-hover{
+    border-radius: 0px !important;    
+    outline: none !important;
+}
+
+.ui-state-hover {
+    -moz-box-shadow: 0 0 0px #85b2cb,inset 0 0px 0 !important;
+    -webkit-box-shadow: 0 0 0px,inset 0 0px 0 !important;
+    box-shadow: 0 0 0px,inset 0 0px 0 !important;
+    color: white !important;
+}
+.ui-menu .ui-menuitem-link{
+        width: 88%  !important;
+}
+
+.ui-menuitem-link{
+    padding: 5px 5px 5px 15px !important;
+    display: block !important;    
+    color: #8aa4af !important;
+    margin: 0 1px !important;
+    background: #2c3b41 !important;
+}
+
+.ui-menuitem-link:hover{
+    color: white !important;
+    margin: 0 1px !important;
+    background: #2c3b41 !important;
+}
+
+.ui-menu .ui-menu-list .ui-widget-header{
+    color: #4b646f;
+    background: #1a2226;
+    padding: 12px 5px 12px 15px;
+    color: #b8c7ce;;
+}
+
+.ui-widget-content{
+    border: 0px solid #a8a8a8 !important;
+}
+
+.ui-corner-all{
+   border-radius: 0px !important;     
+}
+
+.ui-widget-header{
+    border:0px !important;
+}
+

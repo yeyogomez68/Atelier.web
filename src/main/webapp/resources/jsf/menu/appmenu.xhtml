@@ -7,13 +7,20 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition>
-        <h:form id="menuForm">
-            <p:menubar>
+        <h:form id="menuForm" styleClass="menuLeft">
+            <p:menu toggleable="true">  
                 <p:menuitem value="Home" outcome="/resources/jsf/principal/principal.xhtml" icon="ui-icon-home"/>
-                <p:submenu label="Mantenimiento">
-                    <p:menuitem value="Configurar Ciudad..." outcome="/resources/jsf/principal/principal.xhtml" />                    
+                <p:submenu label="Administracion">                    
+                    <p:menuitem value="1..." outcome="/resources/jsf/principal/principal.xhtml" />                    
                 </p:submenu>
-            </p:menubar>
+                <p:submenu label="Compras">                    
+                    <p:menuitem value="2..." outcome="/resources/jsf/principal/principal.xhtml" />                    
+                </p:submenu>
+                <p:submenu label="Inventarios">                    
+                    <p:menuitem value="3..." outcome="/resources/jsf/principal/principal.xhtml" />                    
+                </p:submenu>
+                
+            </p:menu>            
         </h:form>
     </ui:composition>
 
