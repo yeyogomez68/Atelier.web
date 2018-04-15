@@ -17,8 +17,9 @@
 
         <p:layout fullPage="true">         
             
-            <p:layoutUnit position="north" size="100">
-                <ui:insert name="menubar"/>                 
+            <p:layoutUnit position="north">
+                <!--<ui:insert name="menubar"/>-->     
+               <ui:include src="/resources/jsf/menu/appmenuSup.xhtml"/>
             </p:layoutUnit>
             
             <p:layoutUnit position="west" size="200" maxSize="300" minSize="200">               

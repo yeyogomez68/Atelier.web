@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/WEB-INF/include/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Atelier"></h:outputText>
+        </ui:define>
+        
+        <ui:define name="body">
+            
+                <h:form id="forms">   
+                    <p:growl id="growl" showDetail="true" sticky="true" />  
+                    
+<!--                    <p:panel id="panelFiltros" header="Filtros de Estados" >
+                        <h:panelGrid columns="2" cellpadding="5">                             
+                           
+                           <h:outputText value="Estado: "/>
+                           <p:inputText  id="descEstado" value="#{prendaManagedBean}"/>                          
+                           
+                        </h:panelGrid>
+                    </p:panel> 
+                    -->
+                    <p:panel id="panelLista" header="Listado" >
+                        <p:dataTable var="prenda" value="#{prendaManagedBean.prendas}">
+                            
+                            <p:column headerText="Id">
+                                <h:outputText value="#{prenda.prendaNombre}" />
+                            </p:column>
+
+                            <p:column headerText="Descripción">
+                                <h:outputText value="#{prenda.colorId.colorDescrip}" />
+                            </p:column>
+
+                            <p:column headerText="Acción">
+                                <p:link styleClass="linkEditar" value="Editar">
+                                    <!--<f:param name="productId" value="10" />-->
+                                </p:link>
+                            </p:column>
+                            
+                        </p:dataTable>
+                    </p:panel> 
+                </h:form>
+            
+        </ui:define>
+    </ui:composition>
+</html>

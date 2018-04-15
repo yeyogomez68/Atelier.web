@@ -48,4 +48,9 @@
         <managed-bean-class>com.universitaria.ateliermaven.web.administrador.EstadoManagedBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>prendaManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.administrador.PrendaManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
 </faces-config>
