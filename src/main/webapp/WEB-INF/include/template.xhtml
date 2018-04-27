@@ -15,22 +15,24 @@
 
         <p:growl id="growl" life="3000"/>
 
-        <p:layout fullPage="true">         
+<!--        <p:layout fullPage="true">         -->
             
-            <p:layoutUnit position="north">
-                <!--<ui:insert name="menubar"/>-->     
-               <ui:include src="/resources/jsf/menu/appmenuSup.xhtml"/>
-            </p:layoutUnit>
+            <header>
+                <ui:include src="/resources/jsf/menu/appmenuSup.xhtml"/>
+            </header>
             
-            <p:layoutUnit position="west" size="200" maxSize="300" minSize="200">               
+            <aside>               
                 <ui:include src="/resources/jsf/menu/appmenu.xhtml"/>
-            </p:layoutUnit>            
+            </aside>            
 
-            <p:layoutUnit position="center">
+            <section class="sectionContent">
                 <ui:insert name="body"/>
-            </p:layoutUnit>
-
-        </p:layout>
+            </section>
+                
+                        
+            <footer></footer>
+            
+        <!--</p:layout>-->
 
     </h:body>
 

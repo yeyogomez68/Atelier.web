@@ -41,7 +41,20 @@
                                     <!--<f:param name="productId" value="10" />-->
                                 </p:link>
                             </p:column>
+                            <p:column style="width:32px">
+                                <p:rowEditor />
+                            </p:column>
                             
+                            <p:column headerText="Brand">
+           <p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{car.brand}" /></f:facet>
+               <f:facet name="input">
+                   <h:selectOneMenu value="#{car.brand}" style="width:100%">
+                       <f:selectItems value="#{dtEditView.brands}" var="man" itemLabel="#{man}" itemValue="#{man}" />
+                   </h:selectOneMenu>
+               </f:facet>
+           </p:cellEditor>
+       </p:column>
                         </p:dataTable>
                     </p:panel> 
                 </h:form>

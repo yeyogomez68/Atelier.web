@@ -7,17 +7,18 @@
       xmlns:p="http://primefaces.org/ui">
  
     <h:head>
+         <h:outputStylesheet library="css" name="styles.css"/>
         <title>Login</title>
     </h:head>
-    <h:body >
-        <h:form id="forms">          
+    <h:body class="bodyLogin">
+        <h:form id="forms" class="login">          
             <p:growl id="growl" showDetail="true" sticky="true" />  
-            <p:panel id="panel" header="New User" >
-                <h:panelGrid columns="2" cellpadding="5">                    
-                    <h:outputText value="User: " />
-                    <p:inputText  id="usuario" placeholder="ejemplo@correo.com" value="#{loginManagedBean.userName}"/>                
-                    <h:outputText value="Password: " rendered="true"/>
-                    <p:password  value="#{loginManagedBean.password}"/>  
+            <p:panel id="panel" class="panelPrinLogin" >
+                <h:panelGrid columns="1" cellpadding="5" class="panelLogin">                    
+                    <h:outputText value="User: " style="font-weight: bold;color: white;"/>
+                    <p:inputText class="inputLogin"  id="usuario" placeholder="ejemplo@correo.com" value="#{loginManagedBean.userName}"/>                
+                    <h:outputText value="Password: " rendered="true" style="font-weight: bold;color: white;"/>
+                    <p:password class="inputLogin"  value="#{loginManagedBean.password}"/>  
                     <h:column/>
                     <p:commandButton value="Iniciar" icon="ui-icon-key" id="ajax" update="growl, panel" action="#{loginManagedBean.iniciar}" styleClass="ui-priority-primary" />
                 </h:panelGrid>              
