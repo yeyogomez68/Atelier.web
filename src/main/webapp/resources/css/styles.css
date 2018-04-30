@@ -26,6 +26,9 @@ header{
     background-color: rgba(50,91,201);
     height: 35px;    
     width: 100%;
+    -webkit-box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.3);
+    box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.3);
 }
 
 /*Selectores por Clases CSS*/
@@ -135,6 +138,9 @@ aside{
     position: fixed;
     height: 100%;    
     background-color: #20272a;
+    -webkit-box-shadow: 3px 0px 10px 0px rgba(0,0,0,0.3);
+    -moz-box-shadow: 3px 0px 10px 0px rgba(0,0,0,0.3);
+    box-shadow: 3px 0px 10px 0px rgba(0,0,0,0.3);
 }
 .ui-menu{       
     background-color: #20272a;
