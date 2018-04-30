@@ -1,9 +1,12 @@
 *{
-    box-sizing: border-box;
+   
     margin: 0;
     padding: 0;
 }
-
+html,body{
+    width:100%;
+    height: 100%;
+}
 body{
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -16,19 +19,38 @@ body{
     color: #333;
     background-color: #fff;
 }
+header{
+    float: left;
+    margin-left: 250px;
+    position: fixed;
+    background-color: rgba(50,91,201);
+    height: 35px;    
+    width: 100%;
+}
 
 /*Selectores por Clases CSS*/
-.menuLeft{
-    width: 12%;
+.menuLeft{    
+    /*float: left;*/
+    width: 100%;
+    height: 100%;
+    /*margin-top: 120px;*/
+}
+.imgUser{
+    background-image: url(http://localhost:8282/AtelierMaven.web-1.0/faces/javax.faces.resource/img/user.png);
+    width: 200px;
+    height: 200px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
     float: left;
 }
-.imagenEncabezado{
+/*.imagenEncabezado{
     background-image: url(http://localhost:8282/AtelierMaven.web-1.0/faces/javax.faces.resource/img/elatelier.jpg);
     width: 100%;
     height: 100%;
     background-repeat: no-repeat;
     margin: auto;
-}
+}*/
 .bodyLogin{
     background-image: url(http://localhost:8282/AtelierMaven.web-1.0/faces/javax.faces.resource/img/fondo.jpg);
     background-attachment: fixed;
@@ -51,6 +73,7 @@ body{
     margin: auto;
     border: 3px solid #f1f1f1 ;
     border-radius: 6px ;
+    padding: 10px;
 }
 .inputLogin{
     width: 100%;
@@ -63,18 +86,20 @@ body{
 }
 
 .menuSup{
-    background-image: url(http://localhost:8282/AtelierMaven.web-1.0/faces/javax.faces.resource/img/elatelier.jpg);
+    /*background-image: url(http://localhost:8282/AtelierMaven.web-1.0/faces/javax.faces.resource/img/elatelier.jpg);*/
     background-position: center center;
     background-size: cover;
     visibility: visible;
-    height: 111px;
+    height: 35px;
+    background-color: rgba(50,91,201,0.90);
     display: block;
     clear: both; 
 }
 .sectionContent{
     width: 100%;
     float: left;
-    margin-left: 200px;
+    margin-left: 250px;
+    margin-top: 35px;
     height: 100%;
 }
 /*Selectores por TAG*/
@@ -105,8 +130,92 @@ footer{
     clear:both;
 }
 aside{
-    width: 200px;
+    width: 250px;
     float: left;
     position: fixed;
-    height: auto;
+    height: 100%;    
+    background-color: #20272a;
+}
+.ui-menu{       
+    background-color: #20272a;
+    color: white;
+    padding: 0 !important;
+    width: 100% !important;
+}
+/*item de submanu*/
+.ui-menu .ui-menu-list .ui-menuitem{
+    background-color:#373E40;
+    padding: 5px;
+    border-top:solid 1px #404a4e !important;
+    margin: 0 !important;
+    box-sizing: border-box;
+    padding: 10px 5px 10px 25px !important;
+}
+
+.imgContent{
+    width: 250px;
+    height: 120px;
+    box-sizing: border-box;
+    padding: 15px;
+}
+.imgUser{
+    background-image: url(http://localhost:8282/AtelierMaven.web-1.0/faces/javax.faces.resource/img/user.png);
+    width: 80px;
+    height: 80px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;    
+    border-radius: 50%;
+    float: left;
+}
+.imgdataUsrs{
+    float: left;
+    width: 60%;
+    height: 100%;
+    color: white;  
+    padding: 33px 0 0 10px;
+    box-sizing: border-box;
+}
+.ui-menu a{
+    text-decoration: none;
+    color: white;
+}
+/*item de manu*/
+.ui-menu .ui-menu-list .ui-widget-header{
+    padding: 10px 5px 10px 15px !important;
+    box-sizing: border-box;
+    margin: 0;
+    font-size: 15px;
+}
+/*clase para sub menus*/
+.ui-menu.ui-menu-toggleable li.ui-widget-header {
+    width: 100%;
+    border-top: solid 1px #404a4e !important;
+    margin: 0;
+}
+.ui-menu.ui-menu-toggleable li.ui-widget-header h3{
+    padding: 0 !important;
+}
+
+/*Estilos para Scroll*/
+/* width */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgba(50,91,201); 
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #b30000; 
 }
