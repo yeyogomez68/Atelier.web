@@ -17,9 +17,9 @@
                     <p:growl id="growl" showDetail="true" sticky="true" />  
                     
                     <p:panel id="panelFiltros" header="Filtros de Estados" >
-                        <h:panelGrid columns="2" cellpadding="5">                             
+                        <h:panelGrid columns="1">                             
                            
-                           <h:outputText value="Estado: "/>
+                           <h:outputText value="Estado "/>
                            <p:inputText  id="descEstado" value="#{estadoManagedBean.nomEstado}"/>                          
                            
                         </h:panelGrid>
@@ -45,16 +45,7 @@
                                 <p:rowEditor />
                             </p:column>
                             
-                            <p:column headerText="Brand">
-           <p:cellEditor>
-               <f:facet name="output"><h:outputText value="#{car.brand}" /></f:facet>
-               <f:facet name="input">
-                   <h:selectOneMenu value="#{car.brand}" style="width:100%">
-                       <f:selectItems value="#{dtEditView.brands}" var="man" itemLabel="#{man}" itemValue="#{man}" />
-                   </h:selectOneMenu>
-               </f:facet>
-           </p:cellEditor>
-       </p:column>
+                            
                         </p:dataTable>
                     </p:panel> 
                 </h:form>

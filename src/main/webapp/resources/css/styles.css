@@ -99,7 +99,7 @@ header{
     clear: both; 
 }
 .sectionContent{
-    width: 100%;
+    /*width: 100%;*/
     float: left;
     margin-left: 250px;
     margin-top: 35px;
@@ -126,9 +126,12 @@ input[type=text], input[type=password] {
     padding: 12px 20px ;
     margin: 8px 0 ;
     display: inline-block ;
-    border: 1px solid #ccc ;    
+    border: 1px solid #ccc ;   
+    box-sizing: border-box;
 }
-
+table{
+    width: 100%;
+}
 footer{
     clear:both;
 }
@@ -201,6 +204,19 @@ aside{
 }
 .ui-menu.ui-menu-toggleable li.ui-widget-header h3{
     padding: 0 !important;
+}
+/*Titulos de paneles*/
+.ui-panel .ui-panel-title{
+    font-size: 30px;
+    border-bottom: 1px solid rgba(50,91,201);
+}
+.ui-icon-pencil{
+    background-image: url(http://localhost:8282/AtelierMaven.web-1.0/faces/javax.faces.resource/img/editar.png);
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 
 /*Estilos para Scroll*/
