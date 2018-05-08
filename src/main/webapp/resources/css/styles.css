@@ -210,8 +210,39 @@ aside{
     font-size: 30px;
     border-bottom: 1px solid rgba(50,91,201);
 }
+
+/*Estilos para tablas*/
+.ui-datatable-tablewrapper table,.ui-datatable-tablewrapper th {
+    border: 0 none white  !important;
+    border-bottom: 1px solid #d6d6d470  !important;
+    text-align: center;
+    
+}
+.ui-datatable-tablewrapper{
+    overflow: hidden !important;
+}
+.ui-datatable-header{
+    font-weight: bold;
+    font-size: 20px;
+    
+}
+.ui-datatable-header h4{
+    border-bottom: 1px solid rgba(50,91,201);
+}
+
+
+/*Estilos iconos tabla editable*/
 .ui-icon-pencil{
-    background-image: url(http://localhost:8282/AtelierMaven.web-1.0/faces/javax.faces.resource/img/editar.png);
+    background-image: url(http://localhost:8282/AtelierMaven.web-1.0/faces/javax.faces.resource/img/tools/editar.png);
+}
+.ui-icon-check{
+    background-image: url(http://localhost:8282/AtelierMaven.web-1.0/faces/javax.faces.resource/img/tools/check.png);   
+}
+
+.ui-icon-close{
+    background-image: url(http://localhost:8282/AtelierMaven.web-1.0/faces/javax.faces.resource/img/tools/cancel.jpg);
+}
+.ui-icon-close,.ui-icon-check,.ui-icon-pencil{
     width: 20px;
     height: 20px;
     background-repeat: no-repeat;
@@ -219,6 +250,14 @@ aside{
     background-size: cover;
 }
 
+/*Estilo mesaje emergente*/
+.ui-growl{
+    top:50px !important;
+}
+.ui-growl-item-container{
+    background-color: #70b70f75;
+    opacity: 1 !important;
+}
 /*Estilos para Scroll*/
 /* width */
 ::-webkit-scrollbar {

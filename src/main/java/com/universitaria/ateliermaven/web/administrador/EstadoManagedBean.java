@@ -13,6 +13,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -54,4 +57,14 @@ public class EstadoManagedBean implements Serializable{
     public void setEstados(List<Estado> estados) {
         this.estados = estados;
     }  
+    
+    public void onRowEdit(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Car Edited", ((Estado) event.getObject()).getEstadoDescrip());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Edit Cancelled", ((Estado) event.getObject()).getEstadoDescrip());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
 }

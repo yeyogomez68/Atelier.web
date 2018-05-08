@@ -13,41 +13,42 @@
         
         <ui:define name="body">
             
-                <h:form id="forms">   
-                    <p:growl id="growl" showDetail="true" sticky="true" />  
+                <h:form id="form">   
+                    <p:growl id="msgs" showDetail="true" sticky="true" />  
                     
                     <p:panel id="panelFiltros" header="Filtros de Estados" >
-                        <h:panelGrid columns="1">                             
-                           
+                        <h:panelGrid columns="1">                           
                            <h:outputText value="Estado "/>
-                           <p:inputText  id="descEstado" value="#{estadoManagedBean.nomEstado}"/>                          
-                           
+                           <p:inputText  id="descEstado" value="#{estadoManagedBean.nomEstado}"/> 
                         </h:panelGrid>
                     </p:panel> 
                     
-                    <p:panel id="panelLista" header="Listado" >
-                        <p:dataTable var="estado" value="#{estadoManagedBean.estados}">
+<!--                    <p:panel id="panelLista" header="Listado" >-->
+                        <p:dataTable var="estado" value="#{estadoManagedBean.estados}" editable="true">
+                            <f:facet name="header">
+                                <h4>Listado de Estados</h4>
+                            </f:facet>
+                            <!--Eventos de tabla editable-->
+                            <p:ajax event="rowEdit" listener="#{estadoManagedBean.onRowEdit}" update=":form:msgs" />
+                            <p:ajax event="rowEditCancel" listener="#{estadoManagedBean.onRowCancel}" update=":form:msgs" />
                             
                             <p:column headerText="Id">
                                 <h:outputText value="#{estado.estadoId}" />
                             </p:column>
 
-                            <p:column headerText="Descripción">
-                                <h:outputText value="#{estado.estadoDescrip}" />
+                            <p:column headerText="Descripción" filterBy="#{estado.estadoDescrip}">
+                                <p:cellEditor>
+                                    <h:outputText value="#{estado.estadoDescrip}" />
+                                    <f:facet name="output"><h:outputText value="#{estado.estadoDescrip}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput" value="#{estado.estadoDescrip}"/></f:facet>
+                                </p:cellEditor>                                
                             </p:column>
-
-                            <p:column headerText="Acción">
-                                <p:link styleClass="linkEditar" value="Editar">
-                                    <!--<f:param name="productId" value="10" />-->
-                                </p:link>
-                            </p:column>
-                            <p:column style="width:32px">
+                            <!--Columna de evento editar-->
+                            <p:column width="50">
                                 <p:rowEditor />
                             </p:column>
-                            
-                            
                         </p:dataTable>
-                    </p:panel> 
+                    <!--</p:panel>--> 
                 </h:form>
             
         </ui:define>
