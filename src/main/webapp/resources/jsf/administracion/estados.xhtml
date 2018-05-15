@@ -17,26 +17,36 @@
                     <p:growl id="msgs" showDetail="true" sticky="true" />  
                     
                     <p:panel id="panelFiltros" header="Filtros de Estados" >
-                        <h:panelGrid columns="1">                           
-                           <h:outputText value="Estado "/>
-                           <p:inputText  id="descEstado" value="#{estadoManagedBean.nomEstado}"/> 
-                        </h:panelGrid>
+                        
                     </p:panel> 
                     
 <!--                    <p:panel id="panelLista" header="Listado" >-->
-                        <p:dataTable var="estado" value="#{estadoManagedBean.estados}" editable="true">
+                        <p:dataTable var="estado" value="#{estadoManagedBean.estados}" editable="true" widgetVar="tablaEstados"
+                                     paginator="true"
+                                     rowsPerPageTemplate="5,10,15"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"                                     
+                                     emptyMessage="No se han encontrado resultados"
+                                     rows="10">
+                            
                             <f:facet name="header">
-                                <h4>Listado de Estados</h4>
+                                <div class="headerTableAndCreateBtn">
+                                    <p:commandButton type="button" value="+"/>
+                                    <h4>Listado de Estados</h4>  
+                                    <div class="globalFilterDiv">
+                                        <img class="filtroLupa"/>
+                                        <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaEstados').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                    </div>                                                                                                    
+                                </div>
                             </f:facet>
                             <!--Eventos de tabla editable-->
                             <p:ajax event="rowEdit" listener="#{estadoManagedBean.onRowEdit}" update=":form:msgs" />
                             <p:ajax event="rowEditCancel" listener="#{estadoManagedBean.onRowCancel}" update=":form:msgs" />
                             
-                            <p:column headerText="Id">
+                            <p:column headerText="Id" filterBy="#{estado.estadoId}" filterMatchMode="contains">
                                 <h:outputText value="#{estado.estadoId}" />
                             </p:column>
 
-                            <p:column headerText="Descripción" filterBy="#{estado.estadoDescrip}">
+                            <p:column headerText="Descripción" filterBy="#{estado.estadoDescrip}" filterMatchMode="contains">
                                 <p:cellEditor>
                                     <h:outputText value="#{estado.estadoDescrip}" />
                                     <f:facet name="output"><h:outputText value="#{estado.estadoDescrip}" /></f:facet>
@@ -46,9 +56,10 @@
                             <!--Columna de evento editar-->
                             <p:column width="50">
                                 <p:rowEditor />
-                            </p:column>
+                            </p:column>                            
                         </p:dataTable>
                     <!--</p:panel>--> 
+                    
                 </h:form>
             
         </ui:define>

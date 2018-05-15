@@ -20,7 +20,7 @@
                     <h:outputText value="Password: " rendered="true" style="font-weight: bold;color: white;"/>
                     <p:password class="inputLogin"  value="#{loginManagedBean.password}"/>  
                     <h:column/>
-                    <p:commandButton value="Iniciar" icon="ui-icon-key" id="ajax" update="growl, panel" action="#{loginManagedBean.iniciar}" styleClass="ui-priority-primary" />
+                    <p:commandButton value="Iniciar" id="ajax" update="growl, panel" action="#{loginManagedBean.iniciar}" styleClass="ui-priority-primary" />
                 </h:panelGrid>              
              </p:panel>             
         </h:form>
