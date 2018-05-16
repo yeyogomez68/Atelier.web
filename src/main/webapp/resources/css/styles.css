@@ -20,8 +20,8 @@ body{
     background-color: #fff;
 }
 header{
-    float: left;
-    margin-left: 250px;
+    z-index: 9;
+    float: left;    
     position: fixed;
     background-color: rgba(50,91,201);
     height: 35px;    
@@ -29,6 +29,11 @@ header{
     -webkit-box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.3);
     -moz-box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.3);
     box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.3);
+}
+.sectionContent{
+    float: left;
+    margin-top: 35px;
+    height: 100%;
 }
 
 /*Selectores por Clases CSS*/
@@ -98,14 +103,8 @@ header{
     display: block;
     clear: both; 
 }
-.sectionContent{
-    /*width: 100%;*/
-    float: left;
-    margin-left: 250px;
-    margin-top: 35px;
-    height: 100%;
-}
-/*Selectores por TAG*/
+
+/*Botones generales*/
 button {
     background-color: #4CAF50 ;
     color: white ;
@@ -116,12 +115,16 @@ button {
     width: 100% ;
     padding: 10px !important; 
 }
+/*Boton cacelar*/
+.btnCancelar{
+   background-color: #f44336; 
+}
 
 button:hover {
     opacity: 0.8;
 }
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password]{
     width: 100% ;
     padding: 12px 20px ;
     margin: 8px 0 ;
@@ -129,6 +132,14 @@ input[type=text], input[type=password] {
     border: 1px solid #ccc ;   
     box-sizing: border-box;
 }
+/*Estilos para elemento select*/
+select{
+    padding: 12px 20px ;    
+    display: inline-block ;
+    border: 1px solid #ccc ;   
+    box-sizing: border-box;
+}
+
 table{
     width: 100%;
 }
@@ -144,6 +155,7 @@ aside{
     -webkit-box-shadow: 3px 0px 10px 0px rgba(0,0,0,0.3);
     -moz-box-shadow: 3px 0px 10px 0px rgba(0,0,0,0.3);
     box-shadow: 3px 0px 10px 0px rgba(0,0,0,0.3);
+    z-index: 9;
 }
 .ui-menu{       
     background-color: #20272a;
@@ -344,10 +356,92 @@ aside{
     background-position: center;
     background-size: cover;
 }
-
 .ui-paginator-prev{
     background-image: url(../javax.faces.resource/img/toolsBar/espalda.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+}
+/*Numeracion paginador*/
+.ui-paginator-page{
+    border: 1px solid #ededec;
+    text-decoration: none;
+    color: black;
+    border-radius: 8px;
+    background-color: #869fe25e;
+}
+
+/*Modal Panel*/
+.ui-dialog{
+    border: 1px solid #a8a8a8;
+    background: #fff;
+    color: #4f4f4f;
+}
+/*Boton cerrar en los modales*/
+.ui-icon-closethick{
+    background-image: url(../javax.faces.resource/img/general/cancelar.png);
+    width: 15px;
+    height: 15px;   
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+/*Fondo Modal Panel*/
+.ui-widget-overlay {
+    background: #1f2226;
+    opacity: .60;
+    filter: Alpha(Opacity=60);
+}
+
+.containerBarMenuTogggle{
+    margin-left: 260px !important;
+}
+.asideToggle{
+    display:block;
+}
+
+@media screen and (max-width: 800px){    
+    aside{        
+        display:none;
+    }  
+    /*Estilos barra de menu*/
+    .containerBarMenu {
+        display: inline-block;
+        cursor: pointer;
+        width: 28px;
+        margin-left: 5px;
+        margin-top: 3px;
+    }
+
+    .bar1, .bar2, .bar3 {
+        width: 100%;
+        height: 4px;
+        background-color: white;
+        margin: 4px 0;
+        transition: 0.4s;
+    }
+
+    .change .bar1 {
+        -webkit-transform: rotate(-45deg) translate(-4px, 5px);
+        transform: rotate(-45deg) translate(-4px, 5px);
+    }
+
+    .change .bar2 {opacity: 0;}
+
+    .change .bar3 {
+        -webkit-transform: rotate(45deg) translate(-6px, -8px);
+        transform: rotate(45deg) translate(-6px, -8px);
+    }
+}
+
+@media screen and (min-width: 801px){
+    .sectionContent{
+        margin-left: 250px;        
+    }
+    header{
+        margin-left: 250px;
+    }
+    .containerBarMenu{
+        display: none;
+    }
 }

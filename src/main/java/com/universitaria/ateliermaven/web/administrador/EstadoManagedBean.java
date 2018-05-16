@@ -27,8 +27,7 @@ public class EstadoManagedBean implements Serializable{
     private EstadoEJB estadoEJB;
     
     private List<Estado> estados;
-    
-    
+   
     private String nomEstado;
     /**
      * Creates a new instance of EstadoManagedBean
@@ -40,9 +39,9 @@ public class EstadoManagedBean implements Serializable{
         return nomEstado;
     }
 
-    public void setNomEstado(String NomEstado) {
+    public void setNomEstado(String nomEstado) {
         this.nomEstado = nomEstado;
-    }
+    }  
     
     public List<Estado> getEstados() {        
         if(estados==null || estados.isEmpty()){
@@ -52,7 +51,7 @@ public class EstadoManagedBean implements Serializable{
         }      
         setEstados(estadoEJB.getEstados());
         return estados;
-    }
+    }     
 
     public void setEstados(List<Estado> estados) {
         this.estados = estados;
@@ -66,5 +65,9 @@ public class EstadoManagedBean implements Serializable{
     public void onRowCancel(RowEditEvent event) {
         FacesMessage msg = new FacesMessage("Edit Cancelled", ((Estado) event.getObject()).getEstadoDescrip());
         FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    public void crearEstado(){
+        
     }
 }

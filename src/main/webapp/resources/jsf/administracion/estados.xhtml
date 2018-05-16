@@ -23,14 +23,14 @@
 <!--                    <p:panel id="panelLista" header="Listado" >-->
                         <p:dataTable var="estado" value="#{estadoManagedBean.estados}" editable="true" widgetVar="tablaEstados"
                                      paginator="true"
-                                     rowsPerPageTemplate="5,10,15"
-                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"                                     
+                                     rowsPerPageTemplate="5,10,15"                                     
+                                     paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
                                      emptyMessage="No se han encontrado resultados"
                                      rows="10">
                             
                             <f:facet name="header">
                                 <div class="headerTableAndCreateBtn">
-                                    <p:commandButton type="button" value="+"/>
+                                    <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
                                     <h4>Listado de Estados</h4>  
                                     <div class="globalFilterDiv">
                                         <img class="filtroLupa"/>
@@ -59,9 +59,16 @@
                             </p:column>                            
                         </p:dataTable>
                     <!--</p:panel>--> 
-                    
+                    <p:dialog header="Crear Estados" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                        <h:panelGrid columns="1" cellpadding="5">                    
+                            <h:outputText value="Estado: "/>
+                            <p:inputText placeholder="Nombre de Estado" value="#{estadoManagedBean.nomEstado}"/>
+                            <p:commandButton value="Crear" action="#{estadoManagedBean.crearEstado}"/>                            
+                            <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/>                            
+                        </h:panelGrid>
+                    </p:dialog>  
                 </h:form>
-            
         </ui:define>
+        
     </ui:composition>
 </html>
