@@ -8,23 +8,16 @@
     <h:head>
         <title><ui:insert name="title">Menu</ui:insert></title>
         <h:outputStylesheet library="css" name="styles.css"/>
-        <!--<h:outputScript library="scripts" name="styles.js"/>-->      
+        <h:outputScript library="scripts" name="appJScript.js"/>      
     </h:head>
 
-    <h:body>
-        <script>
-            function myFunction(x) {
-                x.classList.toggle("change");                
-                document.getElementById("menu").classList.toggle("asideToggle");
-                document.getElementById("barsMenu").classList.toggle("containerBarMenuTogggle");
-            }
-        </script>
+    <h:body>        
         <p:growl id="growl" life="3000"/>
 
 <!--        <p:layout fullPage="true">         -->
             
             <header>
-                <div id="barsMenu" class="containerBarMenu" onclick="myFunction(this)">
+                <div id="barsMenu" class="containerBarMenu" onclick="ocultaryMostrarMenu()">
                     <div class="bar1"></div>
                     <div class="bar2"></div>
                     <div class="bar3"></div>
