@@ -139,6 +139,20 @@ select{
     border: 1px solid #ccc ;   
     box-sizing: border-box;
 }
+.ui-selectonemenu{
+    width: 100% !important;
+    padding: 5.5px;   
+    display: inline-block ;
+    border: 1px solid #ccc ;   
+    box-sizing: border-box;
+}
+.ui-selectonemenu-panel{
+    background-color: white;
+}
+
+.ui-selectonemenu-panel .ui-state-hover{
+    background-color: rgba(50,91,201);
+}
 
 table{
     width: 100%;

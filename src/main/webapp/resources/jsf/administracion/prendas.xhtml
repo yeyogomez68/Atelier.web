@@ -13,37 +13,79 @@
         
         <ui:define name="body">
             
-                <h:form id="forms">   
-                    <p:growl id="growl" showDetail="true" sticky="true" />  
+                <h:form id="form">   
+                    <p:growl id="msgs" showDetail="true" sticky="true" />  
                     
-<!--                    <p:panel id="panelFiltros" header="Filtros de Estados" >
-                        <h:panelGrid columns="2" cellpadding="5">                             
-                           
-                           <h:outputText value="Estado: "/>
-                           <p:inputText  id="descEstado" value="#{prendaManagedBean}"/>                          
-                           
-                        </h:panelGrid>
-                    </p:panel> 
-                    -->
                     <p:panel id="panelLista" header="Listado" >
-                        <p:dataTable var="prenda" value="#{prendaManagedBean.prendas}">
+                        <p:dataTable var="prenda" value="#{prendaManagedBean.prendas}" editable="true" widgetVar="tablaEstados"
+                                     paginator="true"
+                                     rowsPerPageTemplate="5,10,15"                                     
+                                     paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                                     emptyMessage="No se han encontrado resultados"
+                                     rows="10">
                             
-                            <p:column headerText="Id">
-                                <h:outputText value="#{prenda.prendaNombre}" />
-                            </p:column>
-
-                            <p:column headerText="Descripción">
-                                <h:outputText value="#{prenda.colorId.colorDescrip}" />
-                            </p:column>
-
-                            <p:column headerText="Acción">
-                                <p:link styleClass="linkEditar" value="Editar">
-                                    <!--<f:param name="productId" value="10" />-->
-                                </p:link>
+                            <f:facet name="header">
+                                <div class="headerTableAndCreateBtn">
+                                    <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
+                                    <h4>Listado de Prendas</h4>  
+                                    <div class="globalFilterDiv">
+                                        <img class="filtroLupa"/>
+                                        <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaEstados').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                    </div>                                                                                                    
+                                </div>
+                            </f:facet>
+                            
+                            <p:ajax event="rowEdit" listener="#{prendaManagedBean.onRowEdit}" update=":form:msgs" />
+                            <p:ajax event="rowEditCancel" listener="#{prendaManagedBean.onRowCancel}" update=":form:msgs" />                          
+                                                    
+                            <p:column headerText="Nombre" filterBy="#{prenda.prendaNombre}" filterMatchMode="contains">
+                                <p:cellEditor>
+                                    <h:outputText value="#{prenda.prendaNombre}" />
+                                    <f:facet name="output"><h:outputText value="#{prenda.prendaNombre}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInputNombre" value="#{prenda.prendaNombre}"/></f:facet>
+                                </p:cellEditor>                                
                             </p:column>
                             
+                            <p:column headerText="Descripción" filterBy="#{prenda.prendaDescripcion}" filterMatchMode="contains">
+                                <p:cellEditor>
+                                    <h:outputText value="#{prenda.prendaDescripcion}" />
+                                    <f:facet name="output"><h:outputText value="#{prenda.prendaDescripcion}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInputDescripcion" value="#{prenda.prendaDescripcion}"/></f:facet>
+                                </p:cellEditor>                                
+                            </p:column>
+                           
+                            <p:column headerText="Color" filterBy="#{prenda.colorId.colorDescrip}" filterMatchMode="contains">
+                                <p:cellEditor>
+                                    <h:outputText value="#{prenda.colorId.colorDescrip}" />
+                                    <f:facet name="output"><h:outputText value="#{prenda.colorId.colorDescrip}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu id="car" value="#{prendaManagedBean.colorId}">                                            
+                                            <f:selectItems value="#{prendaManagedBean.colores}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>                                
+                            </p:column>
+                            
+                            <p:column width="50">
+                                <p:rowEditor />
+                            </p:column>  
                         </p:dataTable>
                     </p:panel> 
+                    
+                    <p:dialog header="Crear Prenda" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                        <h:panelGrid columns="1" cellpadding="5">                    
+                            
+                            <h:outputText value="Nombre: "/>
+                            <p:inputText placeholder="Nombre de Prenda" value="#{prendaManagedBean.prendaUtil.prendaNombre}"/>
+                            <h:outputText value="Descripcion: "/>
+                            <p:inputText placeholder="Descripcion de Prenda" value="#{prendaManagedBean.prendaUtil.prendaDescripcion}"/>
+
+                            
+                            <p:commandButton value="Crear" action="#{prendaManagedBean.crearPrenda}"/>                            
+                            <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/>                            
+                        </h:panelGrid>
+                    </p:dialog> 
+                    
                 </h:form>
             
         </ui:define>
