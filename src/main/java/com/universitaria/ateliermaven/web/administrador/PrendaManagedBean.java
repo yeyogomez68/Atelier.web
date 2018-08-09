@@ -9,15 +9,16 @@ package com.universitaria.ateliermaven.web.administrador;
 
 import com.universitaria.atelier.web.jpa.Color;
 import com.universitaria.atelier.web.jpa.Material;
+import com.universitaria.atelier.web.jpa.Ocasion;
 import com.universitaria.atelier.web.jpa.Prenda;
 import com.universitaria.atelier.web.jpa.Prendatipo;
 import com.universitaria.ateliermaven.ejb.administrador.ColorEJB;
 import com.universitaria.ateliermaven.ejb.administrador.MaterialEJB;
+import com.universitaria.ateliermaven.ejb.administrador.OcasionEJB;
 import com.universitaria.ateliermaven.ejb.administrador.PrendaEJB;
 import com.universitaria.ateliermaven.ejb.administrador.PrendaTipoEJB;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -49,16 +50,23 @@ public class PrendaManagedBean {
     @EJB
     private PrendaTipoEJB prendatipoEJB;
     
+    @EJB
+    private OcasionEJB ocasionEJB;
+    
     /*Listas*/    
     private List<Prenda> prendas;
     private List<SelectItem> colores;
     private List<SelectItem> materiales;
     private List<SelectItem> tipoPrendas;
+    private List<SelectItem> ocasiones;
     
     private String prendaNombre;
     private String prendaDescrip;
     
     private String colorId;
+    private String materialId;
+    private String tipoPrendaId;
+    private String ocasionId;
     
     
     private Prenda prendaUtil;
@@ -94,6 +102,48 @@ public class PrendaManagedBean {
     public void setColorId(String colorId) {
         this.colorId = colorId;
     }
+
+    public String getMaterialId() {
+        return materialId;
+    }
+
+    public void setMaterialId(String materialId) {
+        this.materialId = materialId;
+    }
+
+    public String getTipoPrendaId() {
+        return tipoPrendaId;
+    }
+
+    public void setTipoPrendaId(String tipoPrendaId) {
+        this.tipoPrendaId = tipoPrendaId;
+    }
+
+    public List<SelectItem> getOcasiones() {
+        if(ocasiones==null || ocasiones.isEmpty()){
+            ocasiones = new ArrayList<>();           
+        }else{
+            ocasiones.clear();           
+        }
+        for (Ocasion ocasio : ocasionEJB.getOcasiones()) {
+            ocasiones.add(new SelectItem(ocasio.getOcasionId(),ocasio.getOcasionDescrip()));
+        }
+        return ocasiones;
+    }
+
+    public void setOcasiones(List<SelectItem> ocasiones) {
+        this.ocasiones = ocasiones;
+    }
+
+    public String getOcasionId() {
+        return ocasionId;
+    }
+
+    public void setOcasionId(String ocasionId) {
+        this.ocasionId = ocasionId;
+    }
+    
+    
     
     public List<Prenda> getPrendas() {        
         if(prendas==null || prendas.isEmpty()){

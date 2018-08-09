@@ -13,9 +13,7 @@
         
         <ui:define name="body">
             
-                <h:form id="form">   
-                    <p:growl id="msgs" showDetail="true" sticky="true" />  
-                    
+                <h:form id="form">  
                     <p:panel id="panelFiltros" header="Filtros de Estados" >
                         
                     </p:panel> 
@@ -39,8 +37,8 @@
                                 </div>
                             </f:facet>
                             <!--Eventos de tabla editable-->
-                            <p:ajax event="rowEdit" listener="#{estadoManagedBean.onRowEdit}" update=":form:msgs" />
-                            <p:ajax event="rowEditCancel" listener="#{estadoManagedBean.onRowCancel}" update=":form:msgs" />
+                            <p:ajax event="rowEdit" listener="#{estadoManagedBean.onRowEdit}" update=":universarGrowl" />
+                            <p:ajax event="rowEditCancel" listener="#{estadoManagedBean.onRowCancel}" update=":universarGrowl" />
                             
                             <p:column headerText="Id" filterBy="#{estado.estadoId}" filterMatchMode="contains">
                                 <h:outputText value="#{estado.estadoId}" />

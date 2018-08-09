@@ -14,8 +14,6 @@
         <ui:define name="body">
             
                 <h:form id="form">   
-                    <p:growl id="msgs" showDetail="true" sticky="true" />  
-                    
                     <p:panel id="panelLista" header="Listado" >
                         <p:dataTable var="prenda" value="#{prendaManagedBean.prendas}" editable="true" widgetVar="tablaEstados"
                                      paginator="true"
@@ -35,8 +33,8 @@
                                 </div>
                             </f:facet>
                             
-                            <p:ajax event="rowEdit" listener="#{prendaManagedBean.onRowEdit}" update=":form:msgs" />
-                            <p:ajax event="rowEditCancel" listener="#{prendaManagedBean.onRowCancel}" update=":form:msgs" />                          
+                            <p:ajax event="rowEdit" listener="#{prendaManagedBean.onRowEdit}" update=":universarGrowl" />
+                            <p:ajax event="rowEditCancel" listener="#{prendaManagedBean.onRowCancel}" update=":universarGrowl" />                          
                                                     
                             <p:column headerText="Nombre" filterBy="#{prenda.prendaNombre}" filterMatchMode="contains">
                                 <p:cellEditor>
@@ -59,7 +57,7 @@
                                     <h:outputText value="#{prenda.colorId.colorDescrip}" />
                                     <f:facet name="output"><h:outputText value="#{prenda.colorId.colorDescrip}" /></f:facet>
                                     <f:facet name="input">
-                                        <p:selectOneMenu id="car" value="#{prendaManagedBean.colorId}">                                            
+                                        <p:selectOneMenu id="color" value="#{prendaManagedBean.colorId}">                                            
                                             <f:selectItems value="#{prendaManagedBean.colores}" />
                                         </p:selectOneMenu>
                                     </f:facet>
@@ -73,13 +71,33 @@
                     </p:panel> 
                     
                     <p:dialog header="Crear Prenda" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
-                        <h:panelGrid columns="1" cellpadding="5">                    
+                        <h:panelGrid columns="1" cellpadding="3">                    
                             
                             <h:outputText value="Nombre: "/>
                             <p:inputText placeholder="Nombre de Prenda" value="#{prendaManagedBean.prendaUtil.prendaNombre}"/>
+                            
                             <h:outputText value="Descripcion: "/>
                             <p:inputText placeholder="Descripcion de Prenda" value="#{prendaManagedBean.prendaUtil.prendaDescripcion}"/>
-
+                            
+                            <h:outputText value="Color: "/>
+                            <p:selectOneMenu id="tipoC" value="#{prendaManagedBean.colorId}">                                            
+                                <f:selectItems value="#{prendaManagedBean.colores}" />
+                            </p:selectOneMenu>
+                            
+                            <h:outputText value="Material "/>
+                            <p:selectOneMenu id="materialC" value="#{prendaManagedBean.materialId}">                                            
+                                <f:selectItems value="#{prendaManagedBean.materiales}" />
+                            </p:selectOneMenu>
+                            
+                            <h:outputText value="Tipo Prenda: "/>
+                            <p:selectOneMenu id="tipoPrendC" value="#{prendaManagedBean.tipoPrendaId}">                                            
+                                <f:selectItems value="#{prendaManagedBean.tipoPrendas}" />
+                            </p:selectOneMenu>
+                            
+                            <h:outputText value="Ocasion: "/>
+                            <p:selectOneMenu id="ocacionC" value="#{prendaManagedBean.ocasionId}">                                            
+                                <f:selectItems value="#{prendaManagedBean.ocasiones}" />
+                            </p:selectOneMenu>
                             
                             <p:commandButton value="Crear" action="#{prendaManagedBean.crearPrenda}"/>                            
                             <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/>                            

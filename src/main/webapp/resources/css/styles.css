@@ -153,6 +153,11 @@ select{
 .ui-selectonemenu-panel .ui-state-hover{
     background-color: rgba(50,91,201);
 }
+.ui-selectonemenu .ui-icon-triangle-1-s{
+    background-image: url(../javax.faces.resource/img/tools/triangulo.png);
+    margin-top: 10px !important;
+}
+
 
 table{
     width: 100%;
@@ -316,7 +321,7 @@ aside{
 .ui-icon-close{
     background-image: url(../javax.faces.resource/img/tools/cancel.jpg);
 }
-.ui-icon-close,.ui-icon-check,.ui-icon-pencil{
+.ui-icon-close,.ui-icon-check,.ui-icon-pencil, .ui-icon-triangle-1-s{
     width: 20px;
     height: 20px;
     background-repeat: no-repeat;
