@@ -59,6 +59,12 @@ header{
     background-repeat: no-repeat;
     margin: auto;
 }*/
+/*Contenedor Dialog*/
+.contentDialog{
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+}
 .bodyLogin{
     background-image: url(../javax.faces.resource/img/fondo.jpg);
     background-attachment: fixed;
@@ -145,6 +151,7 @@ select{
     display: inline-block ;
     border: 1px solid #ccc ;   
     box-sizing: border-box;
+    margin: 4px 0;
 }
 .ui-selectonemenu-panel{
     background-color: white;

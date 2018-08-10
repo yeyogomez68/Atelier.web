@@ -71,8 +71,7 @@
                     </p:panel> 
                     
                     <p:dialog header="Crear Prenda" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
-                        <h:panelGrid columns="1" cellpadding="3">                    
-                            
+                        <div class="contentDialog">
                             <h:outputText value="Nombre: "/>
                             <p:inputText placeholder="Nombre de Prenda" value="#{prendaManagedBean.prendaUtil.prendaNombre}"/>
                             
@@ -98,10 +97,9 @@
                             <p:selectOneMenu id="ocacionC" value="#{prendaManagedBean.ocasionId}">                                            
                                 <f:selectItems value="#{prendaManagedBean.ocasiones}" />
                             </p:selectOneMenu>
-                            
+                        </div>      
                             <p:commandButton value="Crear" action="#{prendaManagedBean.crearPrenda}"/>                            
                             <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/>                            
-                        </h:panelGrid>
                     </p:dialog> 
                     
                 </h:form>

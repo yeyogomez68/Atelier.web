@@ -55,20 +55,9 @@ public class UsuarioManagedBean implements Serializable{
     private String estadoId;
     private String ciudadId;
     private String rollId;
-    
-    private boolean dialog;
-
-    
+            
     private UsuarioUtil usuarioCrear;
 
-    public boolean isDialog() {
-        return dialog;
-    }
-
-    public void setDialog(boolean dialog) {
-        this.dialog = dialog;
-    }
-    
     public UsuarioUtil getUsuarioCrear() {
         return usuarioCrear;
     }

@@ -32,20 +32,20 @@ public class RolesManagedBean {
     private List<SelectItem> estados;
     
     private String estadoId;
-    private String estadoDesc;
+    private String rollDesc;
     
     public RolesManagedBean() {
         
     }
 
-    public String getEstadoDesc() {
-        return estadoDesc;
+    public String getRollDesc() {
+        return rollDesc;
     }
 
-    public void setEstadoDesc(String estadoDesc) {
-        this.estadoDesc = estadoDesc;
-    }
-
+    public void setRollDesc(String rollDesc) {
+        this.rollDesc = rollDesc;
+    }    
+    
     public String getEstadoId() {
         return estadoId;
     }
@@ -83,17 +83,25 @@ public class RolesManagedBean {
     }   
     
     public void onRowEdit(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Edited", ((Roll) event.getObject()).getRollDesc());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        Integer rollId = ((Roll) event.getObject()).getRollId();
+        System.out.println("com.universitaria.ateliermaven.web.administrador.RolesManagedBean.onRowEdit()" + rollId);
+        
     }
      
     public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Cancelled", ((Roll) event.getObject()).getRollDesc());
+        FacesMessage msg = new FacesMessage("Cancelado", ((Roll) event.getObject()).getRollDesc());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
     
     public void crearRoll(){
+        FacesMessage msg;
         
+        if(rollEJB.setCrearRoll(rollDesc)){
+            msg = new FacesMessage("Mensaje", "Roll Creado con exito"); 
+        }else{
+            msg = new FacesMessage("Mensaje", "Error al crear el Roll");
+        }
+        FacesContext.getCurrentInstance().addMessage(null, msg);       
     }
     
 }

@@ -77,7 +77,7 @@
                         </p:dataTable>
                     <!--</p:panel>--> 
                     <p:dialog header="Crear Usuario" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
-                        <h:panelGrid columns="2" cellpadding="1">                    
+                        <div class="contentDialog">                   
                             <h:outputText value="Identificación: "/>
                             <p:inputText placeholder="Identificación" value="#{usuarioManagedBean.usuarioCrear.identificacion}" maxlength="10"/>
                             
@@ -109,7 +109,7 @@
                                 <f:selectItems value="#{usuarioManagedBean.roles}" />
                             </p:selectOneMenu>                           
                                                        
-                        </h:panelGrid>
+                        </div>
                         <p:commandButton value="Crear" action="#{usuarioManagedBean.crearUsuario}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
                         <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
                     </p:dialog>  
