@@ -6,15 +6,19 @@
 package com.universitaria.ateliermaven.web.administrador;
 
 import com.universitaria.atelier.web.jpa.Usuario;
+import com.universitaria.atelier.web.utils.UsuarioUtil;
+
 import com.universitaria.ateliermaven.ejb.UsuarioEJB;
 import com.universitaria.ateliermaven.ejb.administrador.CiudadEJB;
 import com.universitaria.ateliermaven.ejb.administrador.EstadoEJB;
 import com.universitaria.ateliermaven.ejb.administrador.RollEJB;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+
 import javax.faces.model.SelectItem;
 import org.primefaces.event.RowEditEvent;
 
@@ -22,12 +26,13 @@ import org.primefaces.event.RowEditEvent;
  *
  * @author Jeisson Gomez
  */
-public class UsuarioManagedBean {
+public class UsuarioManagedBean implements Serializable{
 
     /**
      * Creates a new instance of UsuarioManagedBean
      */
     public UsuarioManagedBean() {
+        this.usuarioCrear = new UsuarioUtil();
     }
     
     @EJB
@@ -51,10 +56,25 @@ public class UsuarioManagedBean {
     private String ciudadId;
     private String rollId;
     
-    private Usuario usuarioCrear;
+    private boolean dialog;
 
-    public Usuario getUsuarioCrear() {
+    
+    private UsuarioUtil usuarioCrear;
+
+    public boolean isDialog() {
+        return dialog;
+    }
+
+    public void setDialog(boolean dialog) {
+        this.dialog = dialog;
+    }
+    
+    public UsuarioUtil getUsuarioCrear() {
         return usuarioCrear;
+    }
+
+    public void setUsuarioCrear(UsuarioUtil usuarioCrear) {
+        this.usuarioCrear = usuarioCrear;
     }
 
     public List<SelectItem> getCiudades() {
@@ -101,11 +121,6 @@ public class UsuarioManagedBean {
         this.rollId = rollId;
     }
 
-    
-    public void setUsuarioCrear(Usuario usuarioCrear) {
-        this.usuarioCrear = usuarioCrear;
-    }
-  
     public List<Usuario> getUsuarios() {
         if(usuarios==null || usuarios.isEmpty()){
             usuarios = new ArrayList<>();           
@@ -153,5 +168,16 @@ public class UsuarioManagedBean {
     }
     
     public void crearUsuario(){
+        FacesMessage msg;
+        usuarioCrear.setEstadoId("1");
+        usuarioCrear.setCiudadId(ciudadId);
+        usuarioCrear.setRollId(rollId);
+        if(usuarioEJB.setCrearUsuario(usuarioCrear)){
+            msg = new FacesMessage("Mensaje", "Usuario Creado con exito"); 
+            getUsuarios();
+        }else{
+            msg = new FacesMessage("Mensaje", "Error al crear el usuario");            
+        }
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 }
