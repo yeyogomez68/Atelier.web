@@ -12,9 +12,109 @@
         </ui:define>
         
         <ui:define name="body">
-            <p:panel header="Hola">
-                <p><h:outputText value="Hola mundo"></h:outputText></p>
-            </p:panel>
+            
+                <h:form id="form"> 
+                    <p:panel id="panelFiltros" header="Usuarios" >
+                        
+                    </p:panel>
+                        <p:dataTable var="usuarios" value="#{usuarioManagedBean.usuarios}" editable="true" widgetVar="tablaUsuarios"
+                                     paginator="true"
+                                     rowsPerPageTemplate="5,10,15"                                     
+                                     paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                                     emptyMessage="No se han encontrado resultados"
+                                     rows="10">
+                            
+                            <f:facet name="header">
+                                <div class="headerTableAndCreateBtn">
+                                    <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
+                                    <h4>Listado de Usuarios</h4>  
+                                    <div class="globalFilterDiv">
+                                        <img class="filtroLupa"/>
+                                        <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaUsuarios').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                    </div>                                                                                                    
+                                </div>
+                            </f:facet>
+                            <!--Eventos de tabla editable-->
+                            <p:ajax event="rowEdit" listener="#{usuarioManagedBean.onRowEdit}" update=":universarGrowl" />
+                            <p:ajax event="rowEditCancel" listener="#{usuarioManagedBean.onRowCancel}" update=":universarGrowl" />
+                            
+                            <p:column headerText="Id" filterBy="#{usuarios.usuarioId}" filterMatchMode="contains">
+                                <h:outputText value="#{usuarios.usuarioId}" />
+                            </p:column>
+                            
+                            <p:column headerText="Identificación" filterBy="#{usuarios.usuarioIdentificacion}" filterMatchMode="contains">
+                                <h:outputText value="#{usuarios.usuarioIdentificacion}" />
+                            </p:column>
+                            
+                            <p:column headerText="Nombre" filterBy="#{usuarios.usuarioNombre}" filterMatchMode="contains">
+                                <h:outputText value="#{usuarios.usuarioNombre}" />
+                            </p:column>
+                            
+                            <p:column headerText="Apellido" filterBy="#{usuarios.usuarioApellido}" filterMatchMode="contains">
+                                <h:outputText value="#{usuarios.usuarioApellido}" />
+                            </p:column>
+                            
+                            <p:column headerText="Email" filterBy="#{usuarios.usuarioEmail}" filterMatchMode="contains">
+                                <h:outputText value="#{usuarios.usuarioEmail}" />
+                            </p:column>                
+                           
+                            <p:column headerText="Estado" filterBy="#{usuarios.estadoId.estadoDescrip}" filterMatchMode="contains">
+                                <p:cellEditor>
+                                    <h:outputText value="#{usuarios.estadoId.estadoDescrip}" />
+                                    <f:facet name="output"><h:outputText value="#{usuarios.estadoId.estadoDescrip}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu id="estado" value="#{usuarioManagedBean.estadoId}">                                            
+                                            <f:selectItems value="#{usuarioManagedBean.estados}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>                                
+                            </p:column>
+                            
+                            <!--Columna de evento editar-->
+                            <p:column width="50">
+                                <p:rowEditor />
+                            </p:column>                            
+                        </p:dataTable>
+                    <!--</p:panel>--> 
+                    <p:dialog header="Crear Usuario" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                        <h:panelGrid columns="1" cellpadding="5">                    
+                            <h:outputText value="Identificación: "/>
+                            <p:inputNumber placeholder="Identificación" value="#{usuarioManagedBean.usuarioCrear.usuarioIdentificacion}" decimalPlaces="15"/>
+                            
+                            <h:outputText value="Nombre: "/>
+                            <p:inputText placeholder="Nombre" value="#{usuarioManagedBean.usuarioCrear.usuarioNombre}"/>
+                            
+                            <h:outputText value="Apellido: "/>
+                            <p:inputText placeholder="Apellido" value="#{usuarioManagedBean.usuarioCrear.usuarioApellido}"/>
+                            
+                            <h:outputText value="Email: "/>
+                            <p:inputText placeholder="Email" value="#{usuarioManagedBean.usuarioCrear.usuarioEmail}"/>
+                            
+                            <h:outputText value="Password: "/>
+                            <p:inputText placeholder="Password" value="#{usuarioManagedBean.usuarioCrear.usuarioPassword}"/>
+                            
+                            <h:outputText value="Dirección: "/>
+                            <p:inputText placeholder="Direccion" value="#{usuarioManagedBean.usuarioCrear.usuarioDireccion}"/>
+                            
+                            <h:outputText value="Celular: "/>
+                            <p:inputNumber  placeholder="Celular" value="#{usuarioManagedBean.usuarioCrear.usuarioCel}" decimalPlaces="15"/>
+                            
+                            <h:outputText value="Ciudad: "/>
+                            <p:selectOneMenu id="ciudad" value="#{usuarioManagedBean.ciudadId}">                                            
+                                <f:selectItems value="#{usuarioManagedBean.ciudades}" />
+                            </p:selectOneMenu>
+                            
+                            <h:outputText value="Roll: "/>
+                            <p:selectOneMenu id="roll" value="#{usuarioManagedBean.rollId}">                                            
+                                <f:selectItems value="#{usuarioManagedBean.roles}" />
+                            </p:selectOneMenu>
+                            
+                            <p:commandButton value="Crear" action="#{usuarioManagedBean.crearUsuario}"/>                            
+                            <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/>                            
+                        </h:panelGrid>
+                    </p:dialog>  
+                </h:form>
         </ui:define>
+        
     </ui:composition>
 </html>

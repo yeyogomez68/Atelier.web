@@ -5,7 +5,7 @@
  */
 package com.universitaria.ateliermaven.web.login;
 
-import com.universitaria.ateliermaven.ejb.UsuarioFacade;
+import com.universitaria.ateliermaven.ejb.UsuarioEJB;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -20,7 +20,7 @@ public class LoginManagedBean implements Serializable {
      * Creates a new instance of LoginManagedBean
      */
     @EJB
-    private UsuarioFacade usuarioFacade;
+    private UsuarioEJB usuarioEJB;
     
     private String userName;
     private String password;
@@ -29,7 +29,7 @@ public class LoginManagedBean implements Serializable {
     
     public String iniciar() {
       if(getUserName() != null && getPassword() != null){                       
-            if(usuarioFacade.getAccess(getUserName(),getPassword())){                
+            if(usuarioEJB.getAccess(getUserName(),getPassword())){                
                 return "exito";
             }else{
                 addMessage("Fallo de credeciales");

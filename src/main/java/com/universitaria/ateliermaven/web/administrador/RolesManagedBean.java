@@ -5,8 +5,6 @@
  */
 package com.universitaria.ateliermaven.web.administrador;
 
-import com.universitaria.atelier.web.jpa.Estado;
-import com.universitaria.atelier.web.jpa.Prenda;
 import com.universitaria.atelier.web.jpa.Roll;
 import com.universitaria.ateliermaven.ejb.administrador.EstadoEJB;
 import com.universitaria.ateliermaven.ejb.administrador.RollEJB;
