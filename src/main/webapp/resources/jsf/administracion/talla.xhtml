@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/WEB-INF/include/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Atelier"></h:outputText>
+        </ui:define>
+        
+        <ui:define name="body">
+            
+                <h:form id="form">  
+                    <p:panel id="panelFiltros" header="Tallas" >
+                        
+                    </p:panel> 
+                        <p:growl id="msn" life="2000"/>
+<!--                    <p:panel id="panelLista" header="Listado" >-->
+                        <p:dataTable var="tallas" value="#{tallaManagedBean.tallas}" editable="true" widgetVar="tablaEstados"
+                                     paginator="true"
+                                     rowsPerPageTemplate="5,10,15"                                     
+                                     paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                                     emptyMessage="No se han encontrado resultados"
+                                     rows="10">
+                            
+                            <f:facet name="header">
+                                <div class="headerTableAndCreateBtn">
+                                    <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
+                                    <h4>Listado de Tallas</h4>  
+                                    <div class="globalFilterDiv">
+                                        <img class="filtroLupa"/>
+                                        <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaEstados').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                    </div>                                                                                                    
+                                </div>
+                            </f:facet>
+                            <!--Eventos de tabla editable-->
+                            <p:ajax event="rowEdit" listener="#{tallaManagedBean.onRowEdit}" update=":form:msn" />
+                            <p:ajax event="rowEditCancel" listener="#{tallaManagedBean.onRowCancel}" update=":form:msn" />
+                            
+                            <p:column headerText="Id" filterBy="#{tallas.tallaId}" filterMatchMode="contains">
+                                <h:outputText value="#{tallas.tallaId}" />
+                            </p:column>
+
+                            <p:column headerText="Descripción" filterBy="#{tallas.tallaDescrip}" filterMatchMode="contains">
+                                <p:cellEditor>
+                                    <h:outputText value="#{tallas.tallaDescrip}" />
+                                    <f:facet name="output"><h:outputText value="#{tallas.tallaDescrip}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput" value="#{tallas.tallaDescrip}"/></f:facet>
+                                </p:cellEditor>                                
+                            </p:column>
+                            <!--Columna de evento editar-->
+                            <p:column width="50">
+                                <p:rowEditor />
+                            </p:column>                            
+                        </p:dataTable>
+                    <!--</p:panel>--> 
+                    <p:dialog header="Crear Talla" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                        <div class="contentDialog">                    
+                            <h:outputText value="Talla: "/>
+                            <p:inputText placeholder="Talla" value="#{tallaManagedBean.desTalla}"/>                                                       
+                        </div>
+                        <p:commandButton value="Crear" action="#{tallaManagedBean.crearTalla}" update="form,:form:msn" onclick="PF('dlg1').hide();"/>                            
+                        <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
+                    </p:dialog>  
+                </h:form>
+        </ui:define>
+        
+    </ui:composition>
+</html>
