@@ -146,9 +146,10 @@ public class UsuarioManagedBean implements Serializable{
         this.estadoId = estadoId;
     }
     
-        public void onRowEdit(RowEditEvent event) {
+    public void onRowEdit(RowEditEvent event) {
         FacesMessage msg = new FacesMessage("Edited", ((Usuario) event.getObject()).getEstadoId().getEstadoDescrip());
         FacesContext.getCurrentInstance().addMessage(null, msg);
+        
     }
      
     public void onRowCancel(RowEditEvent event) {
