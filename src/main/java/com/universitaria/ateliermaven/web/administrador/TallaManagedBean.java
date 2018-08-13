@@ -44,11 +44,9 @@ public class TallaManagedBean {
   
     public List<Talla> getTallas() {
         if(tallas==null || tallas.isEmpty()){
-            tallas = new ArrayList<>();           
-        }else{
-            tallas.clear();           
-        }      
-        setTallas(tallaEJB.getTallas());
+            tallas = new ArrayList<>();  
+            setTallas(tallaEJB.getTallas());
+        }
         return tallas;
     }
 
