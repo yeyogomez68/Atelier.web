@@ -79,10 +79,10 @@
                     <p:dialog header="Crear Usuario" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
                         <div class="contentDialog">                   
                             <h:outputText value="Identificación: "/>
-                            <p:inputText placeholder="Identificación" value="#{usuarioManagedBean.usuarioCrear.identificacion}" maxlength="10"/>
+                            <p:inputText placeholder="Identificación" value="#{usuarioManagedBean.usuarioCrear.identificacion}" maxlength="10" decimalSeparator="." decimalPlaces="0" />
                             
                             <h:outputText value="Nombre: "/>
-                            <p:inputText placeholder="Nombre" value="#{usuarioManagedBean.usuarioCrear.nombre}"/>
+                            <p:inputText placeholder="Nombre" value="#{usuarioManagedBean.usuarioCrear.nombre}" />
                             
                             <h:outputText value="Apellido: "/>
                             <p:inputText placeholder="Apellido" value="#{usuarioManagedBean.usuarioCrear.apellido}"/>
@@ -97,7 +97,7 @@
                             <p:inputText placeholder="Direccion" value="#{usuarioManagedBean.usuarioCrear.direccion}"/>
                             
                             <h:outputText value="Celular: "/>
-                            <p:inputText placeholder="Celular" value="#{usuarioManagedBean.usuarioCrear.celular}"  maxlength="10"/>
+                            <p:inputText placeholder="Celular" value="#{usuarioManagedBean.usuarioCrear.celular}"  maxlength="10" />
                             
                             <h:outputText value="Ciudad: "/>
                             <p:selectOneMenu id="ciudad" value="#{usuarioManagedBean.ciudadId}">                                            

@@ -69,8 +69,7 @@ public class TallaManagedBean {
     }
     
     
-    public void crearTalla(){
-        
+    public void crearTalla(){        
         if(getDesTalla()!=null){
             if(!tallaEJB.getExisteTalla(desTalla)){
                 if(tallaEJB.setCrearTalla(desTalla)){
