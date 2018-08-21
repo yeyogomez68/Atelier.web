@@ -35,7 +35,7 @@
     <managed-bean>
         <managed-bean-name>menuPrincipalManagedBean</managed-bean-name>
         <managed-bean-class>com.universitaria.ateliermaven.web.menu.MenuPrincipalManagedBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
+        <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     
     <managed-bean>

@@ -15,7 +15,7 @@
             </div>
         </div>
         <h:form id="menuForm" styleClass="menuLeft">          
-            <p:menu toggleable="true">  
+<!--            <p:menu toggleable="true">  
                 <p:menuitem value="Home" outcome="/resources/jsf/principal/principal.xhtml" icon="ui-icon-home"/>
                 <p:submenu label="Administracion">                    
                     <p:menuitem value="Estados" outcome="/resources/jsf/administracion/estados.xhtml"/>                    
@@ -34,7 +34,8 @@
                 <p:submenu label="Inventarios">                    
                     <p:menuitem value="3..." outcome="/resources/jsf/principal/principal.xhtml"/>                    
                 </p:submenu>                
-            </p:menu>            
+            </p:menu>            -->
+            <p:menu model="#{menuPrincipalManagedBean.model}" />
         </h:form>
     </ui:composition>
 
