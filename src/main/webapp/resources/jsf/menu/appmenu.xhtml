@@ -7,14 +7,16 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition>
-        <div class="imgContent">
+        
+        <h:form id="menuForm" styleClass="menuLeft">   
+            <div class="imgContent">
             <div class="imgUser">      
             </div>
             <div class="imgdataUsrs">                            
-                <h:outputText value="Jeisson Andres"/>               
+                <h:outputText value="#{templateControllerManagedBean.nombre}"/>   
+                <p:commandLink value="Cerrar Sesión" action="#{templateControllerManagedBean.cerrarSession}"/>
             </div>
         </div>
-        <h:form id="menuForm" styleClass="menuLeft">          
 <!--            <p:menu toggleable="true">  
                 <p:menuitem value="Home" outcome="/resources/jsf/principal/principal.xhtml" icon="ui-icon-home"/>
                 <p:submenu label="Administracion">                    

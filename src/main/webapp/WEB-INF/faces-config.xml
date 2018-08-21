@@ -29,6 +29,13 @@
     </navigation-rule>
     
     <navigation-rule>
+        <from-view-id>/resources/jsf/menu/appmenu.xhtml</from-view-id>
+        <from-outcome>ok</from-outcome>
+            <to-view-id>Login.xhtml</to-view-id>
+        <redirect/>
+    </navigation-rule>
+    
+    <navigation-rule>
         <from-view-id>/resources/jsf/principal/principal.xhtml</from-view-id>
     </navigation-rule>
     
@@ -83,4 +90,10 @@
         <managed-bean-class>com.universitaria.ateliermaven.web.compras.MaterialManagedBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>templateControllerManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.session.TemplateControllerManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+
 </faces-config>
