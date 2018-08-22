@@ -7,20 +7,24 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition>
-        <div class="imgContent">
+        
+        <h:form id="menuForm" styleClass="menuLeft">   
+            <div class="imgContent">
             <div class="imgUser">      
             </div>
             <div class="imgdataUsrs">                            
-                <h:outputText value="Jeisson Andres"/>               
+                <h:outputText value="#{templateControllerManagedBean.nombre}"/>   
+                <p:commandLink value="Cerrar Sesión" action="#{templateControllerManagedBean.cerrarSession}"/>
             </div>
         </div>
-        <h:form id="menuForm" styleClass="menuLeft">          
-            <p:menu toggleable="true">  
+<!--            <p:menu toggleable="true">  
                 <p:menuitem value="Home" outcome="/resources/jsf/principal/principal.xhtml" icon="ui-icon-home"/>
                 <p:submenu label="Administracion">                    
                     <p:menuitem value="Estados" outcome="/resources/jsf/administracion/estados.xhtml"/>                    
                     <p:menuitem value="Prendas" outcome="/resources/jsf/administracion/prendas.xhtml"/>   
                     <p:menuitem value="Tallas" outcome="/resources/jsf/administracion/talla.xhtml"/> 
+                    <p:menuitem value="Marcas" outcome="/resources/jsf/administracion/marca.xhtml"/> 
+                    <p:menuitem value="Tipo de Materiales" outcome="/resources/jsf/administracion/materialTipo.xhtml"/> 
                 </p:submenu>
                 <p:submenu label="Usuarios">                    
                     <p:menuitem value="Usuarios" outcome="/resources/jsf/administracion/usuarios.xhtml"/>                    
@@ -32,7 +36,8 @@
                 <p:submenu label="Inventarios">                    
                     <p:menuitem value="3..." outcome="/resources/jsf/principal/principal.xhtml"/>                    
                 </p:submenu>                
-            </p:menu>            
+            </p:menu>            -->
+            <p:menu model="#{menuPrincipalManagedBean.model}" />
         </h:form>
     </ui:composition>
 
