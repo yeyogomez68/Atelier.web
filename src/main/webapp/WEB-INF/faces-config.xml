@@ -28,6 +28,8 @@
         </navigation-case>                
     </navigation-rule>
     
+    
+    
     <navigation-rule>
         <from-view-id>/resources/jsf/principal/principal.xhtml</from-view-id>
     </navigation-rule>
@@ -35,7 +37,7 @@
     <managed-bean>
         <managed-bean-name>menuPrincipalManagedBean</managed-bean-name>
         <managed-bean-class>com.universitaria.ateliermaven.web.menu.MenuPrincipalManagedBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
+        <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     
     <managed-bean>
@@ -69,34 +71,24 @@
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
-        <managed-bean-name>proveedoresManagedBean</managed-bean-name>
-        <managed-bean-class>com.universitaria.ateliermaven.web.inventario.ProveedoresManagedBean</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
         <managed-bean-name>materialTipoManagedBean</managed-bean-name>
         <managed-bean-class>com.universitaria.ateliermaven.web.administrador.MaterialTipoManagedBean</managed-bean-class>
-    
-        <managed-bean-scope>request</managed-bean-scope>
+        <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>marcaManagedBean</managed-bean-name>
         <managed-bean-class>com.universitaria.ateliermaven.web.administrador.MarcaManagedBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
+        <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
-        <managed-bean-name>colorManagedBean</managed-bean-name>
-        <managed-bean-class>com.universitaria.ateliermaven.web.administrador.ColorManagedBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
+        <managed-bean-name>materialManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.compras.MaterialManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
-        <managed-bean-name>ocasionManagedBean</managed-bean-name>
-        <managed-bean-class>com.universitaria.ateliermaven.web.administrador.OcasionManagedBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
+        <managed-bean-name>templateControllerManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.session.TemplateControllerManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
-    <managed-bean>
-        <managed-bean-name>paisManagedBean</managed-bean-name>
-        <managed-bean-class>com.universitaria.ateliermaven.web.administrador.PaisManagedBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-    </managed-bean>
+
 </faces-config>

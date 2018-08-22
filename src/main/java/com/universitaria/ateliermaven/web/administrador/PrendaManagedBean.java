@@ -13,7 +13,7 @@ import com.universitaria.atelier.web.jpa.Ocasion;
 import com.universitaria.atelier.web.jpa.Prenda;
 import com.universitaria.atelier.web.jpa.Prendatipo;
 import com.universitaria.ateliermaven.ejb.administrador.ColorEJB;
-import com.universitaria.ateliermaven.ejb.administrador.MaterialEJB;
+import com.universitaria.ateliermaven.ejb.compras.MaterialEJB;
 import com.universitaria.ateliermaven.ejb.administrador.OcasionEJB;
 import com.universitaria.ateliermaven.ejb.administrador.PrendaEJB;
 import com.universitaria.ateliermaven.ejb.administrador.PrendaTipoEJB;

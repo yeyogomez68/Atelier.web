@@ -41,6 +41,7 @@ header{
     /*float: left;*/
     width: 100%;
     height: 100%;
+    overflow-x: auto;
     /*margin-top: 120px;*/
 }
 .imgUser{
@@ -219,9 +220,16 @@ aside{
     float: left;
     width: 60%;
     height: 100%;
-    color: white;  
-    padding: 33px 0 0 10px;
+    color: white;
+    padding: 0px 10px 0px 10px;
     box-sizing: border-box;
+    display: grid;
+    align-items: center;
+}
+.imgdataUsrs a{
+    align-self: baseline;
+    text-decoration: none;
+    color: white;
 }
 .ui-menu a{
     text-decoration: none;

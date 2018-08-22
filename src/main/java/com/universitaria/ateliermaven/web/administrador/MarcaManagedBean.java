@@ -7,7 +7,6 @@ package com.universitaria.ateliermaven.web.administrador;
 
 import com.universitaria.atelier.web.jpa.Marca;
 import com.universitaria.ateliermaven.ejb.administrador.MarcaEJB;
-import com.universitaria.ateliermaven.web.comunes.Comunes;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -17,58 +16,74 @@ import org.primefaces.event.RowEditEvent;
 
 /**
  *
- * @author SoulHunter
+ * @author jeisson.gomez
  */
 public class MarcaManagedBean {
 
+    /**
+     * Creates a new instance of MarcaManagedBean
+     */
     public MarcaManagedBean() {
     }
-
+    
     @EJB
     private MarcaEJB marcaEJB;
-    private List<Marca> marca;
-    private String nombreMarca;
+    
+    private List<Marca> marcas;
+    private String marcaDesc;
+    
+    FacesMessage msg = null;
 
-    public MarcaEJB getMarcaEJB() {
-        return marcaEJB;
-    }
-
-    public void setMarcaEJB(MarcaEJB marcaEJB) {
-        this.marcaEJB = marcaEJB;
-    }
-
-    public List<Marca> getMarca() {
-        if (marca == null) {
-            marca = new ArrayList<>();
-            setMarca(marcaEJB.getMarcas());
+    public List<Marca> getMarcas() {
+        if(marcas==null || marcas.isEmpty()){
+            marcas = new ArrayList<>();
+            setMarcas(marcaEJB.getMarcas());
         }
-        return marca;
+        return marcas;
     }
 
-    public void setMarca(List<Marca> marca) {
-        this.marca = marca;
+    public void setMarcas(List<Marca> marcas) {
+        this.marcas = marcas;
     }
 
-    public String getNombreMarca() {
-        return nombreMarca;
+    public String getMarcaDesc() {
+        return marcaDesc;
     }
 
-    public void setNombreMarca(String nombreMarca) {
-        this.nombreMarca = nombreMarca;
+    public void setMarcaDesc(String marcaDesc) {
+        this.marcaDesc = marcaDesc;
     }
-
+    
+    
     public void onRowEdit(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Car Edited", ((Marca) event.getObject()).getMarcaNombre());
+        if(marcaEJB.setModifiMarca(((Marca) event.getObject()).getMarcaId().toString(), ((Marca) event.getObject()).getMarcaNombre())){
+            msg = new FacesMessage("Mensaje", "Se modifico la Marca Exitosamente");
+        }else{
+            msg = new FacesMessage("Error", "Error a modificar la Marca");
+        }
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
+     
     public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Edit Cancelled", ((Marca) event.getObject()).getMarcaNombre());
+        msg = new FacesMessage("Edición Cancelada", ((Marca) event.getObject()).getMarcaNombre());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
-    public void crearMarca() {
-        Comunes.mensaje((marcaEJB.setCrearMarca(nombreMarca) ? "Se ha creado el estado correctamente" : "Error creando el estado"), nombreMarca);
+    
+    public void crearMarca(){
+        if(getMarcaDesc()!=null){
+            if(!marcaEJB.getExisteMarca(marcaDesc)){
+                if(marcaEJB.setCrearMarca(marcaDesc)){
+                   msg = new FacesMessage("Mensaje", "Marca Creada Exitosamente");
+                }else{
+                   msg = new FacesMessage("Error", "Error al crear la Marca");
+                }                 
+            }else{
+                msg = new FacesMessage("Mensaje", "La Marca ya se encuentra registrada");
+            }
+        }else{
+            msg = new FacesMessage("Error", "El nombre de la Marca es obligatorio");
+        }
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
+    
 }

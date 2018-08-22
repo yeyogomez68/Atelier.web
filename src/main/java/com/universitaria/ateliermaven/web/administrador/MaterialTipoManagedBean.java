@@ -7,66 +7,93 @@ package com.universitaria.ateliermaven.web.administrador;
 
 import com.universitaria.atelier.web.jpa.Materialtipo;
 import com.universitaria.ateliermaven.ejb.administrador.MaterialTipoEJB;
-import com.universitaria.ateliermaven.web.comunes.Comunes;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.RowEditEvent;
 
 /**
  *
- * @author SoulHunter
+ * @author jeisson.gomez
  */
-@Stateless
-public class MaterialTipoManagedBean implements Serializable {
+public class MaterialTipoManagedBean {
 
-    @EJB
-    private MaterialTipoEJB materialTipoEJB;
-
-    private List<Materialtipo> materialTipo;
-
-    private String materialTipoDescripcion;
-
+    /**
+     * Creates a new instance of MaterialTipoManagedBean
+     */
     public MaterialTipoManagedBean() {
     }
+    
+    
+    @EJB
+    private MaterialTipoEJB materialTipoEJB;
+    
+    private List<Materialtipo> materialestipos;
+    private String materialDesc;
+    private boolean modalDialog = false;
+    
+    FacesMessage msg = null;
 
-    public List<Materialtipo> getMaterialTipo() {
+    public boolean isModalDialog() {
+        return modalDialog;
+    }
 
-        if (materialTipo == null) {
-            materialTipo = new ArrayList<>();
-            setMaterialTipo(materialTipoEJB.getMaterialTipos());
+    public void setModalDialog(boolean modalDialog) {
+        this.modalDialog = modalDialog;
+    }   
+    
+    public List<Materialtipo> getMaterialestipos() {
+        if(materialestipos==null || materialestipos.isEmpty()){
+            materialestipos = new ArrayList<>();
+            setMaterialestipos(materialTipoEJB.getMaterialTipos());
         }
-        return materialTipo;
+        return materialestipos;
     }
 
-    public void setMaterialTipo(List<Materialtipo> materialTipo) {
-        this.materialTipo = materialTipo;
+    public void setMaterialestipos(List<Materialtipo> materialestipos) {
+        this.materialestipos = materialestipos;
     }
 
-    public String getMaterialTipoDescripcion() {
-        return materialTipoDescripcion;
+    public String getMaterialDesc() {
+        return materialDesc;
     }
 
-    public void setMaterialTipoDescripcion(String materialTipoDescripcion) {
-        this.materialTipoDescripcion = materialTipoDescripcion;
-    }
-
+    public void setMaterialDesc(String materialDesc) {
+        this.materialDesc = materialDesc;
+    }     
+    
     public void onRowEdit(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Car Edited", ((Materialtipo) event.getObject()).getMaterialTipoDescript());
+        if(materialTipoEJB.setModifiDesMaterialTipo(((Materialtipo) event.getObject()).getMaterialTipoId().toString(), ((Materialtipo) event.getObject()).getMaterialTipoDescript())){
+            msg = new FacesMessage("Mensaje", "Se modifico la Marca Exitosamente");
+        }else{
+            msg = new FacesMessage("Error", "Error a modificar la Marca");
+        }
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
+     
     public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Edit Cancelled", ((Materialtipo) event.getObject()).getMaterialTipoDescript());
+        msg = new FacesMessage("Edición Cancelada", ((Materialtipo) event.getObject()).getMaterialTipoDescript());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
-    public void crearMaterialTIpo() {
-        Comunes.mensaje((materialTipoEJB.setCrearMaterialTipo(materialTipoDescripcion) ? "Se ha creado el estado correctamente" : "Error creando el estado"), materialTipoDescripcion);
+    
+    public void crearTipoMaterial(){
+        if(getMaterialDesc()!=null || getMaterialDesc().isEmpty()){
+            if(!materialTipoEJB.getExisteMaterialTipo(materialDesc)){
+                if(materialTipoEJB.setCrearMaterialTipo(materialDesc)){
+                   msg = new FacesMessage("Mensaje", "Material Tipo Creada Exitosamente");
+                    setModalDialog(true);
+                }else{
+                   msg = new FacesMessage("Error", "Error al crear el Tipo de Material");
+                }                 
+            }else{
+                msg = new FacesMessage("Mensaje", "El Tipo de Material ya se encuentra registrado");
+            }
+        }else{
+            msg = new FacesMessage("Error", "El nombre del Tipo de Material es obligatorio");
+        }
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
+    
 }

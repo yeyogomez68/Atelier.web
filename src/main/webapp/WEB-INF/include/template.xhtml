@@ -3,12 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
         <title><ui:insert name="title">Menu</ui:insert></title>
         <h:outputStylesheet library="css" name="styles.css"/>
-        <h:outputScript library="scripts" name="appJScript.js"/>      
+        <h:outputScript library="scripts" name="appJScript.js"/> 
+        <f:event type="preRenderView" listener="#{templateControllerManagedBean.validateSession()}"/>
     </h:head>
 
     <h:body>        
