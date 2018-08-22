@@ -5,14 +5,13 @@
  */
 package com.universitaria.ateliermaven.web.login;
 
-import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
+
 import com.universitaria.atelier.web.jpa.Usuario;
 import com.universitaria.ateliermaven.ejb.UsuarioEJB;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 /**
  *
  * @author jeisson.gomez
