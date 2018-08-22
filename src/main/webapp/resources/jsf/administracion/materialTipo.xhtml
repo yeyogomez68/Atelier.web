@@ -14,12 +14,12 @@
         <ui:define name="body">
             
                 <h:form id="form">  
-                    <p:panel id="panelFiltros" header="Marcas" >
+                    <p:panel id="panelFiltros" header="Tipos de Materiales" >
                         
                     </p:panel> 
                         <p:growl id="msn" life="2000"/>
 <!--                    <p:panel id="panelLista" header="Listado" >-->
-                        <p:dataTable var="marcas" value="#{marcaManagedBean.marcas}" editable="true" widgetVar="tablaMarcas"
+                        <p:dataTable var="tiposMateriales" value="#{materialTipoManagedBean.materialestipos}" editable="true" widgetVar="tablaMaterialesTipos"
                                      paginator="true"
                                      rowsPerPageTemplate="5,10,15"                                     
                                      paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
@@ -29,26 +29,26 @@
                             <f:facet name="header">
                                 <div class="headerTableAndCreateBtn">
                                     <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                                    <h4>Listado de Marcas</h4>  
+                                    <h4>Listado de Tipos de Materiales</h4>  
                                     <div class="globalFilterDiv">
                                         <img class="filtroLupa"/>
-                                        <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaMarcas').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                        <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaMaterialesTipos').filter()" style="" placeholder="Filtro de Busqueda"/>        
                                     </div>                                                                                                    
                                 </div>
                             </f:facet>
                             <!--Eventos de tabla editable-->
-                            <p:ajax event="rowEdit" listener="#{marcaManagedBean.onRowEdit}" update=":form:msn" />
-                            <p:ajax event="rowEditCancel" listener="#{marcaManagedBean.onRowCancel}" update=":form:msn" />
+                            <p:ajax event="rowEdit" listener="#{materialTipoManagedBean.onRowEdit}" update=":form:msn" />
+                            <p:ajax event="rowEditCancel" listener="#{materialTipoManagedBean.onRowCancel}" update=":form:msn" />
                             
-                            <p:column headerText="Id" filterBy="#{marcas.marcaId}" filterMatchMode="contains">
-                                <h:outputText value="#{marcas.marcaId}" />
+                            <p:column headerText="Id" filterBy="#{tiposMateriales.materialTipoId}" filterMatchMode="contains">
+                                <h:outputText value="#{tiposMateriales.materialTipoId}" />
                             </p:column>
 
-                            <p:column headerText="Descripción" filterBy="#{marcas.marcaNombre}" filterMatchMode="contains">
+                            <p:column headerText="Descripción" filterBy="#{tiposMateriales.materialTipoDescript}" filterMatchMode="contains">
                                 <p:cellEditor>
-                                    <h:outputText value="#{marcas.marcaNombre}" />
-                                    <f:facet name="output"><h:outputText value="#{marcas.marcaNombre}" /></f:facet>
-                                    <f:facet name="input"><p:inputText id="modelInput" value="#{marcas.marcaNombre}"/></f:facet>
+                                    <h:outputText value="#{tiposMateriales.materialTipoDescript}" />
+                                    <f:facet name="output"><h:outputText value="#{tiposMateriales.materialTipoDescript}" /></f:facet>
+                                    <f:facet name="input"><p:inputText id="modelInput" value="#{tiposMateriales.materialTipoDescript}"/></f:facet>
                                 </p:cellEditor>                                
                             </p:column>
                             <!--Columna de evento editar-->
@@ -57,12 +57,12 @@
                             </p:column>                            
                         </p:dataTable>
                     <!--</p:panel>--> 
-                    <p:dialog header="Crear Talla" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+                    <p:dialog header="Crear Tipo de Material" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
                         <div class="contentDialog">                    
-                            <h:outputText value="Talla: "/>
-                            <p:inputText placeholder="Talla" value="#{marcaManagedBean.marcaDesc}"/>                                                       
+                            <h:outputText value="Tipo de Material: "/>
+                            <p:inputText placeholder="Material" value="#{materialTipoManagedBean.materialDesc}" required="true"/>                                                       
                         </div>
-                        <p:commandButton value="Crear" action="#{marcaManagedBean.crearMarca}" update="form,:form:msn" onclick="PF('dlg1').hide();"/>                            
+                        <p:commandButton value="Crear" action="#{materialTipoManagedBean.crearTipoMaterial}" update="form,:form:msn" onclick="if(#{materialTipoManagedBean.modalDialog})PF('dlg1').hide();:null;"/>                            
                         <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
                     </p:dialog>  
                 </h:form>
