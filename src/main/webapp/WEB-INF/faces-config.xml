@@ -68,4 +68,35 @@
         <managed-bean-class>com.universitaria.ateliermaven.web.administrador.TallaManagedBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>proveedoresManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.inventario.ProveedoresManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>materialTipoManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.administrador.MaterialTipoManagedBean</managed-bean-class>
+    
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>marcaManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.administrador.MarcaManagedBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>colorManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.administrador.ColorManagedBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ocasionManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.administrador.OcasionManagedBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>paisManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.administrador.PaisManagedBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
 </faces-config>

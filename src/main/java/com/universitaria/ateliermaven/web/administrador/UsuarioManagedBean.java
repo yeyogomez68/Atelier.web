@@ -69,9 +69,7 @@ public class UsuarioManagedBean implements Serializable{
     public List<SelectItem> getCiudades() {
         if(ciudades==null || ciudades.isEmpty()){
             ciudades = new ArrayList<>();           
-        }else{
-            ciudades.clear();           
-        }      
+        }     
         setCiudades(ciudadEJB.getSelectItemCiudad());
         return ciudades;
     }

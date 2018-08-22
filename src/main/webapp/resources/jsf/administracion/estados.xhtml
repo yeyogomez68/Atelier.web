@@ -62,11 +62,10 @@
                             <h:outputText value="Estado: "/>
                             <p:inputText placeholder="Nombre de Estado" value="#{estadoManagedBean.nomEstado}"/>                                                       
                         </div>
-                        <p:commandButton value="Crear" action="#{estadoManagedBean.crearEstado}"/>                            
+                        <p:commandButton value="Crear" action="#{estadoManagedBean.crearEstado}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
                         <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
                     </p:dialog>  
                 </h:form>
         </ui:define>
-        
     </ui:composition>
 </html>
