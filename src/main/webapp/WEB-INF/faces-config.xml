@@ -28,12 +28,7 @@
         </navigation-case>                
     </navigation-rule>
     
-    <navigation-rule>
-        <from-view-id>/resources/jsf/menu/appmenu.xhtml</from-view-id>
-        <from-outcome>ok</from-outcome>
-            <to-view-id>Login.xhtml</to-view-id>
-        <redirect/>
-    </navigation-rule>
+    
     
     <navigation-rule>
         <from-view-id>/resources/jsf/principal/principal.xhtml</from-view-id>

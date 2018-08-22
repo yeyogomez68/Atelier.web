@@ -6,39 +6,37 @@
 package com.universitaria.ateliermaven.web.session;
 
 import com.universitaria.atelier.web.jpa.Usuario;
-import javax.annotation.PostConstruct;
+import java.io.Serializable;
 import javax.faces.context.FacesContext;
 
 /**
  *
  * @author jeisson.gomez
  */
-public class TemplateControllerManagedBean {
+public class TemplateControllerManagedBean implements Serializable{
     private String nombre;
     private Usuario user;
-    FacesContext facesContext;
     /**
      * Creates a new instance of TemplateControllerManagedBean
      */
     public TemplateControllerManagedBean() {
         
     }
-    @PostConstruct
-    public void init(){
-        facesContext = FacesContext.getCurrentInstance();
-        user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
-        nombre = user.getUsuarioNombre() + " " +user.getUsuarioApellido();
-    }
 
     public String getNombre() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
+        setNombre(user.getUsuarioNombre() + " " +user.getUsuarioApellido());
         return nombre;
     }
 
     public void setNombre(String nombre) {
+        
         this.nombre = nombre;
     }
 
     public Usuario getUser() {
+        
         return user;
     }
 
@@ -48,7 +46,9 @@ public class TemplateControllerManagedBean {
     
     
     
-    public void validateSession(){
+    public void validateSession(){        
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
         try {                        
             if (user==null) {
                 facesContext.getExternalContext().redirect("../../../Login.xhtml");
@@ -58,9 +58,14 @@ public class TemplateControllerManagedBean {
         }
     }
     
-    public String cerrarSession(){
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "ok";
+    public void cerrarSession(){
+        try {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            facesContext.getExternalContext().invalidateSession();
+            facesContext.getExternalContext().redirect("../../../Login.xhtml");
+        } catch (Exception e) {
+        }
+        
     }
     
 }
