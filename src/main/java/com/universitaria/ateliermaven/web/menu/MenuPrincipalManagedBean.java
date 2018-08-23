@@ -7,7 +7,7 @@ package com.universitaria.ateliermaven.web.menu;
 
 import com.universitaria.atelier.web.jpa.Opcion;
 import com.universitaria.ateliermaven.ejb.menu.OpcionEJB;
-import java.util.AbstractList;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -21,7 +21,7 @@ import org.primefaces.model.menu.MenuModel;
  *
  * @author jeisson.gomez
  */
-public class MenuPrincipalManagedBean {
+public class MenuPrincipalManagedBean implements Serializable{
     
     private MenuModel model;
     

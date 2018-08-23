@@ -434,6 +434,36 @@ aside{
 .asideToggle{
     display:block;
 }
+/*PickList*/
+.ui-picklist.ui-picklist-responsive .ui-picklist-list{
+    border: 1px solid #ccc;
+}
+.ui-picklist .ui-picklist-list li{
+    border-bottom: 1px solid rgba(50,91,201);
+}
+.ui-picklist .ui-picklist-caption{
+    background-color: rgba(50,91,201,0.8);
+    color: white;
+    font-weight: bold;
+}
+.ui-button-icon-only .ui-button-text{
+    color: white;
+    text-indent: 0px !important;
+    font-weight: bold;
+}
+.ui-picklist-button-add-all, .ui-picklist-button-remove-all{
+    display: none !important; 
+}
+.ui-picklist .ui-picklist-filter-container .ui-icon{
+    content: url(../javax.faces.resource/img/tools/lupa.png);
+    width: 15px;
+    height: 15px;
+    margin-top: 11px;
+    opacity: 0.6;
+}
+.ui-picklist{
+    display: contents !important;
+}
 /*Cuando es menor que 800 PEQUEÑO*/
 @media screen and (max-width: 800px){    
     aside{        
@@ -476,7 +506,7 @@ aside{
 /*Cuando es maor a 801 GRANDE*/
 @media screen and (min-width: 801px){
     .sectionContent{
-        margin-left: 250px;        
+        margin-left: 250px;
     }
     header{
         margin-left: 250px;
