@@ -52,13 +52,12 @@ public class OcasionManagedBean implements Serializable {
     }
 
     public void setOcasionNombre(String ocasionNombre) {
-        this.ocasionNombre = ocasionNombre;
+        this.ocasionNombre = Comunes.getFormat(ocasionNombre);
     }
 
     
        public void onRowEdit(RowEditEvent event) {
-           FacesMessage msg = new FacesMessage("Car Edited", ((Ocasion) event.getObject()).getOcasionDescrip());
-           FacesContext.getCurrentInstance().addMessage(null, msg);
+            Comunes.mensaje((ocasionEJB.setModificarOcasion(((Ocasion) event.getObject()).getOcasionId().toString(), Comunes.getFormat(((Ocasion) event.getObject()).getOcasionDescrip())) ? "Se ha modificado la ocasion correctamente" : "Error modificando la ocasion"), ocasionNombre);
     }
 
     public void onRowCancel(RowEditEvent event) {
@@ -67,7 +66,12 @@ public class OcasionManagedBean implements Serializable {
     }
 
     public void crearOcasion( ) {
-        Comunes.mensaje((ocasionEJB.setCrearOcasion(ocasionNombre)? "Se ha creado el estado correctamente":"Error creando el estado" ), ocasionNombre);
+         if (!ocasionEJB.existeOcasion(ocasionNombre)) {
+            Comunes.mensaje((ocasionEJB.setCrearOcasion(ocasionNombre)? "Se ha creado la ocasion correctamente":"Error creando ocasion " ), ocasionNombre);
+        } else {
+            Comunes.mensaje("la ocasion ya se encuentra registrado ", ocasionNombre);
+        }
+        
     }
     
 }

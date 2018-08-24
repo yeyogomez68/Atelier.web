@@ -14,12 +14,12 @@
         <ui:define name="body">
 
             <h:form id="form">  
-                <p:panel id="panelFiltros" header="Filtros de ocasiones" >
+                <p:panel id="panelFiltros" header="Filtros de Colores" >
 
                 </p:panel> 
 
                 <!--                    <p:panel id="panelLista" header="Listado" >-->
-                <p:dataTable var="ocasiones" value="#{ocasionManagedBean.ocasiones}" editable="true" widgetVar="tablaOcasiones"
+                <p:dataTable var="colores" value="#{colorManagedBean.colores}" editable="true" widgetVar="tablaColores"
                              paginator="true"
                              rowsPerPageTemplate="5,10,15"                                     
                              paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
@@ -32,23 +32,23 @@
                             <h4>Listado de colores</h4>  
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
-                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaOcasiones').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaColores').filter()" style="" placeholder="Filtro de Busqueda"/>        
                             </div>                                                                                                    
                         </div>
                     </f:facet>
                     <!--Eventos de tabla editable-->
-                    <p:ajax event="rowEdit" listener="#{ocasionManagedBean.onRowEdit}" update=":universarGrowl" />
-                    <p:ajax event="rowEditCancel" listener="#{ocasionManagedBean.onRowCancel}" update=":universarGrowl" />
+                    <p:ajax event="rowEdit" listener="#{colorManagedBean.onRowEdit}" update=":universarGrowl" />
+                    <p:ajax event="rowEditCancel" listener="#{colorManagedBean.onRowCancel}" update=":universarGrowl" />
 
-                    <p:column headerText="Id" filterBy="#{ocasiones.ocasionId}" filterMatchMode="contains">
-                        <h:outputText value="#{ocasiones.ocasionId}" />
+                    <p:column headerText="Id" filterBy="#{colores.colorId}" filterMatchMode="contains">
+                        <h:outputText value="#{colores.colorId}" />
                     </p:column>
 
-                    <p:column headerText="Descripción" filterBy="#{ocasiones.ocasionDescrip}" filterMatchMode="contains">
+                    <p:column headerText="Descripción" filterBy="#{colores.colorDescrip}" filterMatchMode="contains">
                         <p:cellEditor>
-                            <h:outputText value="#{ocasiones.ocasionDescrip}" />
-                            <f:facet name="output"><h:outputText value="#{ocasiones.ocasionDescrip}" /></f:facet>
-                            <f:facet name="input"><p:inputText id="modelInput" value="#{ocasiones.ocasionDescrip}"/></f:facet>
+                            <h:outputText value="#{colores.colorDescrip}" />
+                            <f:facet name="output"><h:outputText value="#{colores.colorDescrip}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput" value="#{colores.colorDescrip}"/></f:facet>
                         </p:cellEditor>                                
                     </p:column>
                     <!--Columna de evento editar-->
@@ -57,12 +57,12 @@
                     </p:column>                            
                 </p:dataTable>
                 <!--</p:panel>--> 
-                <p:dialog header="Crear Ocasion" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                <p:dialog header="Crear Color" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
                     <div class="contentDialog">                    
-                        <h:outputText value="Ocasion: "/>
-                        <p:inputText placeholder="Nombre de Ocasion" value="#{ocasionManagedBean.ocasionNombre}" required="true"/>      
+                        <h:outputText value="Color: "/>
+                        <p:inputText placeholder="Nombre de Color" value="#{colorManagedBean.colorNombre}"/>                                                       
                     </div>
-                    <p:commandButton value="Crear" action="#{ocasionManagedBean.crearOcasion}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
+                    <p:commandButton value="Crear" action="#{colorManagedBean.crearColor}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
                 </p:dialog>  
             </h:form>

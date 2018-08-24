@@ -29,7 +29,7 @@
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
                             <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                            <h4>Listado de colores</h4>  
+                            <h4>Listado de paises</h4>  
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
                                 <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaPais').filter()" style="" placeholder="Filtro de Busqueda"/>        
@@ -59,8 +59,8 @@
                 <!--</p:panel>--> 
                 <p:dialog header="Crear Pais" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
                     <div class="contentDialog">                    
-                        <h:outputText value="Color: "/>
-                        <p:inputText placeholder="Nombre de Pais" value="#{paisManagedBean.nombrePais}"/>                                                       
+                        <h:outputText value="Pais: "/>
+                        <p:inputText placeholder="Nombre de Pais" value="#{paisManagedBean.nombrePais}" required="true"/>                                                       
                     </div>
                     <p:commandButton value="Crear" action="#{paisManagedBean.crearPais}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
