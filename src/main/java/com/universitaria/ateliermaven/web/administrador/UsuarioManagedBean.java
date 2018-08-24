@@ -124,11 +124,9 @@ public class UsuarioManagedBean implements Serializable{
     
     public List<SelectItem> getEstados() {
         if(estados==null || estados.isEmpty()){
-            estados = new ArrayList<>();           
-        }else{
-            estados.clear();           
-        }      
-        setEstados(estadoEJB.getSelectItemEstados());
+            estados = new ArrayList<>();   
+            setEstados(estadoEJB.getSelectItemEstados());
+        }
         return estados;
     }
 
