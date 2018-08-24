@@ -44,8 +44,12 @@ public class TemplateControllerManagedBean implements Serializable{
         this.user = user;
     }
     
-    
-    
+    public Usuario getUserSession(){
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
+        return user;
+    }
+        
     public void validateSession(){        
         FacesContext facesContext = FacesContext.getCurrentInstance();
         user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");

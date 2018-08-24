@@ -6,18 +6,21 @@
 package com.universitaria.ateliermaven.web.compras;
 
 import com.universitaria.atelier.web.jpa.Encabezadorequerimiento;
-import com.universitaria.atelier.web.jpa.Material;
+import com.universitaria.atelier.web.jpa.Usuario;
+import com.universitaria.atelier.web.utils.MaterialRequerimientoUtil;
+import com.universitaria.ateliermaven.ejb.compras.DetalleRequerimientoEJB;
 import com.universitaria.ateliermaven.ejb.compras.EncabezadoRequerimientoEJB;
 import com.universitaria.ateliermaven.ejb.compras.MaterialEJB;
+import com.universitaria.ateliermaven.web.session.TemplateControllerManagedBean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.TransferEvent;
+import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.DualListModel;
 
 /**
@@ -32,31 +35,59 @@ public class RequerimientoManagedBean implements Serializable{
     @EJB
     private EncabezadoRequerimientoEJB encabezadoRequerimientoEJB;
     
+    @EJB
+    private DetalleRequerimientoEJB detalleRequerimientoEJB;
+    
     private List<Encabezadorequerimiento> listaRequerimientos;
     
     private String desrequerimiento;
     private boolean dialogModifi=false;
     private boolean dialogCrear=false;
+    
+    private double cantidad;
+    private Usuario user;
+    
+    private MaterialRequerimientoUtil material;
     FacesMessage msg = null;
     /**
      * Creates a new instance of RequerimientoManagedBean
      */
     public RequerimientoManagedBean() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
+    }
+
+    public Usuario getUser() {
+        return user;
+    }
+
+    public void setUser(Usuario user) {
+        this.user = user;
+    }
+
+    
+    public double getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(double cantidad) {
+        this.cantidad = cantidad;
     }
     
-    private DualListModel<Material> listMateriales;
+    
+    private DualListModel<MaterialRequerimientoUtil> listMateriales;
 
-    public DualListModel<Material> getListMateriales() {
-        if(listMateriales == null || listMateriales.getSource().isEmpty()){            
-            List<Material> source = new ArrayList<>();
-            List<Material> target = new ArrayList<>();      
-            source = materialEJB.getMateriales();
-            setListMateriales(new DualListModel<Material>(source,target));
+    public DualListModel<MaterialRequerimientoUtil> getListMateriales() {
+        if(listMateriales == null || (listMateriales.getSource().isEmpty() && listMateriales.getTarget().isEmpty())){            
+            List<MaterialRequerimientoUtil> source = new ArrayList<>();
+            List<MaterialRequerimientoUtil> target = new ArrayList<>();      
+            source = materialEJB.getMaterialesRequerimiento();
+            setListMateriales(new DualListModel<MaterialRequerimientoUtil>(source,target));
         }
         return listMateriales;
     }
 
-    public void setListMateriales(DualListModel<Material> listMateriales) {        
+    public void setListMateriales(DualListModel<MaterialRequerimientoUtil> listMateriales) {        
         this.listMateriales = listMateriales;
     }
 
@@ -68,6 +99,14 @@ public class RequerimientoManagedBean implements Serializable{
         return listaRequerimientos;
     }
 
+    public MaterialRequerimientoUtil getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(MaterialRequerimientoUtil material) {
+        this.material = material;
+    }    
+    
     public void setListaRequerimientos(List<Encabezadorequerimiento> listaRequerimientos) {
         this.listaRequerimientos = listaRequerimientos;
     }
@@ -96,35 +135,61 @@ public class RequerimientoManagedBean implements Serializable{
         this.dialogCrear = dialogCrear;
     }
     
-    public void onRowEdit(RowEditEvent event) {
-        Integer idRq = ((Encabezadorequerimiento) event.getObject()).getEncabezadoRequerimientoId();
-        setDialogModifi(true);
-        
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-     
-    public void onRowCancel(RowEditEvent event) {       
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Edición Cancelada", ((Encabezadorequerimiento) event.getObject()).getEncabezadoRequerimientoId().toString()));
-    }
-    
     public void crearRequerimiento(){
         RequestContext req = RequestContext.getCurrentInstance();
-        if(true){
-            setListMateriales(null);
-            getListMateriales(); 
-            req.execute("PF('dlg1').hide();");  
-        }else{
-            req.execute("PF('dlg1').show();");
+        Integer encabezado = encabezadoRequerimientoEJB.setCrearRequerimiento(getDesrequerimiento(),user);
+        if(encabezado!=null){
+            if(detalleRequerimientoEJB.crearDetalleRequerimiento(encabezado, getListMateriales().getTarget(), user)){
+                limpiarLista();
+                req.update(":form");
+                req.execute("PF('dlg1').hide();");  
+            }
+            
         }
-        
-        
+    } 
+    
+    public void modificarRequerimiento(String id){
+        RequestContext req = RequestContext.getCurrentInstance();        
+        setDesrequerimiento(id);
+        req.execute("PF('dlg2').show();"); 
     }
     
-    public void mostrarDialogo(){        
-        setDesrequerimiento("");
+    public void limpiarLista(){        
         setListMateriales(null);
         getListMateriales(); 
+        setDesrequerimiento("");
+         
+    }
+    public void crearRequerimientoPanel(){
+        limpiarLista();
         RequestContext req = RequestContext.getCurrentInstance();
-        req.execute("PF('dlg1').hide();");        
+        req.execute("PF('dlg1').show();"); 
+    }
+    
+    public void onTransfer(TransferEvent event){
+        for(Object item : event.getItems()) {
+            material = new MaterialRequerimientoUtil();
+            material.setNombre(((MaterialRequerimientoUtil) item).getNombre());
+            material.setMaterialId(((MaterialRequerimientoUtil) item).getMaterialId());
+            material.setReferencia(((MaterialRequerimientoUtil) item).getReferencia());
+            material.setMarcaId(((MaterialRequerimientoUtil) item).getMarcaId());
+            material.setCantidad("0.0");
+        }   
+        setCantidad(0);
+        RequestContext req = RequestContext.getCurrentInstance();
+        req.execute("PF('dlg3').show();"); 
+    }
+
+    
+    public void cantidades(){
+        for (MaterialRequerimientoUtil listaMate : listMateriales.getTarget()) {
+            if(listaMate.getMaterialId() == null ? material.getMaterialId() == null : listaMate.getMaterialId().equals(material.getMaterialId())){
+                listaMate.setCantidad(String.valueOf(cantidad));
+                break;
+            }
+        }
+        setCantidad(0);
+        RequestContext req = RequestContext.getCurrentInstance();
+        req.execute("PF('dlg3').hide();"); 
     }
 }
