@@ -75,16 +75,15 @@
                         <h:outputText  value="Fecha:" />
                         <p:calendar id="popup" value="#{detalleProduccionMaganedBean.detalleProduccionCrear.produccionDetaFecha}" />
                         <h:outputText value="Material: "/>
-                        <p:selectOneMenu id="naterial" value="#{detalleProduccionMaganedBean.materialId}">                                            
+                        <p:selectOneMenu id="material" value="#{detalleProduccionMaganedBean.materialId}">                                            
                             <f:selectItems value="#{detalleProduccionMaganedBean.materiales}" />
                         </p:selectOneMenu>
                          <h:outputText value="Produccion: "/>
-                         <p:selectOneMenu id="naterial" value="#{detalleProduccionMaganedBean.produccionId}">                                            
+                         <p:selectOneMenu id="produccion" value="#{detalleProduccionMaganedBean.produccionId}">                                            
                              <f:selectItems value="#{detalleProduccionMaganedBean.producciones}" />
                         </p:selectOneMenu>
-                        
                     </div>
-                    <p:commandButton value="Crear" action="#{prendaTipoManagedBean.crearPrendaTipo}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
+                    <p:commandButton value="Crear" action="#{detalleProduccionMaganedBean.crearProduccionDetalle}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
                 </p:dialog>  
             </h:form>
