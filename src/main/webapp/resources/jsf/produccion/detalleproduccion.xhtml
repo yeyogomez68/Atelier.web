@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -6,21 +6,20 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-
-
-    <ui:composition template="./../../../WEB-INF/include/template.xhtml">
-
+    <ui:composition template="/WEB-INF/include/template.xhtml">
         <ui:define name="title">
-            <h:outputText value="Requerimientos"></h:outputText>
+            <h:outputText value="Atelier"></h:outputText>
         </ui:define>
 
         <ui:define name="body">
-            <h:form id="form">
 
-                <p:panel id="panelFiltros" header="Requerimientos" >                        
-                </p:panel>                      
-                
-                <p:dataTable id="tabla" var="requeri" value="#{requerimientoManagedBean.listaRequerimientos}" editable="true" widgetVar="tablaDetalleProduccion"
+            <h:form id="form">  
+                <p:panel id="panelFiltros" header="Filtros de Detalle de Produccion" >
+
+                </p:panel> 
+
+                <!--                    <p:panel id="panelLista" header="Listado" >-->
+                <p:dataTable var="produccionDetalles" value="#{detalleProduccionMaganedBean.produccionDetalles}" editable="true" widgetVar="tablaProduccionDetalles"
                              paginator="true"
                              rowsPerPageTemplate="5,10,15"                                     
                              paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
@@ -28,117 +27,67 @@
                              rows="10">
 
                     <f:facet name="header">
-
                         <div class="headerTableAndCreateBtn">
-                            <p:commandButton value="+" actionListener="#{requerimientoManagedBean.crearRequerimientoPanel()}"/>
-                            <h4>Listado de Requerimientos</h4>  
+                            <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
+                            <h4>Listado de detalles de produccion</h4>  
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
-                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaDetalleProduccion').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaProduccionDetalles').filter()" style="" placeholder="Filtro de Busqueda"/>        
                             </div>                                                                                                    
                         </div>
                     </f:facet>
                     <!--Eventos de tabla editable-->
+                    <p:ajax event="rowEdit" listener="#{detalleProduccionMaganedBean.onRowEdit}" update=":universarGrowl" />
+                    <p:ajax event="rowEditCancel" listener="#{detalleProduccionMaganedBean.onRowCancel}" update=":universarGrowl" />
 
-
-                    <p:column headerText="Id" filterBy="#{requeri.encabezadoRequerimientoId}" filterMatchMode="contains">
-                        <h:outputText value="#{requeri.encabezadoRequerimientoId}" />
+                    <p:column headerText="Id" filterBy="#{produccionDetalles.produccionDetaId}" filterMatchMode="contains">
+                        <h:outputText value="#{produccionDetalles.produccionDetaId}" />
                     </p:column>
 
-                    <p:column headerText="Detalle" filterBy="#{requeri.encabezadoRequerimientoDeta}" filterMatchMode="contains">
-                        <h:outputText value="#{requeri.encabezadoRequerimientoDeta}" />
+                    <p:column headerText="Descripción" filterBy="#{produccionDetalles.produccionId.produccionDescripcion}" filterMatchMode="contains">
+                        <h:outputText value="#{produccionDetalles.produccionId.produccionDescripcion}" />
                     </p:column>
 
-                    <p:column headerText="Usuario" filterBy="#{requeri.usuarioId.usuarioNombre}" filterMatchMode="contains">
-                        <h:outputText value="#{requeri.usuarioId.usuarioNombre}" />
+                    <p:column headerText="Material" filterBy="#{produccionDetalles.materialId}" filterMatchMode="contains">
+                        <h:outputText value="#{produccionDetalles.materialId}" />
                     </p:column>
 
-                    <p:column headerText="Estado" filterBy="#{requeri.estadoId.estadoDescrip}" filterMatchMode="contains">
-                        <h:outputText value="#{requeri.estadoId.estadoDescrip}" />
-                    </p:column>    
+                    <p:column headerText="Cantidad" filterBy="#{produccionDetalles.produccionDetaCant}" filterMatchMode="contains">
+                        <h:outputText value="#{produccionDetalles.produccionDetaCant}" />
+                    </p:column>
 
-                    <p:column headerText="Editar">
-                        <p:commandLink value="Modificar" actionListener="#{requerimientoManagedBean.modificarRequerimiento(requeri.encabezadoRequerimientoId)}" update="universarGrowl,dialogModificar"/> 
-                    </p:column> 
+                    <p:column headerText="Fecha" filterBy="#{produccionDetalles.produccionDetaFecha}" filterMatchMode="contains">
+                        <h:outputText value="#{produccionDetalles.produccionDetaFecha}" />
+                    </p:column>
 
+                    <!--Columna de evento editar-->
+                    <p:column width="50">
+                        <p:rowEditor />
+                    </p:column>                            
                 </p:dataTable>
-
-
-            </h:form>
-            <p:dialog id="dialogCrear" header="Crear Requerimiento" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
-                <h:form id="frmdialogCrear">
+                <!--</p:panel>--> 
+                <p:dialog header="Crear Nuevo Detalle" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
                     <div class="contentDialog">                    
-                        <h:outputText value="Motivo o Detalle: "/>
-                        <p:inputText value="#{requerimientoManagedBean.desrequerimiento}" required="true" requiredMessage="El motivo es Obligatorio"/>                                                       
-                    </div>                          
-                    <p:pickList id="PojoPickList" value="#{requerimientoManagedBean.listMateriales}" var="material" required="true" requiredMessage="Debe Seleccionar minimo un Material"
-                                itemValue="#{material}" itemLabel="#{material.nombre}" showSourceControls="false" showTargetControls="false" showCheckbox="true" responsive="true"
-                                showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"  addLabel="+" removeLabel="-" converter="materialPickListConverter">
 
-                        <f:facet name="sourceCaption">Material</f:facet>
-                        <f:facet name="targetCaption">Agregado</f:facet>
-                        <p:ajax event="transfer" listener="#{requerimientoManagedBean.onTransfer}" update="dialogCantidad"/>                        
-                        <p:column>
-                            <h:outputText value="#{material.nombre}" />
-                        </p:column>
-                        <p:column>
-                            <h:outputText value="#{material.referencia}" />
-                        </p:column>
-                        <p:column>
-                            <h:outputText value="#{material.tipoId}" />
-                        </p:column>   
-                        <p:column>
-                            <h:outputText value="#{material.cantidad}" />
-                        </p:column> 
-                    </p:pickList>
-                    <p:commandButton value="Crear" action="#{requerimientoManagedBean.crearRequerimiento()}" update="form,frmdialogCrear,universarGrowl"/> 
-                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
-                </h:form>
-            </p:dialog> 
-
-            <p:dialog id="dialogModificar" header="Crear Requerimiento" widgetVar="dlg2" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
-                <h:form>
-                    <div class="contentDialog">                    
-                        <h:outputText value="Motivo o Detalle: "/>
-                        <p:inputText value="#{requerimientoManagedBean.desrequerimiento}" required="true" requiredMessage="El motivo es Obligatorio"/>                                                       
-                    </div>                          
-                    <p:pickList id="PojoPickList2" value="#{requerimientoManagedBean.listMateriales}" var="material" required="true" requiredMessage="Debe Seleccionar minimo un Material"
-                                itemValue="#{material}" itemLabel="#{material.nombre}" showSourceControls="false" showTargetControls="false" showCheckbox="true" responsive="true"
-                                showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"  addLabel="+" removeLabel="-" >
-
-                        <f:facet name="sourceCaption">Material</f:facet>
-                        <f:facet name="targetCaption">Agregado</f:facet>
-
-                        <p:column >
-                            <h:outputText value="#{material.nombre}" />
-                        </p:column>
-                        <p:column>
-                            <h:outputText value="#{material.referencia}" />
-                        </p:column>
-                        <p:column>
-                            <h:outputText value="#{material.tipoId}" />
-                        </p:column>   
-                        <p:column>
-                            <h:outputText value="#{material.cantidad}" />
-                        </p:column> 
-                    </p:pickList>
-                    <p:commandButton value="Crear" action="#{requerimientoManagedBean.crearRequerimiento()}" update="form:tabla,universarGrowl"/> 
-                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg2').hide();"/> 
-                </h:form>
-            </p:dialog>
-            
-            <p:dialog id="dialogCantidad" header="Cantidad" widgetVar="dlg3" closable="false" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
-                <h:form>
-                    <div class="contentDialog">                                                      
                         <h:outputText value="Cantidad: "/>
-                        <p:inputNumber value="#{requerimientoManagedBean.cantidad}" decimalPlaces="1" required="true" minValue="1" maxValue="1000" maxlength="10" requiredMessage="La cantidad es Obligatoria"/>                                                       
-                    </div>                                              
-                    <p:commandButton value="Agregar" action="#{requerimientoManagedBean.cantidades()}" update="universarGrowl,:frmdialogCrear:PojoPickList"/>                     
-                </h:form>
-            </p:dialog>
+                        <p:inputText placeholder="Cantidad" value="#{detalleProduccionMaganedBean.detalleProduccionCrear.produccionDetaCant}"/>  
+                        
+                        <h:outputText  value="Fecha:" />
+                        <p:calendar id="popup" value="#{detalleProduccionMaganedBean.detalleProduccionCrear.produccionDetaFecha}" />
+                        <h:outputText value="Material: "/>
+                        <p:selectOneMenu id="naterial" value="#{detalleProduccionMaganedBean.materialId}">                                            
+                            <f:selectItems value="#{detalleProduccionMaganedBean.materiales}" />
+                        </p:selectOneMenu>
+                         <h:outputText value="Produccion: "/>
+                         <p:selectOneMenu id="naterial" value="#{detalleProduccionMaganedBean.produccionId}">                                            
+                             <f:selectItems value="#{detalleProduccionMaganedBean.producciones}" />
+                        </p:selectOneMenu>
+                        
+                    </div>
+                    <p:commandButton value="Crear" action="#{prendaTipoManagedBean.crearPrendaTipo}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
+                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
+                </p:dialog>  
+            </h:form>
         </ui:define>
-
     </ui:composition>
-
-
 </html>
