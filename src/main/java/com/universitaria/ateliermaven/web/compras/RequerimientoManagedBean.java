@@ -11,6 +11,7 @@ import com.universitaria.atelier.web.utils.MaterialRequerimientoUtil;
 import com.universitaria.ateliermaven.ejb.compras.DetalleRequerimientoEJB;
 import com.universitaria.ateliermaven.ejb.compras.EncabezadoRequerimientoEJB;
 import com.universitaria.ateliermaven.ejb.compras.MaterialEJB;
+import com.universitaria.ateliermaven.web.session.TemplateControllerManagedBean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

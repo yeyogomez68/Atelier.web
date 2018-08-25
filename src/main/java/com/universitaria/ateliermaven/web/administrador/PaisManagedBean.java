@@ -9,6 +9,7 @@ import com.universitaria.atelier.web.jpa.Pais;
 import com.universitaria.ateliermaven.ejb.administrador.PaisEJB;
 import com.universitaria.ateliermaven.web.comunes.Comunes;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -35,6 +36,10 @@ public class PaisManagedBean implements Serializable {
     }
 
     public List<Pais> getPaises() {
+        if (paises == null) {
+            paises = new ArrayList<>();
+            setPaises(paisEJB.getPaises());
+        }
         return paises;
     }
 
@@ -47,12 +52,11 @@ public class PaisManagedBean implements Serializable {
     }
 
     public void setNombrePais(String nombrePais) {
-        this.nombrePais = nombrePais;
+        this.nombrePais = Comunes.getFormat(nombrePais);
     }
 
     public void onRowEdit(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Car Edited", ((Pais) event.getObject()).getPaisNombre());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        Comunes.mensaje((paisEJB.setModificarPais(((Pais) event.getObject()).getPaisId().toString(), Comunes.getFormat(((Pais) event.getObject()).getPaisNombre())) ? "Se ha modificado el pais correctamente" : "Error modificando el pais"), nombrePais);
     }
 
     public void onRowCancel(RowEditEvent event) {
@@ -61,6 +65,10 @@ public class PaisManagedBean implements Serializable {
     }
 
     public void crearPais() {
-        Comunes.mensaje((paisEJB.setCrearPais(Comunes.getFormat(nombrePais)) ? "Se ha creado el estado correctamente" : "Error creando el estado"), Comunes.getFormat(nombrePais));
+        if (!paisEJB.existePais(nombrePais)) {
+            Comunes.mensaje((paisEJB.setCrearPais(nombrePais) ? "Se ha creado el pais correctamente" : "Error creando el pais"), nombrePais);
+        } else {
+            Comunes.mensaje("El pais ya se encuentra registrado", nombrePais);
+        }
     }
 }

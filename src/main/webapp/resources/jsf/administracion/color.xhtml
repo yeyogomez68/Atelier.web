@@ -60,7 +60,7 @@
                 <p:dialog header="Crear Color" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
                     <div class="contentDialog">                    
                         <h:outputText value="Color: "/>
-                        <p:inputText placeholder="Nombre de Color" value="#{colorManagedBean.colorNombre}"/>                                                       
+                        <p:inputText placeholder="Nombre de Color" value="#{colorManagedBean.colorNombre}" required="true"/>                                                       
                     </div>
                     <p:commandButton value="Crear" action="#{colorManagedBean.crearColor}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 

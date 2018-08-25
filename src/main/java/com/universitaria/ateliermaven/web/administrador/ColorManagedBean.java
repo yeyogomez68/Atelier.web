@@ -20,7 +20,6 @@ import org.primefaces.event.RowEditEvent;
  *
  * @author SoulHunter
  */
-
 public class ColorManagedBean implements Serializable {
 
     @EJB
@@ -53,12 +52,11 @@ public class ColorManagedBean implements Serializable {
     }
 
     public void setColorNombre(String colorNombre) {
-        this.colorNombre = colorNombre;
+        this.colorNombre = Comunes.getFormat(colorNombre);
     }
 
     public void onRowEdit(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Car Edited", ((Color) event.getObject()).getColorDescrip());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        Comunes.mensaje((colorEJB.setModificarColor(((Color) event.getObject()).getColorId().toString(), Comunes.getFormat(((Color) event.getObject()).getColorDescrip())) ? "Se ha modificado el color correctamente" : "Error modificando el color"), colorNombre);
     }
 
     public void onRowCancel(RowEditEvent event) {
@@ -67,7 +65,11 @@ public class ColorManagedBean implements Serializable {
     }
 
     public void crearColor() {
-        Comunes.mensaje((colorEJB.setCrearColor(colorNombre) ? "Se ha creado el estado correctamente" : "Error creando el estado"), colorNombre);
+        if (!colorEJB.existeColor(colorNombre)) {
+            Comunes.mensaje((colorEJB.setCrearColor(colorNombre) ? "Se ha creado el estado correctamente" : "Error creando el estado"), colorNombre);
+        } else {
+            Comunes.mensaje("El color ya se encuentra registrado", colorNombre);
+        }
     }
 
 }
