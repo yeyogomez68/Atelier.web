@@ -11,7 +11,6 @@ import com.universitaria.atelier.web.utils.MaterialRequerimientoUtil;
 import com.universitaria.ateliermaven.ejb.compras.DetalleRequerimientoEJB;
 import com.universitaria.ateliermaven.ejb.compras.EncabezadoRequerimientoEJB;
 import com.universitaria.ateliermaven.ejb.compras.MaterialEJB;
-import com.universitaria.ateliermaven.web.session.TemplateControllerManagedBean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TransferEvent;
-import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.DualListModel;
 
 /**
@@ -154,11 +152,13 @@ public class RequerimientoManagedBean implements Serializable{
         req.execute("PF('dlg2').show();"); 
     }
     
-    public void limpiarLista(){        
-        setListMateriales(null);
+    public void limpiarLista(){           
+        listMateriales.getSource().clear();
+        listMateriales.getTarget().clear();
+        listaRequerimientos.clear();
         getListMateriales(); 
-        setDesrequerimiento("");
-         
+        getListaRequerimientos();
+        setDesrequerimiento("");         
     }
     public void crearRequerimientoPanel(){
         limpiarLista();

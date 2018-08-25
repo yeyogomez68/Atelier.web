@@ -77,8 +77,8 @@
 
                         <f:facet name="sourceCaption">Material</f:facet>
                         <f:facet name="targetCaption">Agregado</f:facet>
-                        <p:ajax event="transfer" listener="#{requerimientoManagedBean.onTransfer}"/>                        
-                        <p:column >
+                        <p:ajax event="transfer" listener="#{requerimientoManagedBean.onTransfer}" update="dialogCantidad"/>                        
+                        <p:column>
                             <h:outputText value="#{material.nombre}" />
                         </p:column>
                         <p:column>
@@ -91,7 +91,7 @@
                             <h:outputText value="#{material.cantidad}" />
                         </p:column> 
                     </p:pickList>
-                    <p:commandButton value="Crear" action="#{requerimientoManagedBean.crearRequerimiento()}" update=":form:tabla,universarGrowl"/> 
+                    <p:commandButton value="Crear" action="#{requerimientoManagedBean.crearRequerimiento()}" update="form,frmdialogCrear,universarGrowl"/> 
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
                 </h:form>
             </p:dialog> 

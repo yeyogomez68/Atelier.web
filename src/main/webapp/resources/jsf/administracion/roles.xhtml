@@ -71,15 +71,24 @@
                             </p:column>                            
                         </p:dataTable>
                     <!--</p:panel>--> 
-                    <p:dialog header="Crear Roll" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
-                        <div class="contentDialog">                   
-                            <h:outputText value="Estado: "/>
-                            <p:inputText placeholder="Nombre de Roll" value="#{rolesManagedBean.rollDesc}"/>                                                     
-                        </div>
-                        <p:commandButton value="Crear" action="#{rolesManagedBean.crearRoll}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
-                        <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/>   
-                    </p:dialog>  
+                     
                 </h:form>
+                <p:dialog header="Crear Roll" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                    <h:form>
+                        <div class="contentDialog">                   
+                            <h:outputText value="Nombre Roll "/>
+                            <p:inputText placeholder="Nombre de Roll" value="#{rolesManagedBean.rollDesc}"
+                                         maxlength="20"
+                                         required="true"
+                                         requiredMessage="El Nombre es obligatorio" 
+                                         validatorMessage="El Nombre del Roll debe contener solo letras">
+                                <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                            </p:inputText>
+                        </div>
+                        <p:commandButton value="Crear" action="#{rolesManagedBean.crearRoll}" update="form,universarGrowl"/>                            
+                        <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/>   
+                    </h:form>
+                </p:dialog> 
         </ui:define>
         
     </ui:composition>

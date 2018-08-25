@@ -20,6 +20,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import javax.faces.model.SelectItem;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
 
 /**
@@ -111,10 +112,8 @@ public class UsuarioManagedBean implements Serializable{
     public List<Usuario> getUsuarios() {
         if(usuarios==null || usuarios.isEmpty()){
             usuarios = new ArrayList<>();           
-        }else{
-            usuarios.clear();           
-        }      
-        setUsuarios(usuarioEJB.getUsuarios());
+            setUsuarios(usuarioEJB.getUsuarios());
+        }    
         return usuarios;
     }
 
@@ -155,15 +154,24 @@ public class UsuarioManagedBean implements Serializable{
     
     public void crearUsuario(){
         FacesMessage msg;
+        RequestContext req = RequestContext.getCurrentInstance();
         usuarioCrear.setEstadoId("1");
         usuarioCrear.setCiudadId(ciudadId);
         usuarioCrear.setRollId(rollId);
         if(usuarioEJB.setCrearUsuario(usuarioCrear)){
             msg = new FacesMessage("Mensaje", "Usuario Creado con exito"); 
+            usuarios.clear();
             getUsuarios();
+            limpiarCapos();
+            req.update(":form");
+            req.execute("PF('dlg1').hide();");  
         }else{
             msg = new FacesMessage("Mensaje", "Error al crear el usuario");            
         }
         FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    private void limpiarCapos(){
+        usuarioCrear = new UsuarioUtil();
     }
 }
