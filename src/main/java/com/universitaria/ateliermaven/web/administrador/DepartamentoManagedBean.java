@@ -23,39 +23,39 @@ import org.primefaces.event.RowEditEvent;
  * @author SoulHunter
  */
 public class DepartamentoManagedBean {
-    
+
     public DepartamentoManagedBean() {
         departamentoCrear = new DepartamentoUtil();
     }
-    
+
     @EJB
     private DepartamentoEJB departamentoEJB;
     @EJB
     private PaisEJB paisEJB;
-    
+
     private List<Departamento> departamentos;
     private List<SelectItem> paises;
-    
+
     private String paisId;
-    
+
     private DepartamentoUtil departamentoCrear;
-    
+
     public DepartamentoEJB getDepartamentoEJB() {
         return departamentoEJB;
     }
-    
+
     public void setDepartamentoEJB(DepartamentoEJB departamentoEJB) {
         this.departamentoEJB = departamentoEJB;
     }
-    
+
     public PaisEJB getPaisEJB() {
         return paisEJB;
     }
-    
+
     public void setPaisEJB(PaisEJB paisEJB) {
         this.paisEJB = paisEJB;
     }
-    
+
     public List<Departamento> getDepartamentos() {
         if (departamentos == null) {
             departamentos = new ArrayList<>();
@@ -63,11 +63,11 @@ public class DepartamentoManagedBean {
         }
         return departamentos;
     }
-    
+
     public void setDepartamentos(List<Departamento> departamentos) {
         this.departamentos = departamentos;
     }
-    
+
     public List<SelectItem> getPaises() {
         if (paises == null) {
             paises = new ArrayList<>();
@@ -75,47 +75,45 @@ public class DepartamentoManagedBean {
         }
         return paises;
     }
-    
+
     public void setPaises(List<SelectItem> paises) {
         this.paises = paises;
     }
-    
+
     public String getPaisId() {
         return paisId;
     }
-    
+
     public void setPaisId(String paisId) {
         this.paisId = paisId;
     }
-    
+
     public DepartamentoUtil getDepartamentoCrear() {
         return departamentoCrear;
     }
-    
+
     public void setDepartamentoCrear(DepartamentoUtil departamentoCrear) {
         this.departamentoCrear = departamentoCrear;
     }
-    
+
     public void onRowEdit(RowEditEvent event) {
-        
-        if (!departamentoCrear.getDepartamentoNombre().equals("") && !departamentoEJB.existeDepartamento(Comunes.getFormat(departamentoCrear.getDepartamentoNombre()))) {
-            
-            
+        Departamento departamento = (Departamento) event.getObject();
+        if (!departamento.getDepartamentoNombre().equals("") && !departamentoEJB.existeDepartamento(Comunes.getFormat(departamento.getDepartamentoNombre()))) {
+            Comunes.mensaje((departamentoEJB.setModificarDepartamento(departamento, paisId) ? "Se ha modificado el departamento correctamente " : "Error modificando el departamento "), departamentoCrear.getDepartamentoNombre());
         }
-        
-       // Comunes.mensaje((departamentoEJB.setModificarDepartamento(((Departamento) event.getObject()).getPaisId().toString(), Comunes.getFormat(((Departamento) event.getObject()).getDepartamentoNombre())) ? "Se ha modificado el departamento correctamente " : "Error modificando el departamento "), departamentoCrear.getDepartamentoNombre());
+
     }
-    
+
     public void onRowCancel(RowEditEvent event) {
         FacesMessage msg = new FacesMessage("Edit Cancelled", ((Departamento) event.getObject()).getDepartamentoNombre());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
     public void crearDepartamento() {
         if (!departamentoEJB.existeDepartamento(Comunes.getFormat(departamentoCrear.getDepartamentoNombre()))) {
             departamentoCrear.setDepartamentoNombre(Comunes.getFormat(departamentoCrear.getDepartamentoNombre()));
             departamentoCrear.setPaisId(paisId);
-            Comunes.mensaje((departamentoEJB.setCrearDepartamento(departamentoCrear) ? "Se ha creado el departamento correctamente" : "Error creando el pais"), departamentoCrear.getDepartamentoNombre());
+            Comunes.mensaje((departamentoEJB.setCrearDepartamento(departamentoCrear) ? "Se ha creado el departamento correctamente" : "Error creando el departamento"), departamentoCrear.getDepartamentoNombre());
         } else {
             Comunes.mensaje("El departamento ya se encuentra registrado", departamentoCrear.getDepartamentoNombre());
         }

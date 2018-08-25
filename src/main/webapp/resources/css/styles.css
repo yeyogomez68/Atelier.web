@@ -23,17 +23,29 @@ header{
     z-index: 9;
     float: left;    
     position: fixed;
-    background-color: rgba(50,91,201);
+    background-color: rgb(33, 64, 154);
     height: 35px;    
     width: 100%;
     -webkit-box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.3);
     -moz-box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.3);
     box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.3);
 }
+footer{
+    background-color: rgba(33, 64, 154,0.9);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 25px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+}
 .sectionContent{
     float: left;
     margin-top: 35px;
-    height: 100%;
+    height: auto;
 }
 
 /*Selectores por Clases CSS*/
@@ -42,6 +54,7 @@ header{
     width: 100%;
     height: 100%;
     overflow-x: auto;
+    overflow-y: overlay;
     /*margin-top: 120px;*/
 }
 .imgUser{
@@ -52,6 +65,19 @@ header{
     background-position: center;
     background-size: cover;
     float: left;
+}
+.logoMenu{
+    content: url(../javax.faces.resource/img/logoAtelier.png);
+    width: 90%;
+    height:100%;
+    margin: 20px 0px 20px 0px;
+    
+}
+.contentLogoMenu{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    border-bottom: 5px white solid;
 }
 /*.imagenEncabezado{
     background-image: url(../javax.faces.resource/img/elatelier.jpg);
@@ -76,6 +102,10 @@ header{
     max-width: 500px;
     margin: auto;
     margin-top: 20%;
+}
+.loginLogo{
+    content: url(../javax.faces.resource/img/logoAtelier.png);
+    width: 100%;
 }
 .panelPrinLogin{
     background-color: rgba(0,0,0,0.4);
@@ -113,7 +143,7 @@ header{
 
 /*Botones generales*/
 button {
-    background-color: #4CAF50 ;
+    background-color: rgb(86,196,197) ;
     color: white ;
     padding: 14px 20px ;
     margin: 4px 0 ;
@@ -124,7 +154,7 @@ button {
 }
 /*Boton cacelar*/
 .btnCancelar{
-   background-color: #f44336; 
+   background-color: rgb(235, 65, 58); 
 }
 
 button:hover {
@@ -199,6 +229,11 @@ aside{
     box-sizing: border-box;
     padding: 10px 5px 10px 25px !important;
 }
+.ui-menu .ui-menu-list .ui-menuitem:hover{
+   background-color: rgb(248, 165, 27);
+   font-size: 18px;
+   font-weight: bold;
+}
 
 .imgContent{
     width: 250px;
@@ -228,9 +263,23 @@ aside{
 }
 .imgdataUsrs a{
     align-self: baseline;
+    justify-self: center;
     text-decoration: none;
-    color: white;
+    color: rgb(248, 165, 27);
 }
+.imgdataUsrs a:hover{
+    font-size: 15px;
+    font-weight: bold;
+}
+.ui-datatable tbody td a{
+    text-decoration: none;
+    color: rgb(248, 165, 27);
+    font-weight: bold;
+}
+.ui-datatable tbody td a:hover{
+    font-size: 15px;
+}
+
 .ui-menu a{
     text-decoration: none;
     color: white;
@@ -383,7 +432,9 @@ aside{
 .ui-paginator.ui-paginator-top{
     display: none;
 }
-
+.ui-paginator-current{
+    font-weight: bold;
+}
 /*Controles Paginador*/
 .ui-paginator-next{
     background-image: url(../javax.faces.resource/img/toolsBar/proximo.png);
@@ -402,8 +453,9 @@ aside{
     border: 1px solid #ededec;
     text-decoration: none;
     color: black;
-    border-radius: 8px;
+    border-radius: 4px;
     background-color: #869fe25e;
+    font-weight: bold;
 }
 
 /*Modal Panel*/
@@ -442,7 +494,7 @@ aside{
     border-bottom: 1px solid rgba(50,91,201);
 }
 .ui-picklist .ui-picklist-caption{
-    background-color: rgba(50,91,201,0.8);
+    background-color: rgba(33, 64, 154,0.9);
     color: white;
     font-weight: bold;
 }
@@ -450,6 +502,7 @@ aside{
     color: white;
     text-indent: 0px !important;
     font-weight: bold;
+    font-size: 15px;
 }
 .ui-picklist-button-add-all, .ui-picklist-button-remove-all{
     display: none !important; 
@@ -508,10 +561,51 @@ aside{
     .sectionContent{
         margin-left: 250px;
     }
-    header{
+    header,footer{
         margin-left: 250px;
     }
     .containerBarMenu{
         display: none;
     } 
+}
+
+
+/*animaciones*/
+@-webkit-keyframes pulse {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes pulse {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.pulse {
+  -webkit-animation-name: pulse;
+  animation-name: pulse;
 }

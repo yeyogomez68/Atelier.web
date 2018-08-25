@@ -14,12 +14,12 @@
         <ui:define name="body">
 
             <h:form id="form">  
-                <p:panel id="panelFiltros" header="Filtros de Paises" >
+                <p:panel id="panelFiltros" header="Filtros de Ciudades" >
 
                 </p:panel> 
 
                 <!--                    <p:panel id="panelLista" header="Listado" >-->
-                <p:dataTable var="paises" value="#{paisManagedBean.paises}" editable="true" widgetVar="tablaPais"
+                <p:dataTable var="ciudades" value="#{ciudadManagedBean.ciudades}" editable="true" widgetVar="tablaCiudades"
                              paginator="true"
                              rowsPerPageTemplate="5,10,15"                                     
                              paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
@@ -29,40 +29,56 @@
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
                             <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                            <h4>Listado de colores</h4>  
+                            <h4>Listado de ciudades</h4>  
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
-                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaPais').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaCiudades').filter()" style="" placeholder="Filtro de Busqueda"/>        
                             </div>                                                                                                    
                         </div>
                     </f:facet>
                     <!--Eventos de tabla editable-->
-                    <p:ajax event="rowEdit" listener="#{paisManagedBean.onRowEdit}" update=":universarGrowl" />
-                    <p:ajax event="rowEditCancel" listener="#{paisManagedBean.onRowCancel}" update=":universarGrowl" />
+                    <p:ajax event="rowEdit" listener="#{ciudadManagedBean.onRowEdit}" update=":universarGrowl" />
+                    <p:ajax event="rowEditCancel" listener="#{ciudadManagedBean.onRowCancel}" update=":universarGrowl" />
 
-                    <p:column headerText="Id" filterBy="#{paises.paisId}" filterMatchMode="contains">
-                        <h:outputText value="#{paises.paisId}" />
+                    <p:column headerText="Id" filterBy="#{ciudades.ciudadId}" filterMatchMode="contains">
+                        <h:outputText value="#{ciudades.ciudadId}" />
                     </p:column>
 
-                    <p:column headerText="Descripción" filterBy="#{paises.paisNombre}" filterMatchMode="contains">
+                    <p:column headerText="Descripción" filterBy="#{ciudades.ciudadNombre}" filterMatchMode="contains">
                         <p:cellEditor>
-                            <h:outputText value="#{paises.paisNombre}" />
-                            <f:facet name="output"><h:outputText value="#{paises.paisNombre}" /></f:facet>
-                            <f:facet name="input"><p:inputText id="modelInput" value="#{paises.paisNombre}"/></f:facet>
+                            <h:outputText value="#{ciudades.ciudadNombre}" />
+                            <f:facet name="output"><h:outputText value="#{ciudades.ciudadNombre}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput" value="#{ciudades.ciudadNombre}"/></f:facet>
                         </p:cellEditor>                                
                     </p:column>
+                    <p:column headerText="Departamento" filterBy="#{ciudades.departamentoId.departamentoNombre}" filterMatchMode="contains">
+                        <p:cellEditor>
+                            <h:outputText value="#{ciudades.departamentoId.departamentoNombre}" />
+                            <f:facet name="output"><h:outputText value="#{ciudades.departamentoId.departamentoNombre}" /></f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu id="departamento" value="#{ciudadManagedBean.departamentoId}">                                            
+                                    <f:selectItems value="#{ciudadManagedBean.departamentos}" var="dep" itemLabel="#{dep}" itemValue="#{dep}" />
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>                                
+                    </p:column>
+
                     <!--Columna de evento editar-->
                     <p:column width="50">
                         <p:rowEditor />
                     </p:column>                            
                 </p:dataTable>
                 <!--</p:panel>--> 
-                <p:dialog header="Crear Pais" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                <p:dialog header="Crear Departamento" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
                     <div class="contentDialog">                    
-                        <h:outputText value="Color: "/>
-                        <p:inputText placeholder="Nombre de Pais" value="#{paisManagedBean.nombrePais}"/>                                                       
+                        <h:outputText value="Departamento: "/>
+                        <p:inputText placeholder="Nombre de Ciudad" value="#{ciudadManagedBean.ciudadCrear.ciudadNombre}" required="true"/>                                                       
+                        <h:outputText value="Departamento: "/>
+                        <p:selectOneMenu id="pais" value="#{ciudadManagedBean.departamentoId}">                                            
+                            <f:selectItems value="#{ciudadManagedBean.departamentos}" />
+                        </p:selectOneMenu>
                     </div>
-                    <p:commandButton value="Crear" action="#{paisManagedBean.crearPais}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
+                    <p:commandButton value="Crear" action="#{ciudadManagedBean.crearCiudad}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
                 </p:dialog>  
             </h:form>

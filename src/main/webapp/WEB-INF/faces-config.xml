@@ -13,6 +13,7 @@
             <var>bundle</var>
         </resource-bundle>
     </application>
+
     <factory>
         <exception-handler-factory>
             com.universitaria.ateliermaven.web.factory.CustomExceptionHandlerFactory
@@ -44,12 +45,14 @@
     <managed-bean>
         <managed-bean-name>colorManagedBean</managed-bean-name>
         <managed-bean-class>com.universitaria.ateliermaven.web.administrador.ColorManagedBean</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope></managed-bean>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
     <managed-bean>
         <managed-bean-name>ocasionManagedBean</managed-bean-name>
         <managed-bean-class>com.universitaria.ateliermaven.web.administrador.OcasionManagedBean</managed-bean-class>
     
-        <managed-bean-scope>view</managed-bean-scope></managed-bean>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
     <managed-bean>
         <managed-bean-name>paisManagedBean</managed-bean-name>
         <managed-bean-class>com.universitaria.ateliermaven.web.administrador.PaisManagedBean</managed-bean-class>
@@ -81,7 +84,8 @@
         <managed-bean-name>prendaManagedBean</managed-bean-name>
         <managed-bean-class>com.universitaria.ateliermaven.web.produccion.PrendaManagedBean</managed-bean-class>
     
-        <managed-bean-scope>view</managed-bean-scope></managed-bean>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
     <managed-bean>
         <managed-bean-name>rolesManagedBean</managed-bean-name>
         <managed-bean-class>com.universitaria.ateliermaven.web.administrador.RolesManagedBean</managed-bean-class>    
@@ -125,6 +129,21 @@
     <managed-bean>
         <managed-bean-name>departamentoManagedBean</managed-bean-name>
         <managed-bean-class>com.universitaria.ateliermaven.web.administrador.DepartamentoManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ciudadManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.administrador.CiudadManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>prendaTipoManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.produccion.PrendaTipoManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>produccionManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.produccion.ProduccionManagedBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
 </faces-config>

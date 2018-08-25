@@ -14,12 +14,12 @@
         <ui:define name="body">
 
             <h:form id="form">  
-                <p:panel id="panelFiltros" header="Filtros de Produccion" >
+                <p:panel id="panelFiltros" header="Filtros de Tipos de Prendas" >
 
                 </p:panel> 
 
                 <!--                    <p:panel id="panelLista" header="Listado" >-->
-                <p:dataTable var="colores" value="#{colorManagedBean.colores}" editable="true" widgetVar="tablaColores"
+                <p:dataTable var="prendasTipo" value="#{prendaTipoManagedBean.prendaTipos}" editable="true" widgetVar="tablaPrendasTipo"
                              paginator="true"
                              rowsPerPageTemplate="5,10,15"                                     
                              paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
@@ -29,26 +29,26 @@
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
                             <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                            <h4>Listado de colores</h4>  
+                            <h4>Listado de tipos de prenda</h4>  
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
-                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaColores').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaPrendasTipo').filter()" style="" placeholder="Filtro de Busqueda"/>        
                             </div>                                                                                                    
                         </div>
                     </f:facet>
                     <!--Eventos de tabla editable-->
-                    <p:ajax event="rowEdit" listener="#{colorManagedBean.onRowEdit}" update=":universarGrowl" />
-                    <p:ajax event="rowEditCancel" listener="#{colorManagedBean.onRowCancel}" update=":universarGrowl" />
+                    <p:ajax event="rowEdit" listener="#{prendaTipoManagedBean.onRowEdit}" update=":universarGrowl" />
+                    <p:ajax event="rowEditCancel" listener="#{prendaTipoManagedBean.onRowCancel}" update=":universarGrowl" />
 
-                    <p:column headerText="Id" filterBy="#{colores.colorId}" filterMatchMode="contains">
-                        <h:outputText value="#{colores.colorId}" />
+                    <p:column headerText="Id" filterBy="#{prendasTipo.prendaTipoId}" filterMatchMode="contains">
+                        <h:outputText value="#{prendasTipo.prendaTipoId}" />
                     </p:column>
 
-                    <p:column headerText="Descripción" filterBy="#{colores.colorDescrip}" filterMatchMode="contains">
+                    <p:column headerText="Descripción" filterBy="#{prendasTipo.prendaTipoDescripcion}" filterMatchMode="contains">
                         <p:cellEditor>
-                            <h:outputText value="#{colores.colorDescrip}" />
-                            <f:facet name="output"><h:outputText value="#{colores.colorDescrip}" /></f:facet>
-                            <f:facet name="input"><p:inputText id="modelInput" value="#{colores.colorDescrip}"/></f:facet>
+                            <h:outputText value="#{prendasTipo.prendaTipoDescripcion}" />
+                            <f:facet name="output"><h:outputText value="#{prendasTipo.prendaTipoDescripcion}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput" value="#{prendasTipo.prendaTipoDescripcion}"/></f:facet>
                         </p:cellEditor>                                
                     </p:column>
                     <!--Columna de evento editar-->
@@ -57,12 +57,12 @@
                     </p:column>                            
                 </p:dataTable>
                 <!--</p:panel>--> 
-                <p:dialog header="Crear Color" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                <p:dialog header="Crear Pais" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
                     <div class="contentDialog">                    
-                        <h:outputText value="Color: "/>
-                        <p:inputText placeholder="Nombre de Color" value="#{colorManagedBean.colorNombre}"/>                                                       
+                        <h:outputText value="Tipo de prenda "/>
+                        <p:inputText placeholder="Nombre de tipo de prenda" value="#{prendaTipoManagedBean.nombrePrendaTipo}" required="true"/>                                                       
                     </div>
-                    <p:commandButton value="Crear" action="#{colorManagedBean.crearColor}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
+                    <p:commandButton value="Crear" action="#{prendaTipoManagedBean.crearPrendaTipo}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
                 </p:dialog>  
             </h:form>

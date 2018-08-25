@@ -36,8 +36,8 @@ public class PaisManagedBean implements Serializable {
     }
 
     public List<Pais> getPaises() {
-        if(paises == null){
-        paises = new ArrayList<>();
+        if (paises == null) {
+            paises = new ArrayList<>();
             setPaises(paisEJB.getPaises());
         }
         return paises;
@@ -65,10 +65,10 @@ public class PaisManagedBean implements Serializable {
     }
 
     public void crearPais() {
-         if (!paisEJB.existePais(nombrePais)) {
+        if (!paisEJB.existePais(nombrePais)) {
             Comunes.mensaje((paisEJB.setCrearPais(nombrePais) ? "Se ha creado el pais correctamente" : "Error creando el pais"), nombrePais);
         } else {
-            Comunes.mensaje("El color ya se encuentra registrado", nombrePais);
+            Comunes.mensaje("El pais ya se encuentra registrado", nombrePais);
         }
     }
 }

@@ -11,14 +11,18 @@
         <title>Login</title>
     </h:head>
     <h:body class="bodyLogin">
+        
         <h:form id="forms" class="login">          
-            <p:growl id="growl" showDetail="true" sticky="true" />  
+            <p:growl id="growl" showDetail="true" sticky="true" life="3000"/>              
             <p:panel id="panel" class="panelPrinLogin" >
+                <img class="loginLogo pulse" />
                 <h:panelGrid columns="1" cellpadding="5" class="panelLogin">                    
                     <h:outputText value="User: " style="font-weight: bold;color: white;"/>
-                    <p:inputText class="inputLogin"  id="usuario" placeholder="ejemplo@correo.com" value="#{loginManagedBean.userName}"/>                
-                    <h:outputText value="Password: " rendered="true" style="font-weight: bold;color: white;"/>
-                    <p:password class="inputLogin"  value="#{loginManagedBean.password}"/>  
+                    <p:inputText class="inputLogin"  id="usuario" placeholder="ejemplo@correo.com" value="#{loginManagedBean.userName}" required="true" requiredMessage="El correo es obligatorio" validatorMessage="Formato de correo Incorrecto">
+                                 <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                    </p:inputText>                
+                    <h:outputText value="Password: " style="font-weight: bold;color: white;"/>
+                    <p:password class="inputLogin"  value="#{loginManagedBean.password}" required="true" requiredMessage="La contraseña es obligatoria"/>  
                     <h:column/>
                     <p:commandButton value="Iniciar" id="ajax" update="growl, panel" action="#{loginManagedBean.iniciar}"/>
                 </h:panelGrid>              
