@@ -75,29 +75,67 @@
                                 <p:rowEditor />
                             </p:column>                            
                         </p:dataTable>
-                    <!--</p:panel>--> 
-                    <p:dialog header="Crear Usuario" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+                    <!--</p:panel>-->                       
+                </h:form>
+                <p:dialog header="Crear Usuario" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+                    <h:form id="formCrea">
                         <div class="contentDialog">                   
                             <h:outputText value="Identificación: "/>
-                            <p:inputText placeholder="Identificación" value="#{usuarioManagedBean.usuarioCrear.identificacion}" maxlength="10"/>
+                            <p:inputText placeholder="Identificación" value="#{usuarioManagedBean.usuarioCrear.identificacion}" 
+                                         maxlength="10" 
+                                         required="true" 
+                                         requiredMessage="La Identificación es obligatoria" 
+                                         validatorMessage="La Identificación debe contener solo numeros">
+                                <f:validateRegex pattern="^\d+$" />
+                            </p:inputText>                                
                             
                             <h:outputText value="Nombre: "/>
-                            <p:inputText placeholder="Nombre" value="#{usuarioManagedBean.usuarioCrear.nombre}" />
+                            <p:inputText placeholder="Nombre" value="#{usuarioManagedBean.usuarioCrear.nombre}" 
+                                         required="true" 
+                                         requiredMessage="El Nombre es obligatorio" 
+                                         maxlength="50"
+                                         validatorMessage="El Campo Nombre debe contener solo letras">
+                                <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                            </p:inputText>
                             
                             <h:outputText value="Apellido: "/>
-                            <p:inputText placeholder="Apellido" value="#{usuarioManagedBean.usuarioCrear.apellido}"/>
+                            <p:inputText placeholder="Apellido" value="#{usuarioManagedBean.usuarioCrear.apellido}" 
+                                         required="true" 
+                                         maxlength="50"
+                                         requiredMessage="El Apellido es obligatorio" 
+                                         validatorMessage="El Apellido debe contener solo letras">
+                                <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                            </p:inputText>
                             
                             <h:outputText value="Email: "/>
-                            <p:inputText placeholder="Email" value="#{usuarioManagedBean.usuarioCrear.email}"/>
+                            <p:inputText placeholder="Email" value="#{usuarioManagedBean.usuarioCrear.email}" 
+                                         required="true" 
+                                         requiredMessage="El Correo es obligatorio" 
+                                         validatorMessage="Formato de Correo Incorrecto"
+                                         maxlength="50">
+                                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            </p:inputText>
                             
                             <h:outputText value="Password: "/>
-                            <p:inputText placeholder="Password" value="#{usuarioManagedBean.usuarioCrear.password}"/>
+                            <p:password placeholder="Password" value="#{usuarioManagedBean.usuarioCrear.password}" 
+                                        required="true" 
+                                        requiredMessage="El Password es obligatorio"
+                                        maxlength="50"/>
                             
                             <h:outputText value="Dirección: "/>
-                            <p:inputText placeholder="Direccion" value="#{usuarioManagedBean.usuarioCrear.direccion}"/>
+                            <p:inputText placeholder="Direccion" value="#{usuarioManagedBean.usuarioCrear.direccion}" 
+                                         required="true" 
+                                         requiredMessage="La Direccion es obligatoria"
+                                         maxlength="50"/>
                             
                             <h:outputText value="Celular: "/>
-                            <p:inputText placeholder="Celular" value="#{usuarioManagedBean.usuarioCrear.celular}"  maxlength="10" />
+                            <p:inputText placeholder="Celular" value="#{usuarioManagedBean.usuarioCrear.celular}"  
+                                         maxlength="10" 
+                                         required="true" 
+                                         requiredMessage="El Celular es obligatoria" 
+                                         validatorMessage="El Celular debe contener solo numeros">
+                                <f:validateRegex pattern="^\d+$" />
+                            </p:inputText>
                             
                             <h:outputText value="Ciudad: "/>
                             <p:selectOneMenu id="ciudad" value="#{usuarioManagedBean.ciudadId}">                                            
@@ -109,10 +147,10 @@
                                 <f:selectItems value="#{usuarioManagedBean.roles}" />
                             </p:selectOneMenu>         
                         </div>
-                        <p:commandButton value="Crear" action="#{usuarioManagedBean.crearUsuario}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
+                        <p:commandButton value="Crear" action="#{usuarioManagedBean.crearUsuario}" update="form,formCrea,universarGrowl"/>                            
                         <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
-                    </p:dialog>  
-                </h:form>
+                    </h:form>
+                </p:dialog>
         </ui:define>
     </ui:composition>
 </html>

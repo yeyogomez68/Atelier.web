@@ -19,7 +19,7 @@
                 </p:panel> 
 
                 <!--                    <p:panel id="panelLista" header="Listado" >-->
-                <p:dataTable var="colores" value="#{colorManagedBean.colores}" editable="true" widgetVar="tablaColores"
+                <p:dataTable var="producciones" value="#{produccionManagedBean.producciones}" editable="true" widgetVar="tablaProducciones"
                              paginator="true"
                              rowsPerPageTemplate="5,10,15"                                     
                              paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
@@ -32,19 +32,19 @@
                             <h4>Listado de colores</h4>  
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
-                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaColores').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaProducciones').filter()" style="" placeholder="Filtro de Busqueda"/>        
                             </div>                                                                                                    
                         </div>
                     </f:facet>
                     <!--Eventos de tabla editable-->
-                    <p:ajax event="rowEdit" listener="#{colorManagedBean.onRowEdit}" update=":universarGrowl" />
-                    <p:ajax event="rowEditCancel" listener="#{colorManagedBean.onRowCancel}" update=":universarGrowl" />
+                    <p:ajax event="rowEdit" listener="#{produccionManagedBean.onRowEdit}" update=":universarGrowl" />
+                    <p:ajax event="rowEditCancel" listener="#{produccionManagedBean.onRowCancel}" update=":universarGrowl" />
 
-                    <p:column headerText="Id" filterBy="#{colores.colorId}" filterMatchMode="contains">
-                        <h:outputText value="#{colores.colorId}" />
+                    <p:column headerText="Id" filterBy="#{producciones.prendaId}" filterMatchMode="contains">
+                        <h:outputText value="#{producciones.prendaId}" />
                     </p:column>
 
-                    <p:column headerText="Descripción" filterBy="#{colores.colorDescrip}" filterMatchMode="contains">
+                    <p:column headerText="Descripción" filterBy="#{producciones.produccionDescripcion}" filterMatchMode="contains">
                         <p:cellEditor>
                             <h:outputText value="#{colores.colorDescrip}" />
                             <f:facet name="output"><h:outputText value="#{colores.colorDescrip}" /></f:facet>

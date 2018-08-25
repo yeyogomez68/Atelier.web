@@ -14,6 +14,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
 
 /**
@@ -33,7 +34,7 @@ public class RolesManagedBean {
     
     private String estadoId;
     private String rollDesc;
-    
+    public boolean actualizar;
     public RolesManagedBean() {
         
     }
@@ -56,11 +57,9 @@ public class RolesManagedBean {
 
     public List<Roll> getRoles() {
         if(roles==null || roles.isEmpty()){
-            roles = new ArrayList<>();           
-        }else{
-            roles.clear();           
-        }      
-        setRoles(rollEJB.getRoles());
+            roles = new ArrayList<>(); 
+            setRoles(rollEJB.getRoles());
+        } 
         return roles;
     }
 
@@ -95,13 +94,15 @@ public class RolesManagedBean {
     
     public void crearRoll(){
         FacesMessage msg;
-        
+        RequestContext req = RequestContext.getCurrentInstance();
         if(rollEJB.setCrearRoll(rollDesc)){
-            msg = new FacesMessage("Mensaje", "Roll Creado con exito"); 
+            setRollDesc("");
+            roles.clear();
+            getRoles();
+            req.execute("PF('dlg1').hide();"); 
         }else{
-            msg = new FacesMessage("Mensaje", "Error al crear el Roll");
-        }
-        FacesContext.getCurrentInstance().addMessage(null, msg);       
+            
+        }      
     }
     
 }

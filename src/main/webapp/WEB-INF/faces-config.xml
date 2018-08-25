@@ -126,24 +126,5 @@
         <managed-bean-class>com.universitaria.ateliermaven.web.compras.RequerimientoManagedBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
-    <managed-bean>
-        <managed-bean-name>departamentoManagedBean</managed-bean-name>
-        <managed-bean-class>com.universitaria.ateliermaven.web.administrador.DepartamentoManagedBean</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
-        <managed-bean-name>ciudadManagedBean</managed-bean-name>
-        <managed-bean-class>com.universitaria.ateliermaven.web.administrador.CiudadManagedBean</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
-        <managed-bean-name>prendaTipoManagedBean</managed-bean-name>
-        <managed-bean-class>com.universitaria.ateliermaven.web.produccion.PrendaTipoManagedBean</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
-        <managed-bean-name>produccionManagedBean</managed-bean-name>
-        <managed-bean-class>com.universitaria.ateliermaven.web.produccion.ProduccionManagedBean</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
+    
 </faces-config>

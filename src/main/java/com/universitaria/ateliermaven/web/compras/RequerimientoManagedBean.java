@@ -20,7 +20,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TransferEvent;
-import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.DualListModel;
 
 /**
@@ -154,11 +153,13 @@ public class RequerimientoManagedBean implements Serializable{
         req.execute("PF('dlg2').show();"); 
     }
     
-    public void limpiarLista(){        
-        setListMateriales(null);
+    public void limpiarLista(){           
+        listMateriales.getSource().clear();
+        listMateriales.getTarget().clear();
+        listaRequerimientos.clear();
         getListMateriales(); 
-        setDesrequerimiento("");
-         
+        getListaRequerimientos();
+        setDesrequerimiento("");         
     }
     public void crearRequerimientoPanel(){
         limpiarLista();

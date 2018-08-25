@@ -97,11 +97,11 @@ footer{
     background-attachment: fixed;
     background-position: center;
     background-size: cover;
+    display: flex;
 }
 .login{
     max-width: 500px;
     margin: auto;
-    margin-top: 20%;
 }
 .loginLogo{
     content: url(../javax.faces.resource/img/logoAtelier.png);
