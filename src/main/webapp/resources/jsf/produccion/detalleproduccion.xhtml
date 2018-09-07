@@ -14,12 +14,12 @@
         <ui:define name="body">
 
             <h:form id="form">  
-                <p:panel id="panelFiltros" header="Filtros de Tipos de Prendas" >
+                <p:panel id="panelFiltros" header="Filtros de Detalle de Produccion" >
 
                 </p:panel> 
 
                 <!--                    <p:panel id="panelLista" header="Listado" >-->
-                <p:dataTable var="prendasTipo" value="#{prendaTipoManagedBean.prendaTipos}" editable="true" widgetVar="tablaPrendasTipo"
+                <p:dataTable var="produccionDetalles" value="#{detalleProduccionMaganedBean.produccionDetalles}" editable="true" widgetVar="tablaProduccionDetalles"
                              paginator="true"
                              rowsPerPageTemplate="5,10,15"                                     
                              paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
@@ -29,40 +29,61 @@
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
                             <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                            <h4>Listado de tipos de prenda</h4>  
+                            <h4>Listado de detalles de produccion</h4>  
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
-                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaPrendasTipo').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaProduccionDetalles').filter()" style="" placeholder="Filtro de Busqueda"/>        
                             </div>                                                                                                    
                         </div>
                     </f:facet>
                     <!--Eventos de tabla editable-->
-                    <p:ajax event="rowEdit" listener="#{prendaTipoManagedBean.onRowEdit}" update=":universarGrowl" />
-                    <p:ajax event="rowEditCancel" listener="#{prendaTipoManagedBean.onRowCancel}" update=":universarGrowl" />
+                    <p:ajax event="rowEdit" listener="#{detalleProduccionMaganedBean.onRowEdit}" update=":universarGrowl" />
+                    <p:ajax event="rowEditCancel" listener="#{detalleProduccionMaganedBean.onRowCancel}" update=":universarGrowl" />
 
-                    <p:column headerText="Id" filterBy="#{prendasTipo.prendaTipoId}" filterMatchMode="contains">
-                        <h:outputText value="#{prendasTipo.prendaTipoId}" />
+                    <p:column headerText="Id" filterBy="#{produccionDetalles.produccionDetaId}" filterMatchMode="contains">
+                        <h:outputText value="#{produccionDetalles.produccionDetaId}" />
                     </p:column>
 
-                    <p:column headerText="Descripción" filterBy="#{prendasTipo.prendaTipoDescripcion}" filterMatchMode="contains">
-                        <p:cellEditor>
-                            <h:outputText value="#{prendasTipo.prendaTipoDescripcion}" />
-                            <f:facet name="output"><h:outputText value="#{prendasTipo.prendaTipoDescripcion}" /></f:facet>
-                            <f:facet name="input"><p:inputText id="modelInput" value="#{prendasTipo.prendaTipoDescripcion}"/></f:facet>
-                        </p:cellEditor>                                
+                    <p:column headerText="Descripción" filterBy="#{produccionDetalles.produccionId.produccionDescripcion}" filterMatchMode="contains">
+                        <h:outputText value="#{produccionDetalles.produccionId.produccionDescripcion}" />
                     </p:column>
+
+                    <p:column headerText="Material" filterBy="#{produccionDetalles.materialId}" filterMatchMode="contains">
+                        <h:outputText value="#{produccionDetalles.materialId}" />
+                    </p:column>
+
+                    <p:column headerText="Cantidad" filterBy="#{produccionDetalles.produccionDetaCant}" filterMatchMode="contains">
+                        <h:outputText value="#{produccionDetalles.produccionDetaCant}" />
+                    </p:column>
+
+                    <p:column headerText="Fecha" filterBy="#{produccionDetalles.produccionDetaFecha}" filterMatchMode="contains">
+                        <h:outputText value="#{produccionDetalles.produccionDetaFecha}" />
+                    </p:column>
+
                     <!--Columna de evento editar-->
                     <p:column width="50">
                         <p:rowEditor />
                     </p:column>                            
                 </p:dataTable>
                 <!--</p:panel>--> 
-                <p:dialog header="Crear Pais" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                <p:dialog header="Crear Nuevo Detalle" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
                     <div class="contentDialog">                    
-                        <h:outputText value="Pais: "/>
-                        <p:inputText placeholder="Nombre de Pais" value="#{prendaTipoManagedBean.nombrePrendaTipo}" required="true"/>                                                       
+
+                        <h:outputText value="Cantidad: "/>
+                        <p:inputText placeholder="Cantidad" value="#{detalleProduccionMaganedBean.detalleProduccionCrear.produccionDetaCant}"/>  
+                        
+                        <h:outputText  value="Fecha:" />
+                        <p:calendar id="popup" value="#{detalleProduccionMaganedBean.detalleProduccionCrear.produccionDetaFecha}" />
+                        <h:outputText value="Material: "/>
+                        <p:selectOneMenu id="material" value="#{detalleProduccionMaganedBean.materialId}">                                            
+                            <f:selectItems value="#{detalleProduccionMaganedBean.materiales}" />
+                        </p:selectOneMenu>
+                         <h:outputText value="Produccion: "/>
+                         <p:selectOneMenu id="produccion" value="#{detalleProduccionMaganedBean.produccionId}">                                            
+                             <f:selectItems value="#{detalleProduccionMaganedBean.producciones}" />
+                        </p:selectOneMenu>
                     </div>
-                    <p:commandButton value="Crear" action="#{prendaTipoManagedBean.crearPrendaTipo}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
+                    <p:commandButton value="Crear" action="#{detalleProduccionMaganedBean.crearProduccionDetalle}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
                 </p:dialog>  
             </h:form>

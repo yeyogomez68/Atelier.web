@@ -181,7 +181,7 @@ public class ProduccionManagedBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public void crearPrenda() {
+    public void crearProduccion() {
 
         if (!produccionEJB.existeProduccion(Comunes.getFormat(produccionCrear.getProduccionDescripcion()))) {
 
