@@ -39,6 +39,10 @@ public class RequerimientoManagedBean implements Serializable{
     
     private List<Encabezadorequerimiento> listaRequerimientos;
     
+    private DualListModel<MaterialRequerimientoUtil> listMateriales;
+    private DualListModel<MaterialRequerimientoUtil> listMaterialesRq;
+    
+    private String idRequerimientoModifica;
     private String desrequerimiento;
     private boolean dialogModifi=false;
     private boolean dialogCrear=false;
@@ -56,6 +60,14 @@ public class RequerimientoManagedBean implements Serializable{
         user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
     }
 
+    public String getIdRequerimientoModifica() {
+        return idRequerimientoModifica;
+    }
+
+    public void setIdRequerimientoModifica(String idRequerimientoModifica) {
+        this.idRequerimientoModifica = idRequerimientoModifica;
+    }
+
     public Usuario getUser() {
         return user;
     }
@@ -71,11 +83,8 @@ public class RequerimientoManagedBean implements Serializable{
 
     public void setCantidad(double cantidad) {
         this.cantidad = cantidad;
-    }
+    }    
     
-    
-    private DualListModel<MaterialRequerimientoUtil> listMateriales;
-
     public DualListModel<MaterialRequerimientoUtil> getListMateriales() {
         if(listMateriales == null || (listMateriales.getSource().isEmpty() && listMateriales.getTarget().isEmpty())){            
             List<MaterialRequerimientoUtil> source = new ArrayList<>();
@@ -85,9 +94,20 @@ public class RequerimientoManagedBean implements Serializable{
         }
         return listMateriales;
     }
-
+    
     public void setListMateriales(DualListModel<MaterialRequerimientoUtil> listMateriales) {        
         this.listMateriales = listMateriales;
+    }
+
+    public DualListModel<MaterialRequerimientoUtil> getListMaterialesRq() {
+        if (listMaterialesRq==null || (listMaterialesRq.getSource().isEmpty() && listMaterialesRq.getTarget().isEmpty())) {
+            listMaterialesRq = new DualListModel<>(); 
+        }
+        return listMaterialesRq;
+    }
+
+    public void setListMaterialesRq(DualListModel<MaterialRequerimientoUtil> listMaterialesRq) {
+        this.listMaterialesRq = listMaterialesRq;
     }
 
     public List<Encabezadorequerimiento> getListaRequerimientos() {
@@ -149,7 +169,16 @@ public class RequerimientoManagedBean implements Serializable{
     
     public void modificarRequerimiento(String id){
         RequestContext req = RequestContext.getCurrentInstance();        
-        setDesrequerimiento(id);
+        setIdRequerimientoModifica(id);
+        listMaterialesRq = new DualListModel<>();        
+        if(listMaterialesRq == null || (listMaterialesRq.getSource().isEmpty() && listMaterialesRq.getTarget().isEmpty())){            
+            List<MaterialRequerimientoUtil> source = new ArrayList<>();
+            List<MaterialRequerimientoUtil> target = new ArrayList<>();      
+            source = materialEJB.getMaterialesRequerimiento();
+            target = detalleRequerimientoEJB.obtenerDetalleRq(id);
+            setListMaterialesRq(new DualListModel<MaterialRequerimientoUtil>(source,target));
+        }
+        
         req.execute("PF('dlg2').show();"); 
     }
     
@@ -192,5 +221,9 @@ public class RequerimientoManagedBean implements Serializable{
         setCantidad(0);
         RequestContext req = RequestContext.getCurrentInstance();
         req.execute("PF('dlg3').hide();"); 
+    }
+    
+    public void actualizarRequerimiento(){
+        
     }
 }
