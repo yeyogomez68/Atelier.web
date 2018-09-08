@@ -271,6 +271,9 @@ aside{
     font-size: 15px;
     font-weight: bold;
 }
+.imgdataUsrs p{
+    text-align: center;
+}
 .ui-datatable tbody td a{
     text-decoration: none;
     color: rgb(248, 165, 27);

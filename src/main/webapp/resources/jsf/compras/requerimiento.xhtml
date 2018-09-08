@@ -58,7 +58,7 @@
                     </p:column>    
 
                     <p:column headerText="Editar">
-                        <p:commandLink value="Modificar" actionListener="#{requerimientoManagedBean.modificarRequerimiento(requeri.encabezadoRequerimientoId)}" update="universarGrowl,dialogModificar"/> 
+                        <p:commandLink value="Modificar" actionListener="#{requerimientoManagedBean.modificarRequerimiento(requeri.encabezadoRequerimientoId)}" update="dialogModificar"/> 
                     </p:column> 
 
                 </p:dataTable>
@@ -97,19 +97,19 @@
             </p:dialog> 
 
             <p:dialog id="dialogModificar" header="Crear Requerimiento" widgetVar="dlg2" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
-                <h:form>
+                <h:form id="frmdialogModificar">
                     <div class="contentDialog">                    
                         <h:outputText value="Motivo o Detalle: "/>
                         <p:inputText value="#{requerimientoManagedBean.desrequerimiento}" required="true" requiredMessage="El motivo es Obligatorio"/>                                                       
                     </div>                          
-                    <p:pickList id="PojoPickList2" value="#{requerimientoManagedBean.listMateriales}" var="material" required="true" requiredMessage="Debe Seleccionar minimo un Material"
+                    <p:pickList id="PojoPickList" value="#{requerimientoManagedBean.listMaterialesRq}" var="material" required="true" requiredMessage="Debe Seleccionar minimo un Material"
                                 itemValue="#{material}" itemLabel="#{material.nombre}" showSourceControls="false" showTargetControls="false" showCheckbox="true" responsive="true"
-                                showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"  addLabel="+" removeLabel="-" >
+                                showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"  addLabel="+" removeLabel="-" converter="materialPickListConverter">
 
                         <f:facet name="sourceCaption">Material</f:facet>
                         <f:facet name="targetCaption">Agregado</f:facet>
-
-                        <p:column >
+                        <p:ajax event="transfer" listener="#{requerimientoManagedBean.onTransfer}" update="dialogCantidad"/>                        
+                        <p:column>
                             <h:outputText value="#{material.nombre}" />
                         </p:column>
                         <p:column>
@@ -122,8 +122,8 @@
                             <h:outputText value="#{material.cantidad}" />
                         </p:column> 
                     </p:pickList>
-                    <p:commandButton value="Crear" action="#{requerimientoManagedBean.crearRequerimiento()}" update="form:tabla,universarGrowl"/> 
-                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg2').hide();"/> 
+                    <p:commandButton value="Crear" action="#{requerimientoManagedBean.actualizarRequerimiento()}" update="form,frmdialogCrear,universarGrowl"/> 
+                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
                 </h:form>
             </p:dialog>
             
