@@ -612,3 +612,6 @@ aside{
   -webkit-animation-name: pulse;
   animation-name: pulse;
 }
+.ui-datepicker{
+    background-color: whitesmoke;
+}
