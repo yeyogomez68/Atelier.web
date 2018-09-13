@@ -48,6 +48,7 @@ public class RequerimientoManagedBean implements Serializable{
     
     private double cantidad;
     private Usuario user;
+    private int cantTarget=0;
     
     private MaterialRequerimientoUtil material;
     FacesMessage msg = null;
@@ -173,8 +174,8 @@ public class RequerimientoManagedBean implements Serializable{
         if(listMaterialesRq == null || (listMaterialesRq.getSource().isEmpty() && listMaterialesRq.getTarget().isEmpty())){            
             List<MaterialRequerimientoUtil> source = new ArrayList<>();
             List<MaterialRequerimientoUtil> target = new ArrayList<>();      
-            source = materialEJB.getMaterialesRequerimiento();
             target = detalleRequerimientoEJB.obtenerDetalleRq(id);
+            source = materialEJB.getMaterialesRequerimientoCross(target);            
             setListMaterialesRq(new DualListModel<MaterialRequerimientoUtil>(source,target));
         }
         
@@ -184,6 +185,8 @@ public class RequerimientoManagedBean implements Serializable{
     public void limpiarLista(){           
         listMateriales.getSource().clear();
         listMateriales.getTarget().clear();
+        listMaterialesRq.getSource().clear();
+        listMaterialesRq.getTarget().clear();
         listaRequerimientos.clear();
         getListMateriales(); 
         getListaRequerimientos();
@@ -203,10 +206,15 @@ public class RequerimientoManagedBean implements Serializable{
             material.setReferencia(((MaterialRequerimientoUtil) item).getReferencia());
             material.setMarcaId(((MaterialRequerimientoUtil) item).getMarcaId());
             material.setCantidad("0.0");
-        }   
-        setCantidad(0);
-        RequestContext req = RequestContext.getCurrentInstance();
-        req.execute("PF('dlg3').show();"); 
+        }        
+        for (MaterialRequerimientoUtil listaMate : listMateriales.getTarget()) {
+            if(listaMate.getMaterialId() == null ? material.getMaterialId() == null : listaMate.getMaterialId().equals(material.getMaterialId())){                
+                setCantidad(0);
+                RequestContext req = RequestContext.getCurrentInstance();
+                req.execute("PF('dlg3').show();"); 
+                break;
+            }
+        }        
     }
 
     
@@ -222,7 +230,45 @@ public class RequerimientoManagedBean implements Serializable{
         req.execute("PF('dlg3').hide();"); 
     }
     
+    
+    public void onTransferEdit(TransferEvent event){
+        for(Object item : event.getItems()) {
+            material = new MaterialRequerimientoUtil();
+            material.setNombre(((MaterialRequerimientoUtil) item).getNombre());
+            material.setMaterialId(((MaterialRequerimientoUtil) item).getMaterialId());
+            material.setReferencia(((MaterialRequerimientoUtil) item).getReferencia());
+            material.setMarcaId(((MaterialRequerimientoUtil) item).getMarcaId());
+            material.setCantidad("0.0");
+        }        
+        for (MaterialRequerimientoUtil listaMate : listMaterialesRq.getTarget()) {
+            if(listaMate.getMaterialId() == null ? material.getMaterialId() == null : listaMate.getMaterialId().equals(material.getMaterialId())){                
+                setCantidad(0);
+                RequestContext req = RequestContext.getCurrentInstance();
+                req.execute("PF('dlg4').show();"); 
+                break;
+            }
+        }        
+    }
+
+    
+    public void cantidadesEdit(){
+        for (MaterialRequerimientoUtil listaMate : listMaterialesRq.getTarget()) {
+            if(listaMate.getMaterialId() == null ? material.getMaterialId() == null : listaMate.getMaterialId().equals(material.getMaterialId())){
+                listaMate.setCantidad(String.valueOf(cantidad));
+                break;
+            }
+        }
+        setCantidad(0);
+        RequestContext req = RequestContext.getCurrentInstance();
+        req.execute("PF('dlg4').hide();"); 
+    }
+    
     public void actualizarRequerimiento(){
-        
+        RequestContext req = RequestContext.getCurrentInstance();
+        if(detalleRequerimientoEJB.modificarDetalleRequerimiento(getIdRequerimientoModifica(),getListMaterialesRq().getTarget(), user)){
+                limpiarLista();
+                req.update(":form");
+                req.execute("PF('dlg2').hide();");  
+            }
     }
 }
