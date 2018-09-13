@@ -113,7 +113,7 @@ public class RequerimientoManagedBean implements Serializable{
     public List<Encabezadorequerimiento> getListaRequerimientos() {
         if (listaRequerimientos==null || listaRequerimientos.isEmpty()) {
             listaRequerimientos = new ArrayList<>();
-            setListaRequerimientos(encabezadoRequerimientoEJB.getRequerimientos());
+            setListaRequerimientos(encabezadoRequerimientoEJB.getRequerimientosByUser(user));
         }
         return listaRequerimientos;
     }
