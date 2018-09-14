@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../../../WEB-INF/include/template.xhtml">
+
+            <ui:define name="title">
+                <h:outputText value="Ordenes de Compra"></h:outputText>
+            </ui:define>
+
+            <ui:define name="body">
+                <h:form id="form">
+
+                <p:panel id="panelFiltros" header="Ordenes de Compra" >                        
+                </p:panel>                      
+                
+                    <p:dataTable id="tabla" var="ordenCom" value="#{ordenCompraBean.listOrdenesCompra}" editable="true" widgetVar="tablaOrdenCom"
+                             paginator="true"
+                             rowsPerPageTemplate="5,10,15"                                     
+                             paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                             emptyMessage="No se han encontrado resultados"
+                             rows="10">
+
+                    <f:facet name="header">
+
+                        <div class="headerTableAndCreateBtn">
+                            <p:commandButton value="+" actionListener="#{ordenCompraBean.crearRequerimientoPanel()}"/>
+                            <h4>Listado de Requerimientos</h4>  
+                            <div class="globalFilterDiv">
+                                <img class="filtroLupa"/>
+                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaOrdenCom').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                            </div>                                                                                                    
+                        </div>
+                    </f:facet>
+                    <!--Eventos de tabla editable-->
+
+
+                    <p:column headerText="Id" filterBy="#{ordenCom.ordenCompraId}" filterMatchMode="contains">
+                        <h:outputText value="#{ordenCom.ordenCompraId}" />
+                    </p:column>
+
+                    <p:column headerText="Detalle" filterBy="#{ordenCom.ordenCompraCode}" filterMatchMode="contains">
+                        <h:outputText value="#{ordenCom.ordenCompraCode}" />
+                    </p:column>
+
+                    <p:column headerText="Usuario" filterBy="#{ordenCom.proveedorId}" filterMatchMode="contains">
+                        <h:outputText value="#{ordenCom.proveedorId}" />
+                    </p:column>
+
+                    <p:column headerText="Bruto" filterBy="#{ordenCom.ordenCompraBruto}" filterMatchMode="contains">
+                        <h:outputText value="#{ordenCom.ordenCompraBruto}" />
+                    </p:column>    
+                    
+                    <p:column headerText="Iva" filterBy="#{ordenCom.ordenCompraIVA}" filterMatchMode="contains">
+                        <h:outputText value="#{ordenCom.ordenCompraIVA}" />
+                    </p:column>  
+
+                    <p:column headerText="Total" filterBy="#{ordenCom.ordenCompraTot}" filterMatchMode="contains">
+                        <h:outputText value="#{ordenCom.ordenCompraTot}" />
+                    </p:column>  
+
+                    <p:column headerText="Acción">                        
+                        <p:commandLink value="Ver" actionListener="#{ordenCompraBean.verOrdenCompra(ordenCom)}" update=""/> 
+                    </p:column> 
+
+                </p:dataTable>
+            </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
