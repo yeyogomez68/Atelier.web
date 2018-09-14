@@ -615,3 +615,6 @@ aside{
 .ui-datepicker{
     background-color: whitesmoke;
 }
+#dialogAprob, #dialogVerRq{
+    max-width: 800px;
+}

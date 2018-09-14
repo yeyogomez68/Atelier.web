@@ -6,6 +6,7 @@
 package com.universitaria.ateliermaven.web.compras;
 
 import com.universitaria.atelier.web.jpa.Encabezadorequerimiento;
+import com.universitaria.atelier.web.jpa.Requestdeta;
 import com.universitaria.atelier.web.jpa.Usuario;
 import com.universitaria.atelier.web.utils.MaterialRequerimientoUtil;
 import com.universitaria.ateliermaven.ejb.compras.DetalleRequerimientoEJB;
@@ -40,6 +41,10 @@ public class RequerimientoManagedBean implements Serializable{
     
     private DualListModel<MaterialRequerimientoUtil> listMateriales;
     private DualListModel<MaterialRequerimientoUtil> listMaterialesRq;
+    private List<Requestdeta> listaItemRq;
+    
+    private int idReque;
+    private String DetaReque;    
     
     private String idRequerimientoModifica;
     private String desrequerimiento;
@@ -83,8 +88,35 @@ public class RequerimientoManagedBean implements Serializable{
 
     public void setCantidad(double cantidad) {
         this.cantidad = cantidad;
-    }    
+    } 
     
+    public List<Requestdeta> getListaItemRq() {
+        if (listaItemRq == null || listaItemRq.isEmpty()) {
+            listaItemRq = new ArrayList<>();
+        }
+        return listaItemRq;
+    }
+
+    public void setListaItemRq(List<Requestdeta> listaItemRq) {
+        this.listaItemRq = listaItemRq;
+    }
+
+    public int getIdReque() {
+        return idReque;
+    }
+
+    public void setIdReque(int idReque) {
+        this.idReque = idReque;
+    }
+
+    public String getDetaReque() {
+        return DetaReque;
+    }
+
+    public void setDetaReque(String DetaReque) {
+        this.DetaReque = DetaReque;
+    }
+   
     public DualListModel<MaterialRequerimientoUtil> getListMateriales() {
         if(listMateriales == null || (listMateriales.getSource().isEmpty() && listMateriales.getTarget().isEmpty())){            
             List<MaterialRequerimientoUtil> source = new ArrayList<>();
@@ -167,14 +199,14 @@ public class RequerimientoManagedBean implements Serializable{
         }
     } 
     
-    public void modificarRequerimiento(String id){
+    public void modificarRequerimiento(Encabezadorequerimiento requeri){
         RequestContext req = RequestContext.getCurrentInstance();        
-        setIdRequerimientoModifica(id);
+        setIdRequerimientoModifica(String.valueOf(requeri.getEncabezadoRequerimientoId()));
         listMaterialesRq = new DualListModel<>();        
         if(listMaterialesRq == null || (listMaterialesRq.getSource().isEmpty() && listMaterialesRq.getTarget().isEmpty())){            
             List<MaterialRequerimientoUtil> source = new ArrayList<>();
             List<MaterialRequerimientoUtil> target = new ArrayList<>();      
-            target = detalleRequerimientoEJB.obtenerDetalleRq(id);
+            target = detalleRequerimientoEJB.obtenerDetalleRq(idRequerimientoModifica);
             source = materialEJB.getMaterialesRequerimientoCross(target);            
             setListMaterialesRq(new DualListModel<MaterialRequerimientoUtil>(source,target));
         }
@@ -271,4 +303,18 @@ public class RequerimientoManagedBean implements Serializable{
                 req.execute("PF('dlg2').hide();");  
             }
     }
+    
+    public void verRequerimiento(Encabezadorequerimiento requi){
+        RequestContext req = RequestContext.getCurrentInstance();        
+        this.idReque = requi.getEncabezadoRequerimientoId();
+        this.DetaReque = requi.getEncabezadoRequerimientoDeta(); 
+        llenarDetaRq();
+        req.execute("PF('dlg5').show();");
+    }
+    
+    public void llenarDetaRq(){
+        listaItemRq = new ArrayList<>();
+        setListaItemRq(detalleRequerimientoEJB.obtenerDetalleByIdRq(idReque));
+    }
+    
 }
