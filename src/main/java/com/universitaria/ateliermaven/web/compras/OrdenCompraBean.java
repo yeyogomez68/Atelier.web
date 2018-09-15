@@ -52,6 +52,10 @@ public class OrdenCompraBean {
     }
     
     public void verOrdenCompra (Ordencompra orCompra){
+        
+    }
+    
+    public void crearOrdenCompra(){
     
     }
 }
