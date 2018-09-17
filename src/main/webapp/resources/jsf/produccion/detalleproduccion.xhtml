@@ -40,25 +40,57 @@
                     <p:ajax event="rowEdit" listener="#{detalleProduccionMaganedBean.onRowEdit}" update=":universarGrowl" />
                     <p:ajax event="rowEditCancel" listener="#{detalleProduccionMaganedBean.onRowCancel}" update=":universarGrowl" />
 
-                    <p:column headerText="Id" filterBy="#{produccionDetalles.produccionDetaId}" filterMatchMode="contains">
-                        <h:outputText value="#{produccionDetalles.produccionDetaId}" />
-                    </p:column>
-
                     <p:column headerText="Descripción" filterBy="#{produccionDetalles.produccionId.produccionDescripcion}" filterMatchMode="contains">
                         <h:outputText value="#{produccionDetalles.produccionId.produccionDescripcion}" />
                     </p:column>
 
-                    <p:column headerText="Material" filterBy="#{produccionDetalles.materialId}" filterMatchMode="contains">
-                        <h:outputText value="#{produccionDetalles.materialId}" />
+                    <p:column headerText="Material" filterBy="#{produccionDetalles.materialId.materialNombre}" filterMatchMode="contains">
+                        <h:outputText value="#{produccionDetalles.materialId.materialNombre}" />
                     </p:column>
 
                     <p:column headerText="Cantidad" filterBy="#{produccionDetalles.produccionDetaCant}" filterMatchMode="contains">
-                        <h:outputText value="#{produccionDetalles.produccionDetaCant}" />
+
+                        <p:cellEditor>
+                            <h:outputText value="#{produccionDetalles.produccionDetaCant}" />
+                            <f:facet name="output"><h:outputText value="#{produccionDetalles.produccionDetaCant}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput" value="#{produccionDetalles.produccionDetaCant}"/></f:facet>
+                        </p:cellEditor>    
+
+
                     </p:column>
+
+
 
                     <p:column headerText="Fecha" filterBy="#{produccionDetalles.produccionDetaFecha}" filterMatchMode="contains">
                         <h:outputText value="#{produccionDetalles.produccionDetaFecha}" />
                     </p:column>
+
+                    <p:column headerText="Usuario" filterBy="#{produccionDetalles.usuarioAsignado.usuarioNombre}" filterMatchMode="contains">
+
+
+                        <p:cellEditor>
+                            <h:outputText value="#{produccionDetalles.usuarioAsignado.usuarioNombre}" />
+                            <f:facet name="output"><h:outputText value="#{produccionDetalles.usuarioAsignado.usuarioNombre}" /></f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu id="Usuario" value="#{detalleProduccionMaganedBean.usuarioId}">                                            
+                                    <f:selectItems value="#{detalleProduccionMaganedBean.usuarios}" />
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>   
+                    </p:column>
+
+                    <p:column headerText="Estado" filterBy="#{produccionDetalles.estadoId.estadoDescrip}" filterMatchMode="contains">
+                        <p:cellEditor>
+                            <h:outputText value="#{produccionDetalles.estadoId.estadoDescrip}" />
+                            <f:facet name="output"><h:outputText value="#{produccionDetalles.estadoId.estadoDescrip}" /></f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu id="Estado" value="#{detalleProduccionMaganedBean.estadoId}">                                            
+                                    <f:selectItems value="#{detalleProduccionMaganedBean.estados}" />
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>                                
+                    </p:column>
+
 
                     <!--Columna de evento editar-->
                     <p:column width="50">
@@ -71,16 +103,22 @@
 
                         <h:outputText value="Cantidad: "/>
                         <p:inputText placeholder="Cantidad" value="#{detalleProduccionMaganedBean.detalleProduccionCrear.produccionDetaCant}"/>  
-                        
+
                         <h:outputText  value="Fecha:" />
                         <p:calendar id="popup" value="#{detalleProduccionMaganedBean.detalleProduccionCrear.produccionDetaFecha}" />
                         <h:outputText value="Material: "/>
                         <p:selectOneMenu id="material" value="#{detalleProduccionMaganedBean.materialId}">                                            
                             <f:selectItems value="#{detalleProduccionMaganedBean.materiales}" />
                         </p:selectOneMenu>
-                         <h:outputText value="Produccion: "/>
-                         <p:selectOneMenu id="produccion" value="#{detalleProduccionMaganedBean.produccionId}">                                            
-                             <f:selectItems value="#{detalleProduccionMaganedBean.producciones}" />
+                        
+                         <h:outputText value="Usuario Asignado: "/>
+                        <p:selectOneMenu id="UsuarioAsignado" value="#{detalleProduccionMaganedBean.usuarioId}">                                            
+                            <f:selectItems value="#{detalleProduccionMaganedBean.usuarios}" />
+                        </p:selectOneMenu>
+                        
+                        <h:outputText value="Produccion: "/>
+                        <p:selectOneMenu id="produccion" value="#{detalleProduccionMaganedBean.produccionId}">                                            
+                            <f:selectItems value="#{detalleProduccionMaganedBean.producciones}" />
                         </p:selectOneMenu>
                     </div>
                     <p:commandButton value="Crear" action="#{detalleProduccionMaganedBean.crearProduccionDetalle}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            

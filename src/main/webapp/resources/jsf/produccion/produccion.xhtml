@@ -29,7 +29,7 @@
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
                             <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                            <h4>Listado de colores</h4>  
+                            <h4>Listado de produccion</h4>
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
                                 <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaProducciones').filter()" style="" placeholder="Filtro de Busqueda"/>        
@@ -40,43 +40,21 @@
                     <p:ajax event="rowEdit" listener="#{produccionManagedBean.onRowEdit}" update=":universarGrowl" />
                     <p:ajax event="rowEditCancel" listener="#{produccionManagedBean.onRowCancel}" update=":universarGrowl" />
 
-                    <p:column headerText="Id" filterBy="#{producciones.produccionId}" filterMatchMode="contains">
-                        <h:outputText value="#{producciones.produccionId}" />
-                    </p:column>
-
                     <p:column headerText="Descripción" filterBy="#{producciones.produccionDescripcion}" filterMatchMode="contains">
-                        <p:cellEditor>
-                            <h:outputText value="#{producciones.produccionDescripcion}" />
-                            <f:facet name="output"><h:outputText value="#{producciones.produccionDescripcion}" /></f:facet>
-                            <f:facet name="input"><p:inputText id="modelInput" value="#{producciones.produccionDescripcion}"/></f:facet>
-                        </p:cellEditor>                                
+                        <h:outputText value="#{producciones.produccionDescripcion}" />
                     </p:column>
 
-
-                    <p:column headerText="Fecha de Produccion" filterBy="#{producciones.produccionFecha}" filterMatchMode="contains">
-                        <h:outputText value="#{producciones.produccionFecha}" />
+                    <p:column headerText="Fecha de Produccion" filterBy="#{producciones.produccionFecha.time}" filterMatchMode="contains">
+                        <p:calendar id="datetime" value="#{producciones.produccionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
                     </p:column>
 
-                    <p:column headerText="Hora de Inicio" filterBy="#{producciones.produccionInicioHora}" filterMatchMode="contains" >
-                        <h:outputText value="#{producciones.produccionInicioHora}" />
-                    </p:column>
-
-                    <p:column headerText="Dias Estimados" filterBy="#{producciones.produccionDiaEstimated}" filterMatchMode="contains">
+                    <p:column headerText="Dias" filterBy="#{producciones.produccionDiaEstimated}" filterMatchMode="contains">
                         <h:outputText value="#{producciones.produccionDiaEstimated}" />
                     </p:column>
 
-                    <p:column headerText="Prenda" filterBy="#{producciones.prendaId.prendaNombre}" filterMatchMode="contains">
-                        <p:cellEditor>
-                            <h:outputText value="#{producciones.prendaId.prendaNombre}" />
-                            <f:facet name="output"><h:outputText value="#{producciones.prendaId.prendaNombre}" /></f:facet>
-                            <f:facet name="input">
-                                <p:selectOneMenu id="prenda" value="#{produccionManagedBean.prendaId}">                                            
-                                    <f:selectItems value="#{produccionManagedBean.prendas}" />
-                                </p:selectOneMenu>
-                            </f:facet>
-                        </p:cellEditor>                                
+                    <p:column headerText="% Avance" filterBy="#{producciones.avance}" filterMatchMode="contains">
+                        <h:outputText value="#{producciones.avance}" />
                     </p:column>
-
 
                     <p:column headerText="Estado" filterBy="#{producciones.estadoId.estadoDescrip}" filterMatchMode="contains">
                         <p:cellEditor>
@@ -91,10 +69,6 @@
                     </p:column>
 
 
-                    <p:column headerText="Usuario Creador" filterBy="#{producciones.usuarioCreador.usuarioNombre}" filterMatchMode="contains">
-                        <h:outputText value="#{producciones.usuarioCreador.usuarioNombre}" />
-                    </p:column>
-
                     <p:column headerText="Usuario" filterBy="#{producciones.usuarioCreador.usuarioNombre}" filterMatchMode="contains">
                         <h:outputText value="#{producciones.usuarioCreador.usuarioNombre}" />
                     </p:column>
@@ -105,32 +79,54 @@
                     </p:column>                            
                 </p:dataTable>
                 <!--</p:panel>--> 
-
-
-
-                <p:dialog header="Crear Produccion" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
-                    <div class="contentDialog">         
-
-                        <h:outputText value="Produccion: "/>
-                        <p:inputText placeholder="Descripcion de Produccion" value="#{produccionManagedBean.produccionCrear.produccionDescripcion}" required="true"/>  
-                        <h:outputText value="Dias Estimados: "/>
-                        <p:inputText placeholder="Dias estimados" value="#{produccionManagedBean.produccionCrear.produccionDiaEstimated}"/>  
-                        <h:outputText value="Prenda: "/>
-                        <p:selectOneMenu id="PrendC" value="#{produccionManagedBean.prendaId}">                                            
-                            <f:selectItems value="#{produccionManagedBean.prendas}" />
-                        </p:selectOneMenu>
-
-                        <h:outputText  value="Fecha Produccion:" />
-                        <p:calendar id="popup" value="#{produccionManagedBean.produccionCrear.produccionFecha}" />
-
-                        <h:outputText value="Hora de Inicio:" />
-                        <p:calendar id="datetime" value="#{produccionManagedBean.produccionCrear.produccionInicioHora}" pattern="dd/MM/yyyy HH:mm:ss" />
-
-                    </div>
-                    <p:commandButton value="Crear" action="#{produccionManagedBean.crearProduccion}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
-                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
-                </p:dialog>  
             </h:form>
+
+
+            <p:dialog id="dialogCrear" header="Crear Produccion" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+                <h:form id="formdialogCrear">
+                    <div class="contentDialog">                    
+                        <h:outputText value="Descripcion de Produccion: "/>
+                        <p:inputText value="#{produccionManagedBean.produccionCrear.produccionDescripcion}" required="true" requiredMessage="La descripcion es obligatoria"/>
+                        <h:outputText value="Dias Estimados: "/>
+                        <p:inputNumber value="#{produccionManagedBean.produccionCrear.produccionDiaEstimated}" required="true" minValue="0" placeholder="0" maxValue="1000" maxlength="10" requiredMessage="La cantidad de dias es obligatoria"/>
+                        <h:outputText value="Fecha de produccion: "/>
+                        <p:calendar id="produccionFecha" value="#{produccionManagedBean.produccionCrear.produccionFechaDate}" pattern="dd/MM/yy HH:mm:ss" />
+                    </div>                          
+                    <p:pickList id="PojoPickList" value="#{produccionManagedBean.materialesSelect}" var="material" required="true" requiredMessage="Debe seleccionar minimo un material"
+                                itemValue="#{material}" itemLabel="#{material.nombre}" showSourceControls="false" showTargetControls="false" showCheckbox="true" responsive="true"
+                                showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"  addLabel="+" removeLabel="-" converter="materialPickListConverter">
+
+                        <f:facet name="sourceCaption">Materiales</f:facet>
+                        <f:facet name="targetCaption">Agregado</f:facet>
+                        <p:ajax event="transfer" listener="#{produccionManagedBean.onTransfer}" />                        
+                        <p:column>
+                            <h:outputText value="#{material.nombre}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{material.referencia}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{material.cantidad}" />
+                        </p:column>  
+                    </p:pickList>
+                    <p:commandButton value="Crear" action="#{produccionManagedBean.crearProduccion}" update="form,formdialogCrear,universarGrowl" /> 
+                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
+                </h:form>
+            </p:dialog> 
+
+            <p:dialog id="dialogCantidad" header="Cantidad" widgetVar="dlg2" closable="false" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+                <h:form>
+                    <div class="contentDialog">                                                      
+                        <h:outputText value="Cantidad: "/>
+                        <p:inputNumber value="#{produccionManagedBean.cantidad}" required="true" minValue="0" placeholder="0" maxValue="1000" maxlength="10" requiredMessage="La cantidad es Obligatoria"/>                                                       
+                        <h:outputText value="Usuario Asignado: "/>
+                        <p:selectOneMenu id="UsuarioAsignado" value="#{produccionManagedBean.usuarioId}">                                            
+                            <f:selectItems value="#{produccionManagedBean.usuarios}" />
+                        </p:selectOneMenu>
+                    </div>                                              
+                    <p:commandButton value="Agregar" action="#{produccionManagedBean.cantidades()}" update="universarGrowl,:formdialogCrear:PojoPickList"/>                     
+                </h:form>
+            </p:dialog>
         </ui:define>
     </ui:composition>
 </html>
