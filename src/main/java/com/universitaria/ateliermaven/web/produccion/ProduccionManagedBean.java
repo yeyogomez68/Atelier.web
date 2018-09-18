@@ -17,6 +17,7 @@ import com.universitaria.ateliermaven.ejb.UsuarioEJB;
 import com.universitaria.ateliermaven.ejb.administrador.EstadoEJB;
 import com.universitaria.ateliermaven.ejb.compras.MaterialEJB;
 import com.universitaria.ateliermaven.ejb.produccion.DetalleProduccionEJB;
+import com.universitaria.ateliermaven.ejb.produccion.PrendasEJB;
 
 import com.universitaria.ateliermaven.ejb.produccion.ProduccionEJB;
 import com.universitaria.ateliermaven.web.comunes.Comunes;
@@ -53,10 +54,14 @@ public class ProduccionManagedBean implements Serializable {
     @EJB
     private DetalleProduccionEJB detalleProduccionEJB;
 
+    @EJB
+    private PrendasEJB prendasEJB;
+
     private List<Produccion> producciones;
 
     private List<SelectItem> estados;
     private List<SelectItem> usuarios;
+    private List<SelectItem> prendas;
 
     private DualListModel<MaterialRequerimientoUtil> materialesSelect;
 
@@ -110,6 +115,42 @@ public class ProduccionManagedBean implements Serializable {
 
     public void setProducciones(List<Produccion> producciones) {
         this.producciones = producciones;
+    }
+
+    public DetalleProduccionEJB getDetalleProduccionEJB() {
+        return detalleProduccionEJB;
+    }
+
+    public void setDetalleProduccionEJB(DetalleProduccionEJB detalleProduccionEJB) {
+        this.detalleProduccionEJB = detalleProduccionEJB;
+    }
+
+    public PrendasEJB getPrendaEJB() {
+        return prendasEJB;
+    }
+
+    public void setPrendaEJB(PrendasEJB prendaEJB) {
+        this.prendasEJB = prendaEJB;
+    }
+
+    public List<SelectItem> getPrendas() {
+        if (prendas == null) {
+            prendas = new ArrayList<>();
+            setPrendas(prendasEJB.getSelectItemPrenda());
+        }
+        return prendas;
+    }
+
+    public void setPrendas(List<SelectItem> prendas) {
+        this.prendas = prendas;
+    }
+
+    public MaterialRequerimientoUtil getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(MaterialRequerimientoUtil material) {
+        this.material = material;
     }
 
     public List<SelectItem> getEstados() {
@@ -221,6 +262,7 @@ public class ProduccionManagedBean implements Serializable {
             FacesContext facesContext = FacesContext.getCurrentInstance();
             Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
             produccionCrear.setUsuarioCreador(user.getUsuarioId().toString());
+            produccionCrear.setPrendaId(prendaId);
             if (produccionEJB.setCrearProduccion(produccionCrear)) {
                 Produccion p = produccionEJB.traerProduccionDes(Comunes.getFormat(produccionCrear.getProduccionDescripcion()));
                 for (MaterialRequerimientoUtil pu : materialesSelect.getTarget()) {

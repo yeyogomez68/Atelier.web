@@ -14,12 +14,12 @@
         <ui:define name="body">
 
             <h:form id="form">  
-                <p:panel id="panelFiltros" header="Filtros de Produccion" >
+                <p:panel id="panelFiltros" header="Filtros de Alquiler" >
 
                 </p:panel> 
 
                 <!--                    <p:panel id="panelLista" header="Listado" >-->
-                <p:dataTable var="producciones" value="#{produccionManagedBean.producciones}" editable="true" widgetVar="tablaProducciones"
+                <p:dataTable var="alquiler" value="#{produccionManagedBean.producciones}" editable="true" widgetVar="tablaAlquiler"
                              paginator="true"
                              rowsPerPageTemplate="5,10,15"                                     
                              paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
@@ -29,10 +29,10 @@
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
                             <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                            <h4>Listado de produccion</h4>
+                            <h4>Listado de alquiler</h4>
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
-                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaProducciones').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaAlquiler').filter()" style="" placeholder="Filtro de Busqueda"/>        
                             </div>                                                                                                    
                         </div>
                     </f:facet>
@@ -42,10 +42,6 @@
 
                     <p:column headerText="Descripción" filterBy="#{producciones.produccionDescripcion}" filterMatchMode="contains">
                         <h:outputText value="#{producciones.produccionDescripcion}" />
-                    </p:column>
-
-                    <p:column headerText="Descripción" filterBy="#{producciones.prendaId.prendaNombre}" filterMatchMode="contains">
-                        <h:outputText value="#{producciones.prendaId.prendaNombre}" />
                     </p:column>
 
                     <p:column headerText="Fecha de Produccion" filterBy="#{producciones.produccionFecha.time}" filterMatchMode="contains">
@@ -95,12 +91,6 @@
                         <p:inputNumber value="#{produccionManagedBean.produccionCrear.produccionDiaEstimated}" required="true" minValue="0" placeholder="0" maxValue="1000" maxlength="10" requiredMessage="La cantidad de dias es obligatoria"/>
                         <h:outputText value="Fecha de produccion: "/>
                         <p:calendar id="produccionFecha" value="#{produccionManagedBean.produccionCrear.produccionFechaDate}" pattern="dd/MM/yy HH:mm:ss" />
-                        <h:outputText value="Prenda: "/>
-                        <p:selectOneMenu id="prenda" value="#{produccionManagedBean.prendaId}">                                            
-                            <f:selectItems value="#{produccionManagedBean.prendas}" />
-                        </p:selectOneMenu>
-                        
-                        
                     </div>                          
                     <p:pickList id="PojoPickList" value="#{produccionManagedBean.materialesSelect}" var="material" required="true" requiredMessage="Debe seleccionar minimo un material"
                                 itemValue="#{material}" itemLabel="#{material.nombre}" showSourceControls="false" showTargetControls="false" showCheckbox="true" responsive="true"
