@@ -159,6 +159,11 @@
                         <p:selectOneMenu id="ocacionC" value="#{prendaManagedBean.ocasionId}">                                            
                             <f:selectItems value="#{prendaManagedBean.ocasiones}" />
                         </p:selectOneMenu>
+                        
+                        <h:outputText value="Talla: "/>
+                        <p:selectOneMenu id="tallaC" value="#{prendaManagedBean.tallaId}">                                            
+                            <f:selectItems value="#{prendaManagedBean.tallas}" />
+                        </p:selectOneMenu>
                     </div>      
                     <p:commandButton value="Crear" action="#{prendaManagedBean.crearPrenda}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/>                            
