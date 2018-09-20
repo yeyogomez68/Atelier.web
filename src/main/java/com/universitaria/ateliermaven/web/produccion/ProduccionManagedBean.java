@@ -16,6 +16,7 @@ import com.universitaria.atelier.web.utils.ProduccionUtil;
 import com.universitaria.ateliermaven.ejb.UsuarioEJB;
 import com.universitaria.ateliermaven.ejb.administrador.EstadoEJB;
 import com.universitaria.ateliermaven.ejb.compras.MaterialEJB;
+import com.universitaria.ateliermaven.ejb.inventario.StockMaterialesEJB;
 import com.universitaria.ateliermaven.ejb.produccion.DetalleProduccionEJB;
 import com.universitaria.ateliermaven.ejb.produccion.PrendasEJB;
 
@@ -53,9 +54,10 @@ public class ProduccionManagedBean implements Serializable {
     private UsuarioEJB usuarioEJB;
     @EJB
     private DetalleProduccionEJB detalleProduccionEJB;
-
     @EJB
     private PrendasEJB prendasEJB;
+    @EJB
+    private StockMaterialesEJB stockMaterialesEJB;
 
     private List<Produccion> producciones;
 
@@ -87,6 +89,22 @@ public class ProduccionManagedBean implements Serializable {
 
     public void setMaterialesEJB(MaterialEJB materialesEJB) {
         this.materialesEJB = materialesEJB;
+    }
+
+    public PrendasEJB getPrendasEJB() {
+        return prendasEJB;
+    }
+
+    public void setPrendasEJB(PrendasEJB prendasEJB) {
+        this.prendasEJB = prendasEJB;
+    }
+
+    public StockMaterialesEJB getStockMaterialesEJB() {
+        return stockMaterialesEJB;
+    }
+
+    public void setStockMaterialesEJB(StockMaterialesEJB stockMaterialesEJB) {
+        this.stockMaterialesEJB = stockMaterialesEJB;
     }
 
     public EstadoEJB getEstadoEJB() {
@@ -254,6 +272,7 @@ public class ProduccionManagedBean implements Serializable {
     }
 
     public void crearProduccion() {
+        String mensaje = "Se ha creado la produccion correctamente";
         if (!produccionEJB.existeProduccion(Comunes.getFormat(produccionCrear.getProduccionDescripcion()))) {
             RequestContext req = RequestContext.getCurrentInstance();
             produccionCrear.setProduccionDescripcion(Comunes.getFormat(produccionCrear.getProduccionDescripcion()));
@@ -266,17 +285,19 @@ public class ProduccionManagedBean implements Serializable {
             if (produccionEJB.setCrearProduccion(produccionCrear)) {
                 Produccion p = produccionEJB.traerProduccionDes(Comunes.getFormat(produccionCrear.getProduccionDescripcion()));
                 for (MaterialRequerimientoUtil pu : materialesSelect.getTarget()) {
+
                     DetalleProduccionUtil dpu = new DetalleProduccionUtil();
                     dpu.setMaterialId(pu.getMaterialId());
                     dpu.setProduccionDetaCant(pu.getCantidad());
                     dpu.setProduccionDetaFecha(produccionCrear.getProduccionFechaDate());
                     dpu.setProduccionId(String.valueOf(p.getProduccionId()));
-                    System.out.println("com.universitaria.ateliermaven.web.produccion.ProduccionManagedBean.crearProduccion(" + pu.getUsuarioId() + ")");
                     dpu.setUsuarioId(pu.getUsuarioId());
                     dpu.setEstadoId("1");
-                    detalleProduccionEJB.setCrearDetalleProduccion(dpu);
+                    if (!detalleProduccionEJB.setCrearDetalleProduccion(dpu)) {
+                        mensaje = "Se ha creado la produccion, verifique los detalles de la produccion ";
+                    }
                 }
-                Comunes.mensaje("Se ha creado la produccion correctamente", produccionCrear.getProduccionDescripcion());
+                Comunes.mensaje(mensaje, produccionCrear.getProduccionDescripcion());
             } else {
                 Comunes.mensaje("Error creando la produccion", produccionCrear.getProduccionDescripcion());
             }

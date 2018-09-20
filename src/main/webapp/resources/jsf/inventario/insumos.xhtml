@@ -10,110 +10,79 @@
         <ui:define name="title">
             <h:outputText value="Atelier"></h:outputText>
         </ui:define>
-        
+
         <ui:define name="body">
-            
-                <h:form id="form"> 
-                    <p:panel id="panelFiltros" header="Usuarios" >
-                        
-                    </p:panel>
-                        <p:dataTable var="usuarios" value="#{usuarioManagedBean.usuarios}" editable="true" widgetVar="tablaUsuarios"
-                                     paginator="true"
-                                     rowsPerPageTemplate="5,10,15"                                     
-                                     paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
-                                     emptyMessage="No se han encontrado resultados"
-                                     rows="10">
-                            
-                            <f:facet name="header">
-                                <div class="headerTableAndCreateBtn">
-                                    <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                                    <h4>Listado de Usuarios</h4>  
-                                    <div class="globalFilterDiv">
-                                        <img class="filtroLupa"/>
-                                        <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaUsuarios').filter()" style="" placeholder="Filtro de Busqueda"/>        
-                                    </div>                                                                                                    
-                                </div>
-                            </f:facet>
-                            <!--Eventos de tabla editable-->
-                            <p:ajax event="rowEdit" listener="#{usuarioManagedBean.onRowEdit}" update=":universarGrowl" />
-                            <p:ajax event="rowEditCancel" listener="#{usuarioManagedBean.onRowCancel}" update=":universarGrowl" />
-                            
-                            <p:column headerText="Id" filterBy="#{usuarios.usuarioId}" filterMatchMode="contains">
-                                <h:outputText value="#{usuarios.usuarioId}" />
-                            </p:column>
-                            
-                            <p:column headerText="Identificación" filterBy="#{usuarios.usuarioIdentificacion}" filterMatchMode="contains">
-                                <h:outputText value="#{usuarios.usuarioIdentificacion}" />
-                            </p:column>
-                            
-                            <p:column headerText="Nombre" filterBy="#{usuarios.usuarioNombre}" filterMatchMode="contains">
-                                <h:outputText value="#{usuarios.usuarioNombre}" />
-                            </p:column>
-                            
-                            <p:column headerText="Apellido" filterBy="#{usuarios.usuarioApellido}" filterMatchMode="contains">
-                                <h:outputText value="#{usuarios.usuarioApellido}" />
-                            </p:column>
-                            
-                            <p:column headerText="Email" filterBy="#{usuarios.usuarioEmail}" filterMatchMode="contains">
-                                <h:outputText value="#{usuarios.usuarioEmail}" />
-                            </p:column>                
-                           
-                            <p:column headerText="Estado" filterBy="#{usuarios.estadoId.estadoDescrip}" filterMatchMode="contains">
-                                <p:cellEditor>
-                                    <h:outputText value="#{usuarios.estadoId.estadoDescrip}" />
-                                    <f:facet name="output"><h:outputText value="#{usuarios.estadoId.estadoDescrip}" /></f:facet>
-                                    <f:facet name="input">
-                                        <p:selectOneMenu id="estado" value="#{usuarioManagedBean.estadoId}">                                            
-                                            <f:selectItems value="#{usuarioManagedBean.estados}" />
-                                        </p:selectOneMenu>
-                                    </f:facet>
-                                </p:cellEditor>                                
-                            </p:column>
-                            
-                            <!--Columna de evento editar-->
-                            <p:column width="50">
-                                <p:rowEditor />
-                            </p:column>                            
-                        </p:dataTable>
-                    <!--</p:panel>--> 
-                    <p:dialog header="Crear Usuario" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
-                        <div class="contentDialog">                   
-                            <h:outputText value="Identificación: "/>
-                            <p:inputNumber placeholder="Identificación" value="#{usuarioManagedBean.usuarioCrear.identificacion}" maxlength="10" decimalSeparator="." decimalPlaces="0" />
-                            
-                            <h:outputText value="Nombre: "/>
-                            <p:inputText placeholder="Nombre" value="#{usuarioManagedBean.usuarioCrear.nombre}"/>
-                            
-                            <h:outputText value="Apellido: "/>
-                            <p:inputText placeholder="Apellido" value="#{usuarioManagedBean.usuarioCrear.apellido}"/>
-                            
-                            <h:outputText value="Email: "/>
-                            <p:inputText placeholder="Email" value="#{usuarioManagedBean.usuarioCrear.email}"/>
-                            
-                            <h:outputText value="Password: "/>
-                            <p:inputText placeholder="Password" value="#{usuarioManagedBean.usuarioCrear.password}"/>
-                            
-                            <h:outputText value="Dirección: "/>
-                            <p:inputText placeholder="Direccion" value="#{usuarioManagedBean.usuarioCrear.direccion}"/>
-                            
-                            <h:outputText value="Celular: "/>
-                            <p:inputNumber placeholder="Celular" value="#{usuarioManagedBean.usuarioCrear.celular}"  maxlength="10" decimalSeparator="." decimalPlaces="0" />
-                            
-                            <h:outputText value="Ciudad: "/>
-                            <p:selectOneMenu id="ciudad" value="#{usuarioManagedBean.ciudadId}">                                            
-                                <f:selectItems value="#{usuarioManagedBean.ciudades}" />
-                            </p:selectOneMenu>
-                            
-                            <h:outputText value="Roll: "/>
-                            <p:selectOneMenu id="roll" value="#{usuarioManagedBean.rollId}">                                            
-                                <f:selectItems value="#{usuarioManagedBean.roles}" />
-                            </p:selectOneMenu>         
+
+            <h:form id="form"> 
+                <p:panel id="panelFiltros" header="StockMateriales" >
+
+                </p:panel>
+                <p:dataTable var="stockmateriales" value="#{stockMaterialesManagedBean.stockMateriales}" editable="true" widgetVar="tablaStockMateriales"
+                             paginator="true"
+                             rowsPerPageTemplate="5,10,15"                                     
+                             paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                             emptyMessage="No se han encontrado resultados"
+                             rows="10">
+
+                    <f:facet name="header">
+                        <div class="headerTableAndCreateBtn">
+                            <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
+                            <h4>Stock de materiales</h4>  
+                            <div class="globalFilterDiv">
+                                <img class="filtroLupa"/>
+                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaStockMateriales').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                            </div>                                                                                                    
                         </div>
-                        <p:commandButton value="Crear" action="#{usuarioManagedBean.crearUsuario}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
-                        <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
-                    </p:dialog>  
+                    </f:facet>
+
+                    <!--Eventos de tabla editable-->
+
+                    <p:column headerText="Material" filterBy="#{stockmateriales.materialId.materialNombre}" filterMatchMode="contains">
+                        <h:outputText value="#{stockmateriales.materialId.materialNombre}" />
+                    </p:column>
+
+                    <p:column headerText="Cantidad" filterBy="#{stockmateriales.cantidad}" filterMatchMode="contains">
+                        <h:outputText value="#{stockmateriales.cantidad}" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+
+            <p:dialog id="dialogAprob" header="Ingreso de insumos" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                <h:form id="frmdialogAprob">                      
+                    <p:dataTable id="tabla" var="insumosingr" value="#{stockMaterialesManagedBean.ordenCompras}" editable="true" widgetVar="tablaingreso"
+                                 paginator="true"
+                                 rowsPerPageTemplate="5,10,15"                                     
+                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                                 emptyMessage="No se han encontrado resultados"
+                                 rows="10">
+
+                        <f:facet name="header">
+                            <div class="headerTableAndCreateBtn">                                
+                                <h4>Insumos a ingresar</h4>  
+                                <div class="globalFilterDiv">
+                                    <img class="filtroLupa"/>
+                                    <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaingreso').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                </div>                                                                                                    
+                            </div>
+                        </f:facet>
+                        <!--Eventos de tabla editable-->                      
+
+                        <p:column headerText="Material" filterBy="#{insumosingr.materialId.materialNombre}" filterMatchMode="contains">
+                            <h:outputText value="#{insumosingr.materialId.materialNombre}" />
+                        </p:column>
+
+                        <p:column headerText="Cantidad" filterBy="#{insumosingr.ordenCompraCantidad}" filterMatchMode="contains">
+                            <h:outputText value="#{insumosingr.ordenCompraCantidad}" />
+                        </p:column>    
+                        <p:column headerText="Acción" >
+                            <p:commandLink value="Ingresar" actionListener="#{stockMaterialesManagedBean.ingresarInsumo(insumosingr)}" update="frmdialogAprob,form" /> 
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton value="Ingresar Todo" action="#{stockMaterialesManagedBean.ingresarTodos}" update="dialogAprob,form,dialogAprob,universarGrowl" /> 
+                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
                 </h:form>
+            </p:dialog>
+
         </ui:define>
-        
     </ui:composition>
 </html>
