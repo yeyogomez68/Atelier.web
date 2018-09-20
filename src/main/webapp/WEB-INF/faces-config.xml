@@ -171,4 +171,9 @@
         <managed-bean-class>com.universitaria.ateliermaven.web.inventario.StockMaterialesManagedBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>detallePrendaManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.produccion.DetallePrendaManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
 </faces-config>

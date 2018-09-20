@@ -10,12 +10,9 @@
         <ui:define name="title">
             <h:outputText value="Atelier"></h:outputText>
         </ui:define>
-
         <ui:define name="body">
-
             <h:form id="form"> 
                 <p:panel id="panelFiltros" header="StockMateriales" >
-
                 </p:panel>
                 <p:dataTable var="stockmateriales" value="#{stockMaterialesManagedBean.stockMateriales}" editable="true" widgetVar="tablaStockMateriales"
                              paginator="true"
@@ -23,7 +20,6 @@
                              paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
                              emptyMessage="No se han encontrado resultados"
                              rows="10">
-
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
                             <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
@@ -34,15 +30,16 @@
                             </div>                                                                                                    
                         </div>
                     </f:facet>
-
                     <!--Eventos de tabla editable-->
-
                     <p:column headerText="Material" filterBy="#{stockmateriales.materialId.materialNombre}" filterMatchMode="contains">
                         <h:outputText value="#{stockmateriales.materialId.materialNombre}" />
                     </p:column>
 
                     <p:column headerText="Cantidad" filterBy="#{stockmateriales.cantidad}" filterMatchMode="contains">
                         <h:outputText value="#{stockmateriales.cantidad}" />
+                    </p:column>
+                    <p:column headerText="Ubicacion" filterBy="#{stockmateriales.materialId.ubicacion}" filterMatchMode="contains">
+                        <h:outputText value="#{stockmateriales.materialId.ubicacion}" />
                     </p:column>
                 </p:dataTable>
             </h:form>
@@ -66,7 +63,6 @@
                             </div>
                         </f:facet>
                         <!--Eventos de tabla editable-->                      
-
                         <p:column headerText="Material" filterBy="#{insumosingr.materialId.materialNombre}" filterMatchMode="contains">
                             <h:outputText value="#{insumosingr.materialId.materialNombre}" />
                         </p:column>
@@ -82,7 +78,6 @@
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
                 </h:form>
             </p:dialog>
-
         </ui:define>
     </ui:composition>
 </html>

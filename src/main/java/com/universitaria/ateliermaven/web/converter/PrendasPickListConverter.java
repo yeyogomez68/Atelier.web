@@ -27,12 +27,11 @@ public class PrendasPickListConverter implements Converter {
             prenda.setPrendaNombre(item[1]);
             prenda.setPrendaDescripcion(item[2]);
             prenda.setColorId(item[3]);
-            prenda.setMaterialId(item[4]);
-            prenda.setOcasionId(item[5]);
-            prenda.setPrendaTipoId(item[6]);
-            prenda.setEstadoId(item[7]);
-            prenda.setCantidad(item[8]);
-            prenda.setUsuarioId(item[9]);
+            prenda.setOcasionId(item[4]);
+            prenda.setPrendaTipoId(item[5]);
+            prenda.setEstadoId(item[6]);
+            prenda.setCantidad(item[7]);
+            prenda.setUsuarioId(item[8]);
             return prenda;
         }
         return null;
@@ -49,8 +48,6 @@ public class PrendasPickListConverter implements Converter {
                     .append(prenda.getPrendaDescripcion())
                     .append(";")
                     .append(prenda.getColorId())
-                    .append(";")
-                    .append(prenda.getMaterialId())
                     .append(";")
                     .append(prenda.getOcasionId())
                     .append(";")

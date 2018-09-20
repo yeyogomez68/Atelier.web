@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/WEB-INF/include/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Atelier"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+
+            <h:form id="form">  
+                <p:panel id="panelFiltros" header="Filtros de Detalle de prenda" >
+
+                </p:panel> 
+
+                <!--                    <p:panel id="panelLista" header="Listado" >-->
+                <p:dataTable var="prendaDetalles" value="#{detallePrendaManagedBean.detallePrendas}" editable="true" widgetVar="tablaProduccionDetalles"
+                             paginator="true"
+                             rowsPerPageTemplate="5,10,15"                                     
+                             paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                             emptyMessage="No se han encontrado resultados"
+                             rows="10">
+
+                    <f:facet name="header">
+                        <div class="headerTableAndCreateBtn">
+                            <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
+                            <h4>Listado de detalles de produccion</h4>  
+                            <div class="globalFilterDiv">
+                                <img class="filtroLupa"/>
+                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaProduccionDetalles').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                            </div>                                                                                                    
+                        </div>
+                    </f:facet>
+                    <!--Eventos de tabla editable-->
+
+                    <p:column headerText="Prenda" filterBy="#{prendaDetalles.prendaId.prendaNombre}" filterMatchMode="contains">
+                        <h:outputText value="#{prendaDetalles.prendaId.prendaNombre}" />
+                    </p:column>
+
+                    <p:column headerText="Material" filterBy="#{prendaDetalles.materialId.materialNombre}" filterMatchMode="contains">
+                        <h:outputText value="#{prendaDetalles.materialId.materialNombre}" />
+                    </p:column>
+
+                    <p:column headerText="Acción" >
+                        <p:commandLink value="Eliminar" actionListener="#{detallePrendaManagedBean.eliminarDetallePrenda(prendaDetalles)}" update="form" /> 
+                    </p:column>
+                       
+                </p:dataTable>
+                <!--</p:panel>--> 
+                <p:dialog header="Crear Nuevo Detalle" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                    <div class="contentDialog">                    
+
+
+
+                        <h:outputText value="Prenda: "/>
+                        <p:selectOneMenu id="UsuarioAsignado" value="#{detallePrendaManagedBean.idPrenda}">                                            
+                            <f:selectItems value="#{detallePrendaManagedBean.prendas}" />
+                        </p:selectOneMenu>
+                        <h:outputText value="Material: "/>
+                        <p:selectOneMenu id="material" value="#{detallePrendaManagedBean.idMaterial}">                                            
+                            <f:selectItems value="#{detallePrendaManagedBean.materiales}" />
+                        </p:selectOneMenu>
+
+
+
+                    </div>
+                    <p:commandButton value="Crear" action="#{detallePrendaManagedBean.crearDetallePrenda}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
+                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
+                </p:dialog>  
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
