@@ -17,7 +17,6 @@
                 <p:panel id="panelFiltros" header="Filtros de Detalle de prenda" >
 
                 </p:panel> 
-
                 <!--                    <p:panel id="panelLista" header="Listado" >-->
                 <p:dataTable var="prendaDetalles" value="#{detallePrendaManagedBean.detallePrendas}" editable="true" widgetVar="tablaProduccionDetalles"
                              paginator="true"
@@ -25,7 +24,6 @@
                              paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
                              emptyMessage="No se han encontrado resultados"
                              rows="10">
-
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
                             <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
@@ -37,26 +35,19 @@
                         </div>
                     </f:facet>
                     <!--Eventos de tabla editable-->
-
                     <p:column headerText="Prenda" filterBy="#{prendaDetalles.prendaId.prendaNombre}" filterMatchMode="contains">
                         <h:outputText value="#{prendaDetalles.prendaId.prendaNombre}" />
                     </p:column>
-
                     <p:column headerText="Material" filterBy="#{prendaDetalles.materialId.materialNombre}" filterMatchMode="contains">
                         <h:outputText value="#{prendaDetalles.materialId.materialNombre}" />
                     </p:column>
-
                     <p:column headerText="Acción" >
                         <p:commandLink value="Eliminar" actionListener="#{detallePrendaManagedBean.eliminarDetallePrenda(prendaDetalles)}" update="form" /> 
                     </p:column>
-                       
                 </p:dataTable>
                 <!--</p:panel>--> 
                 <p:dialog header="Crear Nuevo Detalle" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
                     <div class="contentDialog">                    
-
-
-
                         <h:outputText value="Prenda: "/>
                         <p:selectOneMenu id="UsuarioAsignado" value="#{detallePrendaManagedBean.idPrenda}">                                            
                             <f:selectItems value="#{detallePrendaManagedBean.prendas}" />
@@ -65,9 +56,6 @@
                         <p:selectOneMenu id="material" value="#{detallePrendaManagedBean.idMaterial}">                                            
                             <f:selectItems value="#{detallePrendaManagedBean.materiales}" />
                         </p:selectOneMenu>
-
-
-
                     </div>
                     <p:commandButton value="Crear" action="#{detallePrendaManagedBean.crearDetallePrenda}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
