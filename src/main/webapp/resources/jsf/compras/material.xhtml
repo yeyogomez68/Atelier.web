@@ -10,63 +10,99 @@
         <ui:define name="title">
             <h:outputText value="Atelier"></h:outputText>
         </ui:define>
-        
-        <ui:define name="body">
-            
-                <h:form id="form">  
-                    <p:panel id="panelFiltros" header="Tallas" >
-                        
-                    </p:panel> 
-                        <p:growl id="msn" life="2000"/>
-<!--                    <p:panel id="panelLista" header="Listado" >-->
-                        <p:dataTable var="tallas" value="#{tallaManagedBean.tallas}" editable="true" widgetVar="tablaEstados"
-                                     paginator="true"
-                                     rowsPerPageTemplate="5,10,15"                                     
-                                     paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
-                                     emptyMessage="No se han encontrado resultados"
-                                     rows="10">
-                            
-                            <f:facet name="header">
-                                <div class="headerTableAndCreateBtn">
-                                    <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                                    <h4>Listado de Tallas</h4>  
-                                    <div class="globalFilterDiv">
-                                        <img class="filtroLupa"/>
-                                        <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaEstados').filter()" style="" placeholder="Filtro de Busqueda"/>        
-                                    </div>                                                                                                    
-                                </div>
-                            </f:facet>
-                            <!--Eventos de tabla editable-->
-                            <p:ajax event="rowEdit" listener="#{tallaManagedBean.onRowEdit}" update=":form:msn" />
-                            <p:ajax event="rowEditCancel" listener="#{tallaManagedBean.onRowCancel}" update=":form:msn" />
-                            
-                            <p:column headerText="Id" filterBy="#{tallas.tallaId}" filterMatchMode="contains">
-                                <h:outputText value="#{tallas.tallaId}" />
-                            </p:column>
 
-                            <p:column headerText="Descripción" filterBy="#{tallas.tallaDescrip}" filterMatchMode="contains">
-                                <p:cellEditor>
-                                    <h:outputText value="#{tallas.tallaDescrip}" />
-                                    <f:facet name="output"><h:outputText value="#{tallas.tallaDescrip}" /></f:facet>
-                                    <f:facet name="input"><p:inputText id="modelInput" value="#{tallas.tallaDescrip}"/></f:facet>
-                                </p:cellEditor>                                
-                            </p:column>
-                            <!--Columna de evento editar-->
-                            <p:column width="50">
-                                <p:rowEditor />
-                            </p:column>                            
-                        </p:dataTable>
-                    <!--</p:panel>--> 
-                    <p:dialog header="Crear Talla" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
-                        <div class="contentDialog">                    
-                            <h:outputText value="Talla: "/>
-                            <p:inputText placeholder="Talla" value="#{tallaManagedBean.desTalla}"/>                                                       
-                        </div>
-                        <p:commandButton value="Crear" action="#{tallaManagedBean.crearTalla}" update="form,:form:msn" onclick="PF('dlg1').hide();"/>                            
-                        <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
-                    </p:dialog>  
-                </h:form>
+        <ui:define name="body">
+
+            <h:form id="form">   
+                <p:panel id="panelLista" header="Listado" >
+                    <p:dataTable var="materiales" value="#{materialManagedBean.materiales}" editable="true" widgetVar="tablaMateriales"
+                                 paginator="true"
+                                 rowsPerPageTemplate="5,10,15"                                     
+                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                                 emptyMessage="No se han encontrado resultados"
+                                 rows="10">
+
+                        <f:facet name="header">
+                            <div class="headerTableAndCreateBtn">
+                                <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
+                                <h4>Lista de Materiales</h4>  
+                                <div class="globalFilterDiv">
+                                    <img class="filtroLupa"/>
+                                    <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaMateriales').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                </div>                                                                                                    
+                            </div>
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{materialManagedBean.onRowEdit}" update=":universarGrowl" />
+                        <p:ajax event="rowEditCancel" listener="#{prendaManagedBean.onRowCancel}" update=":universarGrowl" />                          
+
+                        <p:column headerText="Nombre" filterBy="#{materiales.materialNombre}" filterMatchMode="contains">
+                            <p:cellEditor>
+                                <h:outputText value="#{materiales.materialNombre}" />
+                                <f:facet name="output"><h:outputText value="#{materiales.materialNombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="modelInputNombre" value="#{materiales.materialNombre}"/></f:facet>
+                            </p:cellEditor>                                
+                        </p:column>
+
+                        <p:column headerText="Referencia" filterBy="#{materiales.materialReference}" filterMatchMode="contains">
+                            <p:cellEditor>
+                                <h:outputText value="#{materiales.materialReference}" />
+                                <f:facet name="output"><h:outputText value="#{materiales.materialReference}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="modelInputDescripcion" value="#{materiales.materialReference}"/></f:facet>
+                            </p:cellEditor>                                
+                        </p:column>
+
+                        <p:column headerText="Marca" filterBy="#{materiales.marcaId.marcaNombre }" filterMatchMode="contains">
+                            <h:outputText value="#{materiales.marcaId.marcaNombre}" />
+                        </p:column>
+
+                        <p:column headerText="Tipo de material" filterBy="#{materiales.materialTipoId.materialTipoDescript}" filterMatchMode="contains">
+                            <p:cellEditor>
+                                <h:outputText value="#{materiales.materialTipoId.materialTipoDescript}" />
+                                <f:facet name="output"><h:outputText value="#{materiales.materialTipoId.materialTipoDescript}" /></f:facet>
+                                <f:facet name="input">
+                                    <p:selectOneMenu id="TipodePrenda" value="#{materialManagedBean.materialTipoId}">                                            
+                                        <f:selectItems value="#{materialManagedBean.materialTipo}" />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor>                                
+                        </p:column>
+
+
+                        <p:column width="50">
+                            <p:rowEditor />
+                        </p:column>  
+                    </p:dataTable>
+                </p:panel> 
+
+                <p:dialog header="Crear Material" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                    <div class="contentDialog">
+                        <h:outputText value="Nombre: "/>
+                        <p:inputText placeholder="Nombre de material" value="#{prendaManagedBean.prendaCrear.prendaNombre}"/>
+
+                        <h:outputText value="Referencia: "/>
+                        <p:inputText placeholder="Referencia de material" value="#{prendaManagedBean.prendaCrear.prendaDescripcion}"/>
+
+                        <h:outputText value="Ubicacion: "/>
+                        <p:inputText placeholder="Ubicacion del material" value="#{prendaManagedBean.prendaCrear.ubicacion}"/>
+
+                        <h:outputText value="Marca: "/>
+                        <p:selectOneMenu id="materialC" value="#{prendaManagedBean.colorId}">                                            
+                            <f:selectItems value="#{prendaManagedBean.colores}" />
+                        </p:selectOneMenu>
+
+                        <h:outputText value="Tipo de material: "/>
+                        <p:selectOneMenu id="materialTipoC" value="#{prendaManagedBean.materialId}">                                            
+                            <f:selectItems value="#{prendaManagedBean.materiales}" />
+                        </p:selectOneMenu>
+
+                    </div>      
+                    <p:commandButton value="Crear" action="#{prendaManagedBean.crearPrenda}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
+                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/>                            
+                </p:dialog> 
+
+            </h:form>
+
         </ui:define>
-        
     </ui:composition>
 </html>

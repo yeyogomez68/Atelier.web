@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/WEB-INF/include/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Atelier"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+
+            <h:form id="form">  
+                <p:panel id="panelFiltros" header="Filtros de Devoluciones" >
+
+                </p:panel> 
+
+                <!--                    <p:panel id="panelLista" header="Listado" >-->
+                <p:dataTable var="devolucion" value="#{alquilerManagedBean.rentasActivas}" editable="true" widgetVar="tablaDevolucion"
+                             paginator="true"
+                             rowsPerPageTemplate="5,10,15"                                     
+                             paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                             emptyMessage="No se han encontrado resultados"
+                             rows="10">
+
+                    <f:facet name="header">
+                        <div class="headerTableAndCreateBtn">
+                            <h4>Listado de devoluciones</h4>
+                            <div class="globalFilterDiv">
+                                <img class="filtroLupa"/>
+                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaDevolucion').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                            </div>                                                                                                    
+                        </div>
+                    </f:facet>
+                    <!--Eventos de tabla editable-->
+
+                    <p:column headerText="Alquiler" filterBy="#{devolucion.rentaId}" filterMatchMode="contains">
+                        <h:outputText value="#{devolucion.rentaId}" />
+                    </p:column>
+
+                    <p:column headerText="Fecha de alquiler" filterBy="#{devolucion.rentaIdFecha.time}" filterMatchMode="contains">
+                        <p:calendar id="FechaAlquiler" value="#{devolucion.rentaIdFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                    </p:column>
+
+                    <p:column headerText="Dias" filterBy="#{devolucion.diaRenta}" filterMatchMode="contains">
+                        <h:outputText value="#{devolucion.diaRenta}" />
+                    </p:column>
+
+                    <p:column headerText="Fecha de retorno" filterBy="#{devolucion.rentaReinEstadomentFecha.time}" filterMatchMode="contains">
+                        <p:calendar id="FechaRetorno" value="#{devolucion.rentaReinEstadomentFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                    </p:column>
+
+
+                    <p:column headerText="Cliente" filterBy="#{devolucion.clienteId.clienteIdentificacion}" filterMatchMode="contains">
+                        <h:outputText value="#{devolucion.clienteId.clienteIdentificacion}" />
+                    </p:column>
+                    <p:column headerText="Acción" >
+                        <p:commandLink value="Reintegro" actionListener="#{alquilerManagedBean.verRentasActivas(devolucion)}" update="dialogAprob" /> 
+                    </p:column>
+                </p:dataTable>
+                <!--</p:panel>--> 
+            </h:form>
+
+
+            <p:dialog id="dialogAprob" header="Devolucion de prendas alquiladas" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                <h:form id="frmdialogAprob">                      
+                    <p:dataTable id="tabla" var="rentadeta" value="#{alquilerManagedBean.detalleRenta}" editable="true" widgetVar="tablaDetalleRenta"
+                                 paginator="true"
+                                 rowsPerPageTemplate="5,10,15"                                     
+                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                                 emptyMessage="No se han encontrado resultados"
+                                 rows="10">
+
+                        <f:facet name="header">
+                            <div class="headerTableAndCreateBtn">                                
+                                <h4>Items rentados</h4>  
+                                <div class="globalFilterDiv">
+                                    <img class="filtroLupa"/>
+                                    <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaDetalleRenta').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                </div>                                                                                                    
+                            </div>
+                        </f:facet>
+                        <!--Eventos de tabla editable-->                      
+
+                        <p:column headerText="Prenda" filterBy="#{rentadeta.prendaId.prendaNombre}" filterMatchMode="contains">
+                            <h:outputText value="#{rentadeta.prendaId.prendaNombre}" />
+                        </p:column>
+
+                        <p:column headerText="Fecha renta" filterBy="#{rentadeta.rentaDetaFecha.time}" filterMatchMode="contains">
+                            <p:calendar id="FechaRenta" value="#{rentadeta.rentaDetaFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                        </p:column>
+
+                        <p:column headerText="Fecha de reintegro" filterBy="#{rentadeta.rentaDetaReinEstadomentFecha.time}" filterMatchMode="contains">
+                            <p:calendar id="FechaReintegro" value="#{rentadeta.rentaDetaReinEstadomentFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                        </p:column>    
+
+                        <p:column headerText="Acción" >
+                            <p:commandLink value="Reintegro" actionListener="#{alquilerManagedBean.reintegrarPrenda(rentadeta)}" update="frmdialogAprob,form"/> 
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton value="Reintegrar Todo" action="#{alquilerManagedBean.reintegrarTodo}" update="dialogAprob,form,dialogAprob,universarGrowl"/> 
+                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
+                </h:form>
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+</html>

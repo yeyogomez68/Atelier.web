@@ -6,11 +6,14 @@
 package com.universitaria.ateliermaven.web.produccion;
 
 import com.universitaria.atelier.web.jpa.Prenda;
+import com.universitaria.atelier.web.utils.MaterialRequerimientoUtil;
 import com.universitaria.atelier.web.utils.PrendaUtil;
 import com.universitaria.ateliermaven.ejb.administrador.ColorEJB;
 import com.universitaria.ateliermaven.ejb.administrador.EstadoEJB;
 import com.universitaria.ateliermaven.ejb.compras.MaterialEJB;
 import com.universitaria.ateliermaven.ejb.administrador.OcasionEJB;
+import com.universitaria.ateliermaven.ejb.administrador.TallaEJB;
+import com.universitaria.ateliermaven.ejb.produccion.DetallePrendaEJB;
 import com.universitaria.ateliermaven.ejb.produccion.PrendaTipoEJB;
 import com.universitaria.ateliermaven.ejb.produccion.PrendasEJB;
 import com.universitaria.ateliermaven.web.comunes.Comunes;
@@ -23,6 +26,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.TransferEvent;
+import org.primefaces.model.DualListModel;
 
 /**
  *
@@ -52,6 +57,15 @@ public class PrendaManagedBean implements Serializable {
     @EJB
     private EstadoEJB estadoEJB;
 
+    @EJB
+    private TallaEJB tallaEJB;
+
+    @EJB
+    private MaterialEJB materialesEJB;
+
+    @EJB
+    private DetallePrendaEJB detallePrendaEJB;
+
     private List<Prenda> prendas;
 
     private List<SelectItem> prendasTipo;
@@ -59,14 +73,35 @@ public class PrendaManagedBean implements Serializable {
     private List<SelectItem> colores;
     private List<SelectItem> ocasiones;
     private List<SelectItem> estados;
+    private List<SelectItem> tallas;
+
+    private DualListModel<MaterialRequerimientoUtil> materialesSelect;
 
     private PrendaUtil prendaCrear;
 
     private String prendaTipoId;
-    private String materialId;
     private String colorId;
+    private String tallaId;
     private String ocasionId;
     private String estadoId;
+
+    private MaterialRequerimientoUtil material;
+
+    public MaterialRequerimientoUtil getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(MaterialRequerimientoUtil material) {
+        this.material = material;
+    }
+
+    public DetallePrendaEJB getDetallePrendaEJB() {
+        return detallePrendaEJB;
+    }
+
+    public void setDetallePrendaEJB(DetallePrendaEJB detallePrendaEJB) {
+        this.detallePrendaEJB = detallePrendaEJB;
+    }
 
     public PrendasEJB getPrendaEJB() {
         return prendaEJB;
@@ -98,6 +133,26 @@ public class PrendaManagedBean implements Serializable {
 
     public void setColorEJB(ColorEJB colorEJB) {
         this.colorEJB = colorEJB;
+    }
+
+    public TallaEJB getTallaEJB() {
+        return tallaEJB;
+    }
+
+    public void setTallaEJB(TallaEJB tallaEJB) {
+        this.tallaEJB = tallaEJB;
+    }
+
+    public List<SelectItem> getTallas() {
+        if (tallas == null) {
+            tallas = new ArrayList<>();
+            setTallas(tallaEJB.getSelectItemTallas());
+        }
+        return tallas;
+    }
+
+    public void setTallas(List<SelectItem> tallas) {
+        this.tallas = tallas;
     }
 
     public OcasionEJB getOcasionEJB() {
@@ -204,12 +259,12 @@ public class PrendaManagedBean implements Serializable {
         this.prendaTipoId = prendaTipoId;
     }
 
-    public String getMaterialId() {
-        return materialId;
+    public String getTallaId() {
+        return tallaId;
     }
 
-    public void setMaterialId(String materialId) {
-        this.materialId = materialId;
+    public void setTallaId(String tallaId) {
+        this.tallaId = tallaId;
     }
 
     public String getColorId() {
@@ -236,11 +291,35 @@ public class PrendaManagedBean implements Serializable {
         this.estadoId = estadoId;
     }
 
+    public DualListModel<MaterialRequerimientoUtil> getMaterialesSelect() {
+
+        if (materialesSelect == null || (materialesSelect.getSource().isEmpty() && materialesSelect.getTarget().isEmpty())) {
+            List<MaterialRequerimientoUtil> source = new ArrayList<>();
+            List<MaterialRequerimientoUtil> target = new ArrayList<>();
+            source = materialesEJB.getMaterialesRequerimiento();
+            setMaterialesSelect(new DualListModel<MaterialRequerimientoUtil>(source, target));
+        }
+        return materialesSelect;
+    }
+
+    public void setMaterialesSelect(DualListModel<MaterialRequerimientoUtil> materialesSelect) {
+        this.materialesSelect = materialesSelect;
+    }
+
+    public MaterialEJB getMaterialesEJB() {
+        return materialesEJB;
+    }
+
+    public void setMaterialesEJB(MaterialEJB materialesEJB) {
+        this.materialesEJB = materialesEJB;
+    }
+
     public void onRowEdit(RowEditEvent event) {
         Prenda prenda = (Prenda) event.getObject();
 
         if (!prenda.getPrendaNombre().equals("") && !prendaEJB.existePrenda(Comunes.getFormat(prenda.getPrendaNombre()))) {
             Comunes.mensaje((prendaEJB.setModificarPrenda(prenda) ? "Se ha modificado la prenda correctamente " : "Error modificando la prenda "), prendaCrear.getPrendaNombre());
+
         }
 
     }
@@ -251,19 +330,41 @@ public class PrendaManagedBean implements Serializable {
     }
 
     public void crearPrenda() {
-
+        String mensaje = "Se ha creado la prenda correctamente";
         if (!prendaEJB.existePrenda(Comunes.getFormat(prendaCrear.getPrendaNombre()))) {
             prendaCrear.setPrendaNombre(Comunes.getFormat(prendaCrear.getPrendaNombre()));
             prendaCrear.setPrendaTipoId(prendaTipoId);
-            prendaCrear.setMaterialId(materialId);
             prendaCrear.setColorId(colorId);
             prendaCrear.setPrendaDescripcion(Comunes.getFormat(prendaCrear.getPrendaDescripcion()));
             prendaCrear.setOcasionId(ocasionId);
             prendaCrear.setEstadoId("1");
+            prendaCrear.setTallaId(tallaId);
 
-            Comunes.mensaje((prendaEJB.setCrearPrenda(prendaCrear) ? "Se ha creado la prenda correctamente" : "Error creando la prenda"), prendaCrear.getPrendaNombre());
+            if (prendaEJB.setCrearPrenda(prendaCrear)) {
+                Prenda p = prendaEJB.traerPrendaNombre(prendaCrear.getPrendaNombre());
+                for (MaterialRequerimientoUtil mru : materialesSelect.getTarget()) {
+
+                    if (!detallePrendaEJB.setCrearDetallePrenda(mru.getMaterialId(), String.valueOf(p.getPrendaId()))) {
+                        mensaje = "Se ha creado la prenda, verifique los detalles de la prenda ";
+                    }
+                }
+
+            }
+            Comunes.mensaje(mensaje, prendaCrear.getPrendaNombre());
         } else {
             Comunes.mensaje("La prenda ya se encuentra registrada", prendaCrear.getPrendaNombre());
         }
     }
+
+    public void onTransfer(TransferEvent event) {
+        for (Object item : event.getItems()) {
+            material = new MaterialRequerimientoUtil();
+            material.setNombre(((MaterialRequerimientoUtil) item).getNombre());
+            material.setMaterialId(((MaterialRequerimientoUtil) item).getMaterialId());
+            material.setReferencia(((MaterialRequerimientoUtil) item).getReferencia());
+            material.setMarcaId(((MaterialRequerimientoUtil) item).getMarcaId());
+            material.setCantidad("0.0");
+        }
+    }
+
 }
