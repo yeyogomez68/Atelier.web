@@ -11,7 +11,7 @@ import com.universitaria.ateliermaven.ejb.compras.OrdenCompraDetaEJB;
 import com.universitaria.ateliermaven.ejb.constantes.EstadoEnum;
 import com.universitaria.ateliermaven.ejb.inventario.StockMaterialesEJB;
 import com.universitaria.ateliermaven.web.comunes.Comunes;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -20,7 +20,7 @@ import javax.ejb.EJB;
  *
  * @author SoulHunter
  */
-public class StockMaterialesManagedBean implements Serializable {
+public class StockMaterialesManagedBean {
 
     @EJB
     private StockMaterialesEJB stockMaterialesEJB;
@@ -61,7 +61,7 @@ public class StockMaterialesManagedBean implements Serializable {
     public List<Ordencompradeta> getOrdenCompras() {
         if (ordenCompras == null) {
             ordenCompras = new ArrayList<>();
-            setOrdenCompras(ordenCompraDetaEJB.getOrdenCompraDetaPorEstado(1));
+            setOrdenCompras(ordenCompraDetaEJB.getOrdenCompraDetaPorEstado());
         }
         return ordenCompras;
     }

@@ -10,103 +10,108 @@
         <ui:define name="title">
             <h:outputText value="Atelier"></h:outputText>
         </ui:define>
-        
+
         <ui:define name="body">
-            
-                <h:form id="form"> 
-                    <p:panel id="panelFiltros" header="Proveedores" >
-                        
-                    </p:panel>
-                    <p:dataTable var="proveedores" value="#{proveedoresManagedBean.provedor}" editable="true" widgetVar="tablaProveedores"
-                                     paginator="true"
-                                     rowsPerPageTemplate="5,10,15"                                     
-                                     paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
-                                     emptyMessage="No se han encontrado resultados"
-                                     rows="10">
-                            
-                            <f:facet name="header">
-                                <div class="headerTableAndCreateBtn">
-                                    <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                                    <h4>Listado de Proveedores</h4>  
-                                    <div class="globalFilterDiv">
-                                        <img class="filtroLupa"/>
-                                        <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaProveedores').filter()" style="" placeholder="Filtro de Busqueda"/>        
-                                    </div>                                                                                                    
-                                </div>
-                            </f:facet>
-                            <!--Eventos de tabla editable-->
-                            <p:ajax event="rowEdit" listener="#{proveedoresManagedBean.onRowEdit}" update=":universarGrowl" />
-                            <p:ajax event="rowEditCancel" listener="#{proveedoresManagedBean.onRowCancel}" update=":universarGrowl" />
-                            
-                            <p:column headerText="Id" filterBy="#{proveedores.proveedorId}" filterMatchMode="contains">
-                                <h:outputText value="#{proveedores.proveedorId}" />
-                            </p:column>
-                            
-                            <p:column headerText="NIT/Identificacion" filterBy="#{proveedores.nit}" filterMatchMode="contains">
-                                <h:outputText value="#{proveedores.nit}" />
-                            </p:column>
-                            
-                            <p:column headerText="Nombre" filterBy="#{proveedores.proveedorNombre}" filterMatchMode="contains">
-                                <h:outputText value="#{proveedores.proveedorNombre}" />
-                            </p:column>
-                            
-                            <p:column headerText="Direccion" filterBy="#{proveedores.proveedorDireccion}" filterMatchMode="contains">
-                                <h:outputText value="#{proveedores.proveedorDireccion}" />
-                            </p:column>
-                            
-                            <p:column headerText="Telefono" filterBy="#{proveedores.proveedorPhone}" filterMatchMode="contains">
-                                <h:outputText value="#{proveedores.proveedorPhone}" />
-                            </p:column>                
-                           
-                            <h:outputText value="Ciudad: "/>
-                            <p:selectOneMenu id="ciudad" value="#{proveedoresManagedBean.ciudadId}">                                            
-                                <f:selectItems value="#{proveedoresManagedBean.ciudades}" />
-                            </p:selectOneMenu>          
-                           
-                            
-                            <p:column headerText="Estado" filterBy="#{proveedores.estadoId.estadoDescrip}" filterMatchMode="contains">
-                                <p:cellEditor>
-                                    <h:outputText value="#{proveedores.estadoId.estadoDescrip}" />
-                                    <f:facet name="output"><h:outputText value="#{proveedores.estadoId.estadoDescrip}" /></f:facet>
-                                    <f:facet name="input">
-                                        <p:selectOneMenu id="estado" value="#{proveedoresManagedBean.estadoId}">                                            
-                                            <f:selectItems value="#{proveedoresManagedBean.estados}" />
-                                        </p:selectOneMenu>
-                                    </f:facet>
-                                </p:cellEditor>                                
-                            </p:column>
-                            
-                            <!--Columna de evento editar-->
-                            <p:column width="50">
-                                <p:rowEditor />
-                            </p:column>                            
-                        </p:dataTable>
-                    <!--</p:panel>--> 
-                    <p:dialog header="Crear Proveedor" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
-                        <div class="contentDialog">                   
-                            <h:outputText value="NIT/Identificaciòn: "/>
-                            <p:inputText placeholder="NIT/Identificación" value="#{proveedoresManagedBean.proveedorCrear.nit}"  />
-                            
-                            <h:outputText value="Nombre: "/>
-                            <p:inputText placeholder="Nombre" value="#{proveedoresManagedBean.proveedorCrear.nombre}"/>
-                            
-                            <h:outputText value="Direccion: "/>
-                            <p:inputText placeholder="Direccion" value="#{proveedoresManagedBean.proveedorCrear.direccion}"/>
-                            
-                            <h:outputText value="Telefono: "/>
-                            <p:inputText placeholder="Telefono" value="#{proveedoresManagedBean.proveedorCrear.telefono}"/>
-                            
-                            <h:outputText value="Ciudad: "/>
-                            <p:selectOneMenu id="ciudad" value="#{proveedoresManagedBean.ciudadId}">                                            
-                                <f:selectItems value="#{proveedoresManagedBean.ciudades}" />
-                            </p:selectOneMenu>
-                                  
+
+            <h:form id="form"> 
+                <p:panel id="panelFiltros" header="Proveedores" >
+
+                </p:panel>
+                <p:dataTable var="proveedores" value="#{proveedoresManagedBean.provedor}" editable="true" widgetVar="tablaProveedores"
+                             paginator="true"
+                             rowsPerPageTemplate="5,10,15"                                     
+                             paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                             emptyMessage="No se han encontrado resultados"
+                             rows="10">
+
+                    <f:facet name="header">
+                        <div class="headerTableAndCreateBtn">
+                            <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
+                            <h4>Listado de Proveedores</h4>  
+                            <div class="globalFilterDiv">
+                                <img class="filtroLupa"/>
+                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaProveedores').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                            </div>                                                                                                    
                         </div>
-                        <p:commandButton value="Crear" action="#{proveedoresManagedBean.crearProveedor}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
-                        <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
-                    </p:dialog>  
+                    </f:facet>
+                    <!--Eventos de tabla editable-->
+                    <p:ajax event="rowEdit" listener="#{proveedoresManagedBean.onRowEdit}" update=":universarGrowl" />
+                    <p:ajax event="rowEditCancel" listener="#{proveedoresManagedBean.onRowCancel}" update=":universarGrowl" />
+
+                    <p:column headerText="Id" filterBy="#{proveedores.proveedorId}" filterMatchMode="contains">
+                        <h:outputText value="#{proveedores.proveedorId}" />
+                    </p:column>
+
+                    <p:column headerText="NIT/Identificacion" filterBy="#{proveedores.nit}" filterMatchMode="contains">
+                        <h:outputText value="#{proveedores.nit}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre" filterBy="#{proveedores.proveedorNombre}" filterMatchMode="contains">
+                        <h:outputText value="#{proveedores.proveedorNombre}" />
+                    </p:column>
+
+                    <p:column headerText="Direccion" filterBy="#{proveedores.proveedorDireccion}" filterMatchMode="contains">
+                        <h:outputText value="#{proveedores.proveedorDireccion}" />
+                    </p:column>
+
+                    <p:column headerText="Telefono" filterBy="#{proveedores.proveedorPhone}" filterMatchMode="contains">
+                        <h:outputText value="#{proveedores.proveedorPhone}" />
+                    </p:column>                
+
+                    <h:outputText value="Ciudad: "/>
+                    <p:selectOneMenu id="ciudad" value="#{proveedoresManagedBean.ciudadId}">                                            
+                        <f:selectItems value="#{proveedoresManagedBean.ciudades}" />
+                    </p:selectOneMenu>          
+
+
+                    <p:column headerText="Estado" filterBy="#{proveedores.estadoId.estadoDescrip}" filterMatchMode="contains">
+                        <p:cellEditor>
+                            <h:outputText value="#{proveedores.estadoId.estadoDescrip}" />
+                            <f:facet name="output"><h:outputText value="#{proveedores.estadoId.estadoDescrip}" /></f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu id="estado" value="#{proveedoresManagedBean.estadoId}">                                            
+                                    <f:selectItems value="#{proveedoresManagedBean.estados}" />
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>                                
+                    </p:column>
+
+                    <!--Columna de evento editar-->
+                    <p:column width="50">
+                        <p:rowEditor />
+                    </p:column>                            
+                </p:dataTable>
+                <!--</p:panel>--> 
+
+            </h:form>
+
+            <p:dialog header="Crear Proveedor" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+                <h:form>
+                    <div class="contentDialog">                   
+                        <h:outputText value="NIT/Identificaciòn: "/>
+                        <p:inputText placeholder="NIT/Identificación" value="#{proveedoresManagedBean.proveedorCrear.nit}"  />
+
+                        <h:outputText value="Nombre: "/>
+                        <p:inputText placeholder="Nombre" value="#{proveedoresManagedBean.proveedorCrear.nombre}"/>
+
+                        <h:outputText value="Direccion: "/>
+                        <p:inputText placeholder="Direccion" value="#{proveedoresManagedBean.proveedorCrear.direccion}"/>
+
+                        <h:outputText value="Telefono: "/>
+                        <p:inputText placeholder="Telefono" value="#{proveedoresManagedBean.proveedorCrear.telefono}"/>
+
+                        <h:outputText value="Ciudad: "/>
+                        <p:selectOneMenu id="ciudad" value="#{proveedoresManagedBean.ciudadId}">                                            
+                            <f:selectItems value="#{proveedoresManagedBean.ciudades}" />
+                        </p:selectOneMenu>
+
+                    </div>
+                    <p:commandButton value="Crear" action="#{proveedoresManagedBean.crearProveedor}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
+                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
                 </h:form>
+            </p:dialog>  
+
         </ui:define>
-        
+
     </ui:composition>
 </html>
