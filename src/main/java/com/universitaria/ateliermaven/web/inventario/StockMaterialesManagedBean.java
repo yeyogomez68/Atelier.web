@@ -15,6 +15,7 @@ import com.universitaria.ateliermaven.web.comunes.Comunes;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -71,10 +72,15 @@ public class StockMaterialesManagedBean {
     }
 
     public void ingresarInsumo(Ordencompradeta ordenCompraDeta) {
-
+        RequestContext req = RequestContext.getCurrentInstance();
         if (ordenCompraDetaEJB.setActualizarEstadoOrderCompraDeta(ordenCompraDeta, EstadoEnum.APROBADO.getId())) {
             Comunes.mensaje((stockMaterialesEJB.setModificarStockMaterial(ordenCompraDeta.getMaterialId(), ordenCompraDeta.getOrdenCompraCantidad().intValue()) ? "Se ha ingresado el insumo correctamente " : "Error ingresando el insumo"), ordenCompraDeta.getMaterialId().getMaterialNombre());
             actualizarLista();
+            if (getOrdenCompras().isEmpty()) {
+                stockMateriales.clear();
+                setStockMateriales(stockMaterialesEJB.getStockMaterial());
+                req.update(":form");
+            }
         } else {
             Comunes.mensaje("No es posible ingresar el insumo", "");
         }
@@ -91,6 +97,12 @@ public class StockMaterialesManagedBean {
             }
         }
         actualizarLista();
+        stockMateriales.clear();
+        setStockMateriales(stockMaterialesEJB.getStockMaterial());
+        if (ordenCompras.isEmpty()) {
+            RequestContext req = RequestContext.getCurrentInstance();
+            req.execute("PF('dlg1').hide();");
+        }
     }
 
     private void actualizarLista() {
