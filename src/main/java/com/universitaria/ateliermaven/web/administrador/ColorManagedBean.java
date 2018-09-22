@@ -14,6 +14,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
 
 /**
@@ -26,17 +27,11 @@ public class ColorManagedBean implements Serializable {
     private ColorEJB colorEJB;
     private List<Color> colores;
     private String colorNombre;
-
-    public ColorEJB getColorEJB() {
-        return colorEJB;
-    }
-
-    public void setColorEJB(ColorEJB colorEJB) {
-        this.colorEJB = colorEJB;
-    }
-
+    FacesMessage msg = null;
+    
+    
     public List<Color> getColores() {
-        if (colores == null) {
+        if (colores == null || colores.isEmpty()) {
             colores = new ArrayList<>();
             setColores(colorEJB.getColores());
         }
@@ -52,24 +47,42 @@ public class ColorManagedBean implements Serializable {
     }
 
     public void setColorNombre(String colorNombre) {
-        this.colorNombre = Comunes.getFormat(colorNombre);
+        this.colorNombre = colorNombre;
     }
 
     public void onRowEdit(RowEditEvent event) {
-        Comunes.mensaje((colorEJB.setModificarColor(((Color) event.getObject()).getColorId().toString(), Comunes.getFormat(((Color) event.getObject()).getColorDescrip())) ? "Se ha modificado el color correctamente" : "Error modificando el color"), colorNombre);
+         if(colorEJB.setModificarColor(((Color) event.getObject()).getColorId().toString(), ((Color) event.getObject()).getColorDescrip())){
+        msg = new FacesMessage("Mensaje", "Se modifico el Color Exitosamente");
+        }else{
+            msg = new FacesMessage("Error", "Error a modificar el Color");
+        }
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
+               
     public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Edit Cancelled", ((Color) event.getObject()).getColorDescrip());
+        FacesMessage msg = new FacesMessage("Edicion Cancelada", ((Color) event.getObject()).getColorDescrip());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public void crearColor() {
-        if (!colorEJB.existeColor(colorNombre)) {
-            Comunes.mensaje((colorEJB.setCrearColor(colorNombre) ? "Se ha creado el estado correctamente" : "Error creando el estado"), colorNombre);
-        } else {
-            Comunes.mensaje("El color ya se encuentra registrado", colorNombre);
+   public void crearColor(){  
+        RequestContext req = RequestContext.getCurrentInstance();
+            if(!colorEJB.getexisteColor(colorNombre)){
+                if(colorEJB.setCrearColor(colorNombre)){
+                    colores.clear();
+                    getColores();
+                    setColorNombre("");
+                    req.update(":form");
+                    req.execute("PF('dlg1').hide();");
+                   msg = new FacesMessage("Mensaje", "Color Creado Exitosamente");
+                }else{
+                   msg = new FacesMessage("Error", "Error al crear el Color");
+                }                 
+            }else{
+                msg = new FacesMessage("Mensaje", "El Color ya se encuentra registrado");
+            
         }
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
+    
 
 }

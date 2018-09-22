@@ -12,6 +12,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
 
 /**
@@ -29,11 +30,9 @@ public class MaterialTipoManagedBean {
     
     @EJB
     private MaterialTipoEJB materialTipoEJB;
-    
     private List<Materialtipo> materialestipos;
     private String materialDesc;
     private boolean modalDialog = false;
-    
     FacesMessage msg = null;
 
     public boolean isModalDialog() {
@@ -66,9 +65,9 @@ public class MaterialTipoManagedBean {
     
     public void onRowEdit(RowEditEvent event) {
         if(materialTipoEJB.setModifiDesMaterialTipo(((Materialtipo) event.getObject()).getMaterialTipoId().toString(), ((Materialtipo) event.getObject()).getMaterialTipoDescript())){
-            msg = new FacesMessage("Mensaje", "Se modifico la Marca Exitosamente");
+            msg = new FacesMessage("Mensaje", "Se modifico el Material Exitosamente");
         }else{
-            msg = new FacesMessage("Error", "Error a modificar la Marca");
+            msg = new FacesMessage("Error", "Error a modificar la Material");
         }
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
@@ -79,11 +78,17 @@ public class MaterialTipoManagedBean {
     }
     
     public void crearTipoMaterial(){
+        RequestContext req = RequestContext.getCurrentInstance();
         if(getMaterialDesc()!=null || getMaterialDesc().isEmpty()){
             if(!materialTipoEJB.getExisteMaterialTipo(materialDesc)){
                 if(materialTipoEJB.setCrearMaterialTipo(materialDesc)){
-                   msg = new FacesMessage("Mensaje", "Material Tipo Creada Exitosamente");
-                    setModalDialog(true);
+                    materialestipos.clear();
+                    getMaterialestipos();
+                    setMaterialDesc("");
+                    req.update(":form");
+                    req.execute("PF('dlg1').hide();");
+                    msg = new FacesMessage("Mensaje", "Material Tipo Creada Exitosamente");
+                 
                 }else{
                    msg = new FacesMessage("Error", "Error al crear el Tipo de Material");
                 }                 

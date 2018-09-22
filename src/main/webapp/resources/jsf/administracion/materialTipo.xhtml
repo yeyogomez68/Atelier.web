@@ -7,8 +7,9 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition template="/WEB-INF/include/template.xhtml">
+      
         <ui:define name="title">
-            <h:outputText value="Atelier"></h:outputText>
+            <h:outputText value="Atelier - Material Tipo"></h:outputText>
         </ui:define>
         
         <ui:define name="body">
@@ -17,7 +18,7 @@
                     <p:panel id="panelFiltros" header="Tipos de Materiales" >
                         
                     </p:panel> 
-                        <p:growl id="msn" life="2000"/>
+                    
 <!--                    <p:panel id="panelLista" header="Listado" >-->
                         <p:dataTable var="tiposMateriales" value="#{materialTipoManagedBean.materialestipos}" editable="true" widgetVar="tablaMaterialesTipos"
                                      paginator="true"
@@ -36,9 +37,10 @@
                                     </div>                                                                                                    
                                 </div>
                             </f:facet>
+                            
                             <!--Eventos de tabla editable-->
-                            <p:ajax event="rowEdit" listener="#{materialTipoManagedBean.onRowEdit}" update=":form:msn" />
-                            <p:ajax event="rowEditCancel" listener="#{materialTipoManagedBean.onRowCancel}" update=":form:msn" />
+                            <p:ajax event="rowEdit" listener="#{materialTipoManagedBean.onRowEdit}" update=":universarGrowl"/>
+                            <p:ajax event="rowEditCancel" listener="#{materialTipoManagedBean.onRowCancel}" update=":universarGrowl" />
                             
                             <p:column headerText="Id" filterBy="#{tiposMateriales.materialTipoId}" filterMatchMode="contains">
                                 <h:outputText value="#{tiposMateriales.materialTipoId}" />
@@ -48,25 +50,45 @@
                                 <p:cellEditor>
                                     <h:outputText value="#{tiposMateriales.materialTipoDescript}" />
                                     <f:facet name="output"><h:outputText value="#{tiposMateriales.materialTipoDescript}" /></f:facet>
-                                    <f:facet name="input"><p:inputText id="modelInput" value="#{tiposMateriales.materialTipoDescript}"/></f:facet>
-                                </p:cellEditor>                                
-                            </p:column>
+                                    <f:facet name="input">
+                                        <p:inputText 
+                                            id="modelInput" 
+                                            value="#{tiposMateriales.materialTipoDescript}"
+                                            maxlength="20"
+                                            required="true"
+                                            requiredMessage="El Tipo de Material es obligatorio" 
+                                            validatorMessage="El Tipo de Material debe contener solo letras">
+                                    <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                                </p:inputText>
+                            </f:facet>
+                         </p:cellEditor>                                
+                       </p:column>
+                            
                             <!--Columna de evento editar-->
                             <p:column width="50">
                                 <p:rowEditor />
                             </p:column>                            
                         </p:dataTable>
+
                     <!--</p:panel>--> 
+                    </h:form>
                     <p:dialog header="Crear Tipo de Material" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+                      <h:form>
                         <div class="contentDialog">                    
                             <h:outputText value="Tipo de Material: "/>
-                            <p:inputText placeholder="Material" value="#{materialTipoManagedBean.materialDesc}" required="true"/>                                                       
+                            <p:inputText placeholder="Material" value="#{materialTipoManagedBean.materialDesc}" 
+                                         maxlength="20"
+                                        required="true"
+                                        requiredMessage="El Tipo de Material es obligatorio" 
+                                        validatorMessage="El Tipo de Material debe contener solo letras">
+                            <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                        </p:inputText>                                                    
                         </div>
-                        <p:commandButton value="Crear" action="#{materialTipoManagedBean.crearTipoMaterial}" update="form,:form:msn" onclick="if(#{materialTipoManagedBean.modalDialog})PF('dlg1').hide();:null;"/>                            
+                        <p:commandButton value="Crear" action="#{materialTipoManagedBean.crearTipoMaterial}" update="form,universarGrowl"/>                            
                         <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
-                    </p:dialog>  
-                </h:form>
-        </ui:define>
+                    </h:form>
+                 </p:dialog>  
+          </ui:define>
         
     </ui:composition>
 </html>

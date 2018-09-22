@@ -170,7 +170,7 @@ public class ProduccionManagedBean implements Serializable {
     public void onRowEdit(RowEditEvent event) {
         Produccion produccion = (Produccion) event.getObject();
 
-        if (!produccion.getProduccionDescripcion().equals("") && !prendaEJB.existePrenda(Comunes.getFormat(produccion.getProduccionDescripcion()))) {
+        if (!produccion.getProduccionDescripcion().equals("") && !prendaEJB.getexistePrenda(Comunes.getFormat(produccion.getProduccionDescripcion()))) {
             Comunes.mensaje((produccionEJB.setModificarProduccion(produccion) ? "Se ha modificado la produccion correctamente " : "Error modificando la produccion "), produccionCrear.getProduccionDescripcion());
         }
 
@@ -183,7 +183,7 @@ public class ProduccionManagedBean implements Serializable {
 
     public void crearProduccion() {
 
-        if (!produccionEJB.existeProduccion(Comunes.getFormat(produccionCrear.getProduccionDescripcion()))) {
+        if (!produccionEJB.getexisteProduccion(Comunes.getFormat(produccionCrear.getProduccionDescripcion()))) {
 
             produccionCrear.setProduccionDescripcion(Comunes.getFormat(produccionCrear.getProduccionDescripcion()));
             produccionCrear.setEstadoId("1");

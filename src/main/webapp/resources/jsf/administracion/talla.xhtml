@@ -7,8 +7,9 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition template="/WEB-INF/include/template.xhtml">
+        
         <ui:define name="title">
-            <h:outputText value="Atelier"></h:outputText>
+            <h:outputText value="Atelier - Talla"></h:outputText>
         </ui:define>
         
         <ui:define name="body">
@@ -17,7 +18,8 @@
                     <p:panel id="panelFiltros" header="Tallas" >
                         
                     </p:panel> 
-                        <p:growl id="msn" life="2000"/>
+                    
+                       
 <!--                    <p:panel id="panelLista" header="Listado" >-->
                         <p:dataTable var="tallas" value="#{tallaManagedBean.tallas}" editable="true" widgetVar="tablaEstados"
                                      paginator="true"
@@ -37,8 +39,8 @@
                                 </div>
                             </f:facet>
                             <!--Eventos de tabla editable-->
-                            <p:ajax event="rowEdit" listener="#{tallaManagedBean.onRowEdit}" update=":form:msn" />
-                            <p:ajax event="rowEditCancel" listener="#{tallaManagedBean.onRowCancel}" update=":form:msn" />
+                            <p:ajax event="rowEdit" listener="#{tallaManagedBean.onRowEdit}" update=":universarGrowl" />
+                            <p:ajax event="rowEditCancel" listener="#{tallaManagedBean.onRowCancel}" update=":universarGrowl" />
                             
                             <p:column headerText="Id" filterBy="#{tallas.tallaId}" filterMatchMode="contains">
                                 <h:outputText value="#{tallas.tallaId}" />
@@ -48,24 +50,45 @@
                                 <p:cellEditor>
                                     <h:outputText value="#{tallas.tallaDescrip}" />
                                     <f:facet name="output"><h:outputText value="#{tallas.tallaDescrip}" /></f:facet>
-                                    <f:facet name="input"><p:inputText id="modelInput" value="#{tallas.tallaDescrip}"/></f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText
+                                            id="modelInput" 
+                                            value="#{tallas.tallaDescrip}"
+                                            maxlength="20"
+                                            required="true"
+                                            requiredMessage="El Cargo es obligatorio" 
+                                            validatorMessage="El Cargo debe contener solo letras">
+                                            <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                                        </p:inputText>
+                                    </f:facet>
                                 </p:cellEditor>                                
                             </p:column>
+                            
                             <!--Columna de evento editar-->
                             <p:column width="50">
                                 <p:rowEditor />
                             </p:column>                            
                         </p:dataTable>
-                    <!--</p:panel>--> 
-                    <p:dialog header="Crear Talla" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
-                        <div class="contentDialog">                    
-                            <h:outputText value="Talla: "/>
-                            <p:inputText placeholder="Talla" value="#{tallaManagedBean.desTalla}"/>                                                       
-                        </div>
-                        <p:commandButton value="Crear" action="#{tallaManagedBean.crearTalla}" update="form,:form:msn" onclick="PF('dlg1').hide();"/>                            
+                    
+                        <!--</p:panel>--> 
+                    </h:form>
+                        <p:dialog header="Crear Talla" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                          <h:form>
+                            <div class="contentDialog">                    
+                            <h:outputText value= "Nombre Talla: "/>
+                            <p:inputText placeholder="Nombre de Talla" value="#{tallaManagedBean.desTalla}"
+                                         maxlength="20"
+                                         required="true"
+                                         requiredMessage="La Talla es obligatoria" 
+                                         validatorMessage="La Talla debe contener solo letras">
+                            <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                        </p:inputText>
+                    </div>
+                        <p:commandButton value="Crear" action="#{tallaManagedBean.crearTalla}" update="form,universarGrowl"/>                            
                         <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
+                      </h:form>
                     </p:dialog>  
-                </h:form>
+                
         </ui:define>
         
     </ui:composition>

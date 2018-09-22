@@ -12,6 +12,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
 
 /**
@@ -28,10 +29,8 @@ public class MarcaManagedBean {
     
     @EJB
     private MarcaEJB marcaEJB;
-    
     private List<Marca> marcas;
     private String marcaDesc;
-    
     FacesMessage msg = null;
 
     public List<Marca> getMarcas() {
@@ -70,9 +69,16 @@ public class MarcaManagedBean {
     }
     
     public void crearMarca(){
+        RequestContext req = RequestContext.getCurrentInstance();
         if(getMarcaDesc()!=null){
             if(!marcaEJB.getExisteMarca(marcaDesc)){
                 if(marcaEJB.setCrearMarca(marcaDesc)){
+                   marcas.clear();
+                   getMarcas();
+                   setMarcaDesc("");
+                   req.update(":form");
+                   req.execute("PF('dlg1').hide();"); 
+                    
                    msg = new FacesMessage("Mensaje", "Marca Creada Exitosamente");
                 }else{
                    msg = new FacesMessage("Error", "Error al crear la Marca");

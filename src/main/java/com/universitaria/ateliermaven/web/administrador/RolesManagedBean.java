@@ -23,6 +23,7 @@ import org.primefaces.event.RowEditEvent;
  */
 public class RolesManagedBean {
 
+
     @EJB
     private RollEJB rollEJB;
     
@@ -31,10 +32,11 @@ public class RolesManagedBean {
     
     private List<Roll> roles;    
     private List<SelectItem> estados;
-    
     private String estadoId;
     private String rollDesc;
     public boolean actualizar;
+    FacesMessage msg = null;
+    
     public RolesManagedBean() {
         
     }
@@ -81,14 +83,15 @@ public class RolesManagedBean {
         this.estados = estados;
     }   
     
+      
     public void onRowEdit(RowEditEvent event) {
         Integer rollId = ((Roll) event.getObject()).getRollId();
         System.out.println("com.universitaria.ateliermaven.web.administrador.RolesManagedBean.onRowEdit()" + rollId);
-        
+        msg = new FacesMessage("Mensaje", "Se modifico el Cargo Exitosamente");
     }
      
     public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Cancelado", ((Roll) event.getObject()).getRollDesc());
+        FacesMessage msg = new FacesMessage("Edicion Cancelada", ((Roll) event.getObject()).getRollDesc());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
     
