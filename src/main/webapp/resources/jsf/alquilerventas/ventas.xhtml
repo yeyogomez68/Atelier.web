@@ -103,13 +103,12 @@
                         </p:column> 
 
                         <p:column headerText="Acción" >
-                            <p:commandLink value="Rentar" actionListener="#{alquilerManagedBean.entregarReservacionVenta(reservacion)}" update="dialogEntregarReservacion"/> 
+                            <p:commandLink value="Vender" actionListener="#{alquilerManagedBean.entregarReservacionVenta(reservacion)}" update="frmdialogAprob"/> 
                             <br></br>
-                            <p:commandLink value="Liberar" actionListener="#{alquilerManagedBean.liberarReservacion(reservacion)}" update="dialogEntregarReservacion"/> 
+                            <p:commandLink value="Liberar" actionListener="#{alquilerManagedBean.liberarReservacion(reservacion)}" update="frmdialogAprob"/> 
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton value="Vender Todo" action="#{alquilerManagedBean.alquilarTodo}" update="dialogEntregarReservacion"/> 
-                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
+                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();" update="form"/> 
                 </h:form>
             </p:dialog>
 
@@ -145,7 +144,7 @@
                 <h:form>
                     <div class="contentDialog">                                                      
                         <h:outputText value="Valor: "/>
-                        <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="0" placeholder="0" maxValue="10000000" maxlength="10" requiredMessage="El valor es obligatorio"/>
+                        <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="1000" placeholder="0" maxValue="10000000" maxlength="10" requiredMessage="El valor es obligatorio"/>
                     </div>                              
                     <p:commandButton value="Agregar" action="#{alquilerManagedBean.valorTotal()}" update="universarGrowl,:formdialogCrear:PojoPickList"/>                     
                 </h:form>

@@ -71,11 +71,11 @@
                             <h:outputText value="#{insumosingr.ordenCompraCantidad}" />
                         </p:column>    
                         <p:column headerText="Acción" >
-                            <p:commandLink value="Ingresar" actionListener="#{stockMaterialesManagedBean.ingresarInsumo(insumosingr)}" update="frmdialogAprob,form" /> 
+                            <p:commandLink value="Ingresar" actionListener="#{stockMaterialesManagedBean.ingresarInsumo(insumosingr)}" update="frmdialogAprob" /> 
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton value="Ingresar Todo" action="#{stockMaterialesManagedBean.ingresarTodos}" update="dialogAprob,form,dialogAprob,universarGrowl" /> 
-                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
+                    <p:commandButton value="Ingresar Todo" action="#{stockMaterialesManagedBean.ingresarTodos}" update="form,frmdialogAprob" /> 
+                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();" update="form,frmdialogAprob"/> 
                 </h:form>
             </p:dialog>
         </ui:define>

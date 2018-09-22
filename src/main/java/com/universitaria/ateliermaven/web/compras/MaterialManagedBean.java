@@ -12,19 +12,21 @@ import com.universitaria.ateliermaven.ejb.administrador.MaterialTipoEJB;
 import com.universitaria.ateliermaven.ejb.compras.MaterialEJB;
 import com.universitaria.ateliermaven.ejb.inventario.StockMaterialesEJB;
 import com.universitaria.ateliermaven.web.comunes.Comunes;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
 
 /**
  *
  * @author jeisson.gomez
  */
-public class MaterialManagedBean {
+public class MaterialManagedBean implements Serializable {
 
     /**
      * Creates a new instance of MaterialManagedBean
@@ -139,23 +141,35 @@ public class MaterialManagedBean {
     }
 
     public void onRowEdit(RowEditEvent event) {
+        try {
+            materialUtil.setNombre(((Material) event.getObject()).getMaterialNombre());
+            materialUtil.setReferencia((((Material) event.getObject()).getMaterialReference()));
+            materialUtil.setMaterialId(String.valueOf(((Material) event.getObject()).getMaterialId()));
+            materialUtil.setTipoId(materialTipoId);
+            if (materialEJB.setModificarMaterial(materialUtil)) {
+                Comunes.mensaje("El material se actualizo correctamente", materialUtil.getNombre());
+            } else {
+                Comunes.mensaje("El material no se actualizo correctamente", materialUtil.getNombre());
+            }
 
-        materialUtil.setNombre(((Material) event.getObject()).getMaterialNombre());
-        materialUtil.setReferencia((((Material) event.getObject()).getMaterialReference()));
-        materialUtil.setTipoId(materialTipoId);
-        if (materialEJB.setModificarMaterial(materialUtil)) {
-
-        } else {
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
 
     public void crearMaterial() {
+        RequestContext req = RequestContext.getCurrentInstance();
+
         if (!materialEJB.existeMaterial(materialUtil.getReferencia())) {
             materialUtil.setMarcaId(marca);
             materialUtil.setTipoId(materialTipoId);
             Comunes.mensaje((materialEJB.setCrearMaterial(materialUtil) ? "Se ha creado el material correctamente" : "Error creando el material"), materialUtil.getNombre());
+            materiales.clear();
+            setMateriales(materialEJB.getMateriales());
+            materialUtil = new MaterialUtil();
+            req.update(":form");
+            req.execute("PF('dlg1').hide();");
         } else {
             Comunes.mensaje("El material ya se encuentra registrado", materialUtil.getNombre());
         }

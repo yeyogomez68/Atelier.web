@@ -11,16 +11,17 @@ import com.universitaria.ateliermaven.ejb.compras.OrdenCompraDetaEJB;
 import com.universitaria.ateliermaven.ejb.constantes.EstadoEnum;
 import com.universitaria.ateliermaven.ejb.inventario.StockMaterialesEJB;
 import com.universitaria.ateliermaven.web.comunes.Comunes;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
+import org.primefaces.context.RequestContext;
 
 /**
  *
  * @author SoulHunter
  */
-public class StockMaterialesManagedBean implements Serializable {
+public class StockMaterialesManagedBean {
 
     @EJB
     private StockMaterialesEJB stockMaterialesEJB;
@@ -61,7 +62,7 @@ public class StockMaterialesManagedBean implements Serializable {
     public List<Ordencompradeta> getOrdenCompras() {
         if (ordenCompras == null) {
             ordenCompras = new ArrayList<>();
-            setOrdenCompras(ordenCompraDetaEJB.getOrdenCompraDetaPorEstado(1));
+            setOrdenCompras(ordenCompraDetaEJB.getOrdenCompraDetaPorEstado());
         }
         return ordenCompras;
     }
@@ -71,10 +72,15 @@ public class StockMaterialesManagedBean implements Serializable {
     }
 
     public void ingresarInsumo(Ordencompradeta ordenCompraDeta) {
-
+        RequestContext req = RequestContext.getCurrentInstance();
         if (ordenCompraDetaEJB.setActualizarEstadoOrderCompraDeta(ordenCompraDeta, EstadoEnum.APROBADO.getId())) {
             Comunes.mensaje((stockMaterialesEJB.setModificarStockMaterial(ordenCompraDeta.getMaterialId(), ordenCompraDeta.getOrdenCompraCantidad().intValue()) ? "Se ha ingresado el insumo correctamente " : "Error ingresando el insumo"), ordenCompraDeta.getMaterialId().getMaterialNombre());
             actualizarLista();
+            if (getOrdenCompras().isEmpty()) {
+                stockMateriales.clear();
+                setStockMateriales(stockMaterialesEJB.getStockMaterial());
+                req.update(":form");
+            }
         } else {
             Comunes.mensaje("No es posible ingresar el insumo", "");
         }
@@ -91,6 +97,12 @@ public class StockMaterialesManagedBean implements Serializable {
             }
         }
         actualizarLista();
+        stockMateriales.clear();
+        setStockMateriales(stockMaterialesEJB.getStockMaterial());
+        if (ordenCompras.isEmpty()) {
+            RequestContext req = RequestContext.getCurrentInstance();
+            req.execute("PF('dlg1').hide();");
+        }
     }
 
     private void actualizarLista() {

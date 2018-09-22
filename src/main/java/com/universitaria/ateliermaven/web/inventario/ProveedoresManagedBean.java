@@ -17,6 +17,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
 
 /**
@@ -147,9 +148,15 @@ public class ProveedoresManagedBean implements Serializable {
 
     public void crearProveedor() {
         FacesMessage msg;
+        RequestContext req = RequestContext.getCurrentInstance();
         proveedorCrear.setEstadoId("1");
         proveedorCrear.setCiudadId(ciudadId);
         msg = new FacesMessage("Mensaje", (proveedorEJB.setCrearProveedor(proveedorCrear) ? "Proveedor Creado con exito" : "Error al crear el proveedor"));
+        proveedores.clear();
+        setProvedor(proveedorEJB.getProveedores());
+        proveedorCrear = new ProveedorUtil();
+        req.update(":form");
+        req.execute("PF('dlg1').hide();");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
