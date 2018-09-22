@@ -182,9 +182,9 @@ public class AlquilerManagedBean implements Serializable {
         RequestContext req = RequestContext.getCurrentInstance();
 
         setDetalleRenta(detalleRentaEJB.getRentaDetalleRenta(renta));
-        if (detalleRenta != null && !detalleRenta.isEmpty()) {
-            req.execute("PF('dlg1').show();");
-        }
+
+        req.execute("PF('dlg1').show();");
+
     }
 
     public void reintegrarPrenda(Rentadeta rentadetalle) {
@@ -192,10 +192,10 @@ public class AlquilerManagedBean implements Serializable {
             System.out.println("com.universitaria.ateliermaven.web.alquilerventa.AlquilerManagedBean.reintegrarPrenda()");
             detalleRenta.clear();
             setDetalleRenta(detalleRentaEJB.getRentaDetalleRenta(rentadetalle.getRentaId()));
-            rentasActivas.clear();
-            setRentasActivas(rentaEJB.getRentasActivas());
             if (detalleRenta.isEmpty()) {
                 rentaEJB.reintegrarRenta(rentadetalle.getRentaId());
+                rentasActivas.clear();
+                setRentasActivas(rentaEJB.getRentasActivas());
             }
         }
     }
@@ -209,6 +209,8 @@ public class AlquilerManagedBean implements Serializable {
         }
         if (!error) {
             rentaEJB.reintegrarRenta(detalleRenta.get(0).getRentaId());
+            rentasActivas.clear();
+            setRentasActivas(rentaEJB.getRentasActivas());
         }
         detalleRenta.clear();
     }
