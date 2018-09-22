@@ -21,7 +21,6 @@ import com.universitaria.ateliermaven.ejb.produccion.PrendasEJB;
 
 import com.universitaria.ateliermaven.ejb.produccion.ProduccionEJB;
 import com.universitaria.ateliermaven.web.comunes.Comunes;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,10 +60,9 @@ public class ProduccionManagedBean implements Serializable {
 
     private List<Produccion> producciones;
 
-    private List<SelectItem> prendas;
     private List<SelectItem> estados;
     private List<SelectItem> usuarios;
-
+    private List<SelectItem> prendas;
 
     private DualListModel<MaterialRequerimientoUtil> materialesSelect;
 

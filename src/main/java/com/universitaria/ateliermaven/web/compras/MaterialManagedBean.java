@@ -10,6 +10,7 @@ import com.universitaria.atelier.web.utils.MaterialUtil;
 import com.universitaria.ateliermaven.ejb.administrador.MarcaEJB;
 import com.universitaria.ateliermaven.ejb.administrador.MaterialTipoEJB;
 import com.universitaria.ateliermaven.ejb.compras.MaterialEJB;
+import com.universitaria.ateliermaven.ejb.inventario.StockMaterialesEJB;
 import com.universitaria.ateliermaven.web.comunes.Comunes;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +124,7 @@ public class MaterialManagedBean {
     public List<SelectItem> getMaterialTipo() {
         if (materialTipo == null) {
             materialTipo = new ArrayList<>();
-            setMaterialTipo(materialEJB.getSelectItemMaterial());
+            setMaterialTipo(materialTipoEJB.getSelectItemMaterialTipo());
         }
         return materialTipo;
     }
