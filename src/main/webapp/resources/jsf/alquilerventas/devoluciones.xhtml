@@ -98,10 +98,9 @@
                         </p:column>    
 
                         <p:column headerText="Acción" >
-                            <p:commandLink value="Reintegro" actionListener="#{alquilerManagedBean.reintegrarPrenda(rentadeta)}" update="frmdialogAprob,form"/> 
+                            <p:commandLink value="Reintegro" actionListener="#{alquilerManagedBean.reintegrarPrenda(rentadeta)}" update="frmdialogAprob"/> 
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton value="Reintegrar Todo" action="#{alquilerManagedBean.reintegrarTodo}" update="dialogAprob,form,dialogAprob,universarGrowl"/> 
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
                 </h:form>
             </p:dialog>

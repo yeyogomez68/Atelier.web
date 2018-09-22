@@ -228,6 +228,12 @@ public class AlquilerManagedBean implements Serializable {
             reservacionClienteActivas.clear();
             setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
         }
+        if (getReservacionClienteActivas().isEmpty()) {
+            reservacionActivas.clear();
+            setReservacionActivas(reservaEJB.getReservacionActivas());
+            RequestContext req = RequestContext.getCurrentInstance();
+            req.update(":form");
+        }
 
     }
 
@@ -235,6 +241,8 @@ public class AlquilerManagedBean implements Serializable {
         if (reservaEJB.liberarReservacion(reservacion)) {
             reservacionClienteActivas.clear();
             setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
+            reservacionActivas.clear();
+            setReservacionActivas(reservaEJB.getReservacionActivas());
         }
 
     }
@@ -246,23 +254,30 @@ public class AlquilerManagedBean implements Serializable {
         }
 
     }
-    
-    
-     public void entregarReservacionVenta(Reservacion reservacion) {
+
+    public void entregarReservacionVenta(Reservacion reservacion) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
 
-        if (reservaEJB.entregarReservacionRenTa(reservacion, user, valor)) {
+        if (reservaEJB.entregarReservacionVenta(reservacion, user, valor)) {
             reservacionClienteActivas.clear();
             setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
         }
+        
+        if (getReservacionClienteActivas().isEmpty()) {
+            reservacionActivas.clear();
+            setReservacionActivas(reservaEJB.getReservacionActivas());
+            RequestContext req = RequestContext.getCurrentInstance();
+            req.update(":form");
+        }
 
     }
-    
+
     public void venderTodo() {
 
         for (Reservacion r : reservacionClienteActivas) {
             entregarReservacionVenta(r);
+            
         }
 
     }
@@ -313,7 +328,6 @@ public class AlquilerManagedBean implements Serializable {
         req.execute("PF('dlg2').hide();");
     }
 
-    
     public void crearVenta() {
         RequestContext req = RequestContext.getCurrentInstance();
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -331,5 +345,4 @@ public class AlquilerManagedBean implements Serializable {
         req.execute("PF('dlg2').hide();");
     }
 
-    
 }
