@@ -28,8 +28,8 @@
 
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
-                            <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                            <h4>Listado de alquiler</h4>
+                            <p:commandButton type="button" value="+" onclick="PF('dlg2').show();"/>
+                            <h4>Listado de prendas para alquiler</h4>
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
                                 <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaAlquiler').filter()" style="" placeholder="Filtro de Busqueda"/>        
@@ -108,10 +108,51 @@
                             <p:commandLink value="Liberar" actionListener="#{alquilerManagedBean.liberarReservacion(reservacion)}" update="dialogEntregarReservacion"/> 
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton value="Rentar Todo" action="#{alquilerManagedBean.reintegrarTodo}" update="dialogEntregarReservacion"/> 
+                    <p:commandButton value="Rentar Todo" action="#{alquilerManagedBean.alquilarTodo}" update="dialogEntregarReservacion"/> 
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
                 </h:form>
             </p:dialog>
+
+            <p:dialog id="dialogCrear" header="Alquilar" widgetVar="dlg2" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+                <h:form id="formdialogCrear">
+                    <div class="contentDialog">                    
+
+                        <h:outputText value="Dias renta: "/>
+                        <p:inputNumber value="#{alquilerManagedBean.alquilarUtil.diaRenta}" required="true" minValue="0" placeholder="0" maxValue="366" maxlength="10" requiredMessage="La cantidad de dias es obligatoria"/>
+                        <h:outputText value="Cliente: "/>
+                        <p:inputNumber value="#{alquilerManagedBean.alquilarUtil.clienteId}" required="true" minValue="0" placeholder="0" maxValue="9999999999" maxlength="11" requiredMessage="La identificacion del cliente es obligatoria"/>
+
+                    </div>                          
+                    <p:pickList id="PojoPickList" value="#{alquilerManagedBean.prendasSelect}" var="prenda" required="true" requiredMessage="Debe seleccionar minimo un material"
+                                itemValue="#{prenda}" itemLabel="#{prenda.prendaNombre}" showSourceControls="false" showTargetControls="false" showCheckbox="true" responsive="true"
+                                showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"  addLabel="+" removeLabel="-" converter="prendasPickListConverter">
+
+                        <f:facet name="sourceCaption">Prendas</f:facet>
+                        <f:facet name="targetCaption">Seleccion</f:facet>
+                        <p:ajax event="transfer" listener="#{alquilerManagedBean.onTransfer}" />                        
+                        <p:column>
+                            <h:outputText value="#{prenda.prendaNombre}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{prenda.valor}" />
+                        </p:column>
+
+                    </p:pickList>
+                    <p:commandButton value="Alquilar" action="#{alquilerManagedBean.crearRenta}" update="form,formdialogCrear,universarGrowl" /> 
+                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg2').hide();"/> 
+                </h:form>
+            </p:dialog> 
+
+            <p:dialog id="dialogCantidad" header="Valor" widgetVar="dlg3" closable="false" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+                <h:form>
+                    <div class="contentDialog">                                                      
+                        <h:outputText value="Valor: "/>
+                        <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="0" placeholder="0" maxValue="10000000" maxlength="10" requiredMessage="El valor es obligatorio"/>
+                    </div>                              
+                    <p:commandButton value="Agregar" action="#{alquilerManagedBean.valorTotal()}" update="universarGrowl,:formdialogCrear:PojoPickList"/>                     
+                </h:form>
+            </p:dialog>
+
 
 
         </ui:define>

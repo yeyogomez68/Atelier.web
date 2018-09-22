@@ -14,12 +14,12 @@
         <ui:define name="body">
 
             <h:form id="form">  
-                <p:panel id="panelFiltros" header="Filtros de Produccion" >
+                <p:panel id="panelFiltros" header="Filtros de ventas" >
 
                 </p:panel> 
 
                 <!--                    <p:panel id="panelLista" header="Listado" >-->
-                <p:dataTable var="producciones" value="#{produccionManagedBean.producciones}" editable="true" widgetVar="tablaProducciones"
+                <p:dataTable var="alquiler" value="#{alquilerManagedBean.reservacionActivas}" editable="true" widgetVar="tablaAlquiler"
                              paginator="true"
                              rowsPerPageTemplate="5,10,15"                                     
                              paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
@@ -28,105 +28,131 @@
 
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
-                            <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                            <h4>Listado de produccion</h4>
+                            <p:commandButton type="button" value="+" onclick="PF('dlg2').show();"/>
+                            <h4>Listado de prendas para vender</h4>
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
-                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaProducciones').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaAlquiler').filter()" style="" placeholder="Filtro de Busqueda"/>        
                             </div>                                                                                                    
                         </div>
                     </f:facet>
                     <!--Eventos de tabla editable-->
-                    <p:ajax event="rowEdit" listener="#{produccionManagedBean.onRowEdit}" update=":universarGrowl" />
-                    <p:ajax event="rowEditCancel" listener="#{produccionManagedBean.onRowCancel}" update=":universarGrowl" />
-
-                    <p:column headerText="Descripción" filterBy="#{producciones.produccionDescripcion}" filterMatchMode="contains">
-                        <h:outputText value="#{producciones.produccionDescripcion}" />
+                    <p:column headerText="Cliente" filterBy="#{alquiler.clienteId.clienteIdentificacion}" filterMatchMode="contains">
+                        <h:outputText value="#{alquiler.clienteId.clienteIdentificacion}" />
                     </p:column>
 
-                    <p:column headerText="Fecha de Produccion" filterBy="#{producciones.produccionFecha.time}" filterMatchMode="contains">
-                        <p:calendar id="datetime" value="#{producciones.produccionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                    <p:column headerText="Fecha de reservacion" filterBy="#{alquiler.reservacionFecha.time}" filterMatchMode="contains">
+                        <p:calendar id="fechareservacion" value="#{alquiler.reservacionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
                     </p:column>
 
-                    <p:column headerText="Dias" filterBy="#{producciones.produccionDiaEstimated}" filterMatchMode="contains">
-                        <h:outputText value="#{producciones.produccionDiaEstimated}" />
+                    <p:column headerText="Limite de reservacion" filterBy="#{alquiler.reservacionLimit}" filterMatchMode="contains">
+                        <h:outputText value="#{alquiler.reservacionLimit}" />
                     </p:column>
 
-                    <p:column headerText="% Avance" filterBy="#{producciones.avance}" filterMatchMode="contains">
-                        <h:outputText value="#{producciones.avance}" />
+                    <p:column headerText="Fecha Limite" filterBy="#{alquiler.reservacionLimitFecha.time}" filterMatchMode="contains">
+                        <p:calendar id="fechalimite" value="#{alquiler.reservacionLimitFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
                     </p:column>
 
-                    <p:column headerText="Estado" filterBy="#{producciones.estadoId.estadoDescrip}" filterMatchMode="contains">
-                        <p:cellEditor>
-                            <h:outputText value="#{producciones.estadoId.estadoDescrip}" />
-                            <f:facet name="output"><h:outputText value="#{producciones.estadoId.estadoDescrip}" /></f:facet>
-                            <f:facet name="input">
-                                <p:selectOneMenu id="Estado" value="#{produccionManagedBean.estadoId}">                                            
-                                    <f:selectItems value="#{produccionManagedBean.estados}" />
-                                </p:selectOneMenu>
-                            </f:facet>
-                        </p:cellEditor>                                
+                    <p:column headerText="Prenda" filterBy="#{alquiler.prendaId.prendaNombre}" filterMatchMode="contains">
+                        <h:outputText value="#{alquiler.prendaId.prendaNombre}" />
                     </p:column>
-
-
-                    <p:column headerText="Usuario" filterBy="#{producciones.usuarioCreador.usuarioNombre}" filterMatchMode="contains">
-                        <h:outputText value="#{producciones.usuarioCreador.usuarioNombre}" />
+                    <p:column headerText="Acción" >
+                        <p:commandLink value="Entregar" actionListener="#{alquilerManagedBean.verEntregarAlquiler(alquiler)}" update="dialogEntregarReservacion" /> 
                     </p:column>
-
                     <!--Columna de evento editar-->
-                    <p:column width="50">
-                        <p:rowEditor />
-                    </p:column>                            
                 </p:dataTable>
                 <!--</p:panel>--> 
             </h:form>
 
 
-            <p:dialog id="dialogCrear" header="Crear Produccion" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+            <p:dialog id="dialogEntregarReservacion" header="Entregar Reservacion" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                <h:form id="frmdialogAprob">                      
+                    <p:dataTable id="tabla" var="reservacion" value="#{alquilerManagedBean.reservacionClienteActivas}" editable="true" widgetVar="tablaReservacion"
+                                 paginator="true"
+                                 rowsPerPageTemplate="5,10,15"                                     
+                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                                 emptyMessage="No se han encontrado resultados"
+                                 rows="10">
+
+                        <f:facet name="header">
+                            <div class="headerTableAndCreateBtn">                                
+                                <h4>Items reservados</h4>  
+                                <div class="globalFilterDiv">
+                                    <img class="filtroLupa"/>
+                                    <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaReservacion').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                </div>                                                                                                    
+                            </div>
+                        </f:facet>
+                        <!--Eventos de tabla editable-->                      
+
+                        <p:column headerText="Prenda" filterBy="#{reservacion.prendaId.prendaNombre}" filterMatchMode="contains">
+                            <h:outputText value="#{reservacion.prendaId.prendaNombre}" />
+                        </p:column>
+
+                        <p:column headerText="Fecha renta" filterBy="#{reservacion.reservacionFecha.time}" filterMatchMode="contains">
+                            <p:calendar id="FechaRenta" value="#{reservacion.reservacionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                        </p:column>
+
+                        <p:column headerText="Fecha de reintegro" filterBy="#{reservacion.reservacionLimitFecha.time}" filterMatchMode="contains">
+                            <p:calendar id="FechaReintegro" value="#{reservacion.reservacionLimitFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                        </p:column>    
+
+
+                        <p:column headerText="Valor de renta" >
+                            <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="0" placeholder="0" maxValue="100000000" maxlength="10" requiredMessage="El valor es obligatorio"/>                                                       
+                        </p:column> 
+
+                        <p:column headerText="Acción" >
+                            <p:commandLink value="Rentar" actionListener="#{alquilerManagedBean.entregarReservacionVenta(reservacion)}" update="dialogEntregarReservacion"/> 
+                            <br></br>
+                            <p:commandLink value="Liberar" actionListener="#{alquilerManagedBean.liberarReservacion(reservacion)}" update="dialogEntregarReservacion"/> 
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton value="Vender Todo" action="#{alquilerManagedBean.alquilarTodo}" update="dialogEntregarReservacion"/> 
+                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
+                </h:form>
+            </p:dialog>
+
+            <p:dialog id="dialogCrear" header="Alquilar" widgetVar="dlg2" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
                 <h:form id="formdialogCrear">
                     <div class="contentDialog">                    
-                        <h:outputText value="Descripcion de Produccion: "/>
-                        <p:inputText value="#{produccionManagedBean.produccionCrear.produccionDescripcion}" required="true" requiredMessage="La descripcion es obligatoria"/>
-                        <h:outputText value="Dias Estimados: "/>
-                        <p:inputNumber value="#{produccionManagedBean.produccionCrear.produccionDiaEstimated}" required="true" minValue="0" placeholder="0" maxValue="1000" maxlength="10" requiredMessage="La cantidad de dias es obligatoria"/>
-                        <h:outputText value="Fecha de produccion: "/>
-                        <p:calendar id="produccionFecha" value="#{produccionManagedBean.produccionCrear.produccionFechaDate}" pattern="dd/MM/yy HH:mm:ss" />
-                    </div>                          
-                    <p:pickList id="PojoPickList" value="#{produccionManagedBean.materialesSelect}" var="material" required="true" requiredMessage="Debe seleccionar minimo un material"
-                                itemValue="#{material}" itemLabel="#{material.nombre}" showSourceControls="false" showTargetControls="false" showCheckbox="true" responsive="true"
-                                showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"  addLabel="+" removeLabel="-" converter="materialPickListConverter">
 
-                        <f:facet name="sourceCaption">Materiales</f:facet>
-                        <f:facet name="targetCaption">Agregado</f:facet>
-                        <p:ajax event="transfer" listener="#{produccionManagedBean.onTransfer}" />                        
+                        <h:outputText value="Cliente: "/>
+                        <p:inputNumber value="#{alquilerManagedBean.alquilarUtil.clienteId}" required="true" minValue="0" placeholder="0" maxValue="9999999999" maxlength="11" requiredMessage="La identificacion del cliente es obligatoria"/>
+
+                    </div>                          
+                    <p:pickList id="PojoPickList" value="#{alquilerManagedBean.prendasSelect}" var="prenda" required="true" requiredMessage="Debe seleccionar minimo un material"
+                                itemValue="#{prenda}" itemLabel="#{prenda.prendaNombre}" showSourceControls="false" showTargetControls="false" showCheckbox="true" responsive="true"
+                                showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"  addLabel="+" removeLabel="-" converter="prendasPickListConverter">
+
+                        <f:facet name="sourceCaption">Prendas</f:facet>
+                        <f:facet name="targetCaption">Seleccion</f:facet>
+                        <p:ajax event="transfer" listener="#{alquilerManagedBean.onTransfer}" />                        
                         <p:column>
-                            <h:outputText value="#{material.nombre}" />
+                            <h:outputText value="#{prenda.prendaNombre}" />
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{material.referencia}" />
+                            <h:outputText value="#{prenda.valor}" />
                         </p:column>
-                        <p:column>
-                            <h:outputText value="#{material.cantidad}" />
-                        </p:column>  
+
                     </p:pickList>
-                    <p:commandButton value="Crear" action="#{produccionManagedBean.crearProduccion}" update="form,formdialogCrear,universarGrowl" /> 
-                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
+                    <p:commandButton value="Vender" action="#{alquilerManagedBean.crearVenta}" update="form,formdialogCrear,universarGrowl" /> 
+                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg2').hide();"/> 
                 </h:form>
             </p:dialog> 
 
-            <p:dialog id="dialogCantidad" header="Cantidad" widgetVar="dlg2" closable="false" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+            <p:dialog id="dialogCantidad" header="Valor" widgetVar="dlg3" closable="false" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
                 <h:form>
                     <div class="contentDialog">                                                      
-                        <h:outputText value="Cantidad: "/>
-                        <p:inputNumber value="#{produccionManagedBean.cantidad}" required="true" minValue="0" placeholder="0" maxValue="1000" maxlength="10" requiredMessage="La cantidad es Obligatoria"/>                                                       
-                        <h:outputText value="Usuario Asignado: "/>
-                        <p:selectOneMenu id="UsuarioAsignado" value="#{produccionManagedBean.usuarioId}">                                            
-                            <f:selectItems value="#{produccionManagedBean.usuarios}" />
-                        </p:selectOneMenu>
-                    </div>                                              
-                    <p:commandButton value="Agregar" action="#{produccionManagedBean.cantidades()}" update="universarGrowl,:formdialogCrear:PojoPickList"/>                     
+                        <h:outputText value="Valor: "/>
+                        <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="0" placeholder="0" maxValue="10000000" maxlength="10" requiredMessage="El valor es obligatorio"/>
+                    </div>                              
+                    <p:commandButton value="Agregar" action="#{alquilerManagedBean.valorTotal()}" update="universarGrowl,:formdialogCrear:PojoPickList"/>                     
                 </h:form>
             </p:dialog>
+
+
+
         </ui:define>
     </ui:composition>
 </html>

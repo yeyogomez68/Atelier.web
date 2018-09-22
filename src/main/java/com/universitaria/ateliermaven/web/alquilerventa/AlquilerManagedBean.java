@@ -9,9 +9,14 @@ import com.universitaria.atelier.web.jpa.Renta;
 import com.universitaria.atelier.web.jpa.Rentadeta;
 import com.universitaria.atelier.web.jpa.Reservacion;
 import com.universitaria.atelier.web.jpa.Usuario;
+import com.universitaria.atelier.web.utils.AlquilarUtil;
+import com.universitaria.atelier.web.utils.MaterialRequerimientoUtil;
+import com.universitaria.atelier.web.utils.PrendaUtil;
 import com.universitaria.ateliermaven.ejb.alquilerventas.DetalleRentaEJB;
 import com.universitaria.ateliermaven.ejb.alquilerventas.RentaEJB;
 import com.universitaria.ateliermaven.ejb.alquilerventas.ReservaEJB;
+import com.universitaria.ateliermaven.ejb.produccion.PrendasEJB;
+import com.universitaria.ateliermaven.web.comunes.Comunes;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,6 +24,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.TransferEvent;
+import org.primefaces.model.DualListModel;
 
 /**
  *
@@ -26,19 +33,62 @@ import org.primefaces.context.RequestContext;
  */
 public class AlquilerManagedBean implements Serializable {
 
+    public AlquilerManagedBean() {
+        alquilarUtil = new AlquilarUtil();
+        prendaUtil = new PrendaUtil();
+    }
+
     @EJB
     private RentaEJB rentaEJB;
     @EJB
     private DetalleRentaEJB detalleRentaEJB;
     @EJB
     private ReservaEJB reservaEJB;
+    @EJB
+    private PrendasEJB prendasEJB;
 
     private List<Renta> rentasActivas;
     private List<Rentadeta> detalleRenta;
     private List<Reservacion> reservacionActivas;
     private List<Reservacion> reservacionClienteActivas;
 
+    private DualListModel<PrendaUtil> prendasSelect;
+
+    private AlquilarUtil alquilarUtil;
+    private PrendaUtil prendaUtil;
     private int valor;
+
+    public PrendaUtil getPrendaUtil() {
+        return prendaUtil;
+    }
+
+    public void setPrendaUtil(PrendaUtil prendaUtil) {
+        this.prendaUtil = prendaUtil;
+    }
+
+    public PrendasEJB getPrendasEJB() {
+        return prendasEJB;
+    }
+
+    public void setPrendasEJB(PrendasEJB prendasEJB) {
+        this.prendasEJB = prendasEJB;
+    }
+
+    public DualListModel<PrendaUtil> getPrendasSelect() {
+
+        if (prendasSelect == null || (prendasSelect.getSource().isEmpty() && prendasSelect.getTarget().isEmpty())) {
+            List<PrendaUtil> source = new ArrayList<>();
+            List<PrendaUtil> target = new ArrayList<>();
+            source = prendasEJB.getPrendasProduccionDisponibles();
+            setPrendasSelect(new DualListModel<PrendaUtil>(source, target));
+        }
+
+        return prendasSelect;
+    }
+
+    public void setPrendasSelect(DualListModel<PrendaUtil> prendasSelect) {
+        this.prendasSelect = prendasSelect;
+    }
 
     public int getValor() {
         return valor;
@@ -46,6 +96,14 @@ public class AlquilerManagedBean implements Serializable {
 
     public void setValor(int valor) {
         this.valor = valor;
+    }
+
+    public AlquilarUtil getAlquilarUtil() {
+        return alquilarUtil;
+    }
+
+    public void setAlquilarUtil(AlquilarUtil alquilarUtil) {
+        this.alquilarUtil = alquilarUtil;
     }
 
     public List<Reservacion> getReservacionClienteActivas() {
@@ -181,4 +239,97 @@ public class AlquilerManagedBean implements Serializable {
 
     }
 
+    public void alquilarTodo() {
+
+        for (Reservacion r : reservacionClienteActivas) {
+            entregarReservacionRenTa(r);
+        }
+
+    }
+    
+    
+     public void entregarReservacionVenta(Reservacion reservacion) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
+
+        if (reservaEJB.entregarReservacionRenTa(reservacion, user, valor)) {
+            reservacionClienteActivas.clear();
+            setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
+        }
+
+    }
+    
+    public void venderTodo() {
+
+        for (Reservacion r : reservacionClienteActivas) {
+            entregarReservacionVenta(r);
+        }
+
+    }
+
+    public void onTransfer(TransferEvent event) {
+        for (Object item : event.getItems()) {
+            prendaUtil = new PrendaUtil();
+            prendaUtil.setPrendaNombre(((PrendaUtil) item).getPrendaNombre());
+            prendaUtil.setPrendaId(((PrendaUtil) item).getPrendaId());
+            prendaUtil.setValor("0.0");
+        }
+        for (PrendaUtil listaRenta : prendasSelect.getTarget()) {
+            if (listaRenta.getPrendaId() == null ? listaRenta.getPrendaId() == null : listaRenta.getPrendaId().equals(prendaUtil.getPrendaId())) {
+                setValor(0);
+                RequestContext req = RequestContext.getCurrentInstance();
+                req.execute("PF('dlg3').show();");
+                break;
+            }
+        }
+    }
+
+    public void valorTotal() {
+        for (PrendaUtil listaPrenda : prendasSelect.getTarget()) {
+            if (listaPrenda.getPrendaId() == null ? prendaUtil.getPrendaId() == null : listaPrenda.getPrendaId().equals(prendaUtil.getPrendaId())) {
+                listaPrenda.setValor(String.valueOf(valor));
+                break;
+            }
+        }
+        setValor(0);
+        RequestContext req = RequestContext.getCurrentInstance();
+        req.execute("PF('dlg3').hide();");
+    }
+
+    public void crearRenta() {
+        RequestContext req = RequestContext.getCurrentInstance();
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
+
+        if (rentaEJB.setCrearRenta(prendasSelect.getTarget(), alquilarUtil, user)) {
+            Comunes.mensaje("Se ha creado el alquiler correctamente", "");
+        } else {
+            Comunes.mensaje("Error creando el alquiler", "");
+        }
+        prendasSelect.getTarget().clear();
+        prendasSelect.getSource().clear();
+        setValor(0);
+        req.update(":form");
+        req.execute("PF('dlg2').hide();");
+    }
+
+    
+    public void crearVenta() {
+        RequestContext req = RequestContext.getCurrentInstance();
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
+
+        if (rentaEJB.setCrearVenta(prendasSelect.getTarget(), alquilarUtil, user)) {
+            Comunes.mensaje("Se ha creado el alquiler correctamente", "");
+        } else {
+            Comunes.mensaje("Error creando el alquiler", "");
+        }
+        prendasSelect.getTarget().clear();
+        prendasSelect.getSource().clear();
+        setValor(0);
+        req.update(":form");
+        req.execute("PF('dlg2').hide();");
+    }
+
+    
 }

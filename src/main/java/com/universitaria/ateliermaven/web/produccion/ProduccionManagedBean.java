@@ -10,7 +10,6 @@ import com.universitaria.atelier.web.jpa.Produccion;
 import com.universitaria.atelier.web.jpa.Usuario;
 import com.universitaria.atelier.web.utils.DetalleProduccionUtil;
 import com.universitaria.atelier.web.utils.MaterialRequerimientoUtil;
-import com.universitaria.atelier.web.utils.MaterialUtil;
 
 import com.universitaria.atelier.web.utils.ProduccionUtil;
 import com.universitaria.ateliermaven.ejb.UsuarioEJB;

@@ -32,6 +32,7 @@ public class PrendasPickListConverter implements Converter {
             prenda.setEstadoId(item[6]);
             prenda.setCantidad(item[7]);
             prenda.setUsuarioId(item[8]);
+            prenda.setValor(item[9]);
             return prenda;
         }
         return null;
@@ -57,7 +58,9 @@ public class PrendasPickListConverter implements Converter {
                     .append(";")
                     .append(prenda.getCantidad())
                     .append(";")
-                    .append(prenda.getUsuarioId());
+                    .append(prenda.getUsuarioId())
+                    .append(";")
+                    .append(prenda.getValor());
             String pre = buf.toString();
             return pre;
         } else {
