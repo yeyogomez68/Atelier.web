@@ -6,21 +6,18 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-    <body>
+    <ui:composition template="./../../../WEB-INF/include/template.xhtml">
 
-        <ui:composition template="./../../../WEB-INF/include/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Ordenes de Compra"></h:outputText>
+        </ui:define>
 
-            <ui:define name="title">
-                <h:outputText value="Ordenes de Compra"></h:outputText>
-            </ui:define>
-
-            <ui:define name="body">
-                <h:form id="form">
-
+        <ui:define name="body">
+            <h:form id="form">
                 <p:panel id="panelFiltros" header="Ordenes de Compra" >                        
                 </p:panel>                      
-                
-                    <p:dataTable id="tabla" var="ordenCom" value="#{ordenCompraBean.listOrdenesCompra}" editable="true" widgetVar="tablaOrdenCom"
+
+                <p:dataTable id="tabla" var="ordenCom" value="#{ordenCompraBean.listOrdenesCompra}" editable="true" widgetVar="tablaOrdenCom"
                              paginator="true"
                              rowsPerPageTemplate="5,10,15"                                     
                              paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
@@ -30,8 +27,8 @@
                     <f:facet name="header">
 
                         <div class="headerTableAndCreateBtn">
-                            <p:commandButton value="+" actionListener="#{ordenCompraBean.crearOrdenCompra()}"/>
-                            <h4>Listado de Requerimientos</h4>  
+                            <p:commandButton value="+" actionListener="#{ordenCompraBean.crearOrdenCompraPanel()}" update="dialogCrearOC"/>
+                            <h4>Listado de Ordenes de Compra</h4>  
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
                                 <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaOrdenCom').filter()" style="" placeholder="Filtro de Busqueda"/>        
@@ -45,18 +42,18 @@
                         <h:outputText value="#{ordenCom.ordenCompraId}" />
                     </p:column>
 
-                    <p:column headerText="Codigo" filterBy="#{ordenCom.ordenCompraCode}" filterMatchMode="contains">
+                    <!-- <p:column headerText="Codigo" filterBy="#{ordenCom.ordenCompraCode}" filterMatchMode="contains">
                         <h:outputText value="#{ordenCom.ordenCompraCode}" />
-                    </p:column>
+                    </p:column>-->
 
                     <p:column headerText="Proveedor" filterBy="#{ordenCom.proveedorId}" filterMatchMode="contains">
-                        <h:outputText value="#{ordenCom.proveedorId}" />
+                        <h:outputText value="#{ordenCom.proveedorId.proveedorNombre}" />
                     </p:column>
 
                     <p:column headerText="Valor Bruto" filterBy="#{ordenCom.ordenCompraBruto}" filterMatchMode="contains">
                         <h:outputText value="#{ordenCom.ordenCompraBruto}" />
                     </p:column>    
-                    
+
                     <p:column headerText="Iva" filterBy="#{ordenCom.ordenCompraIVA}" filterMatchMode="contains">
                         <h:outputText value="#{ordenCom.ordenCompraIVA}" />
                     </p:column>  
@@ -66,61 +63,73 @@
                     </p:column>  
 
                     <p:column headerText="Acción">                        
-                        <p:commandLink value="Ver" actionListener="#{ordenCompraBean.verOrdenCompra(ordenCom)}" update=""/> 
+                        <p:commandLink value="Ver" actionListener="#{ordenCompraBean.verOrdenCompra(ordenCom)}" update="dialogCantidadMod"/> 
                     </p:column> 
 
                 </p:dataTable>
             </h:form>
-            <p:dialog id="dialogAprob" header="Aprobación de Items de Requerimiento" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
-                <h:form id="frmdialogAprob">                      
-                    <p:dataTable id="tabla" var="detaRq" value="#{ordenCompraBean.listaItemRq}" editable="true" widgetVar="tablaDetaRequeri"
-                                 paginator="true"
-                                 rowsPerPageTemplate="5,10,15"                                     
-                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+
+            <p:dialog id="dialogCrearOC" header="Items de Requerimiento" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                <h:form id="frmdialogCreaOC">                         
+                    <div class="contentDialog">   
+                        <h:outputText value="Proveedor: "/>
+                        <p:selectOneMenu id="proveedor" value="#{ordenCompraBean.proveedorId}">                                            
+                            <f:selectItems value="#{ordenCompraBean.listProveedores}" />
+                        </p:selectOneMenu>
+                        <h:outputText value="Detalle: "/>
+                        <p:inputText value="#{requerimientoManagedBean.desrequerimiento}" required="true" requiredMessage="El Detalle es Obligatorio"/>                                                       
+                    </div>   
+                    <p:dataTable id="tabla" var="ordenComDeta" value="#{ordenCompraBean.listRqOrdenCompraDeta}" editable="true" widgetVar="tablaItemOrdenCom"
+                                 paginator="true"                                                         
+                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}"                                     
                                  emptyMessage="No se han encontrado resultados"
-                                 rows="10">
+                                 rows="3">
 
                         <f:facet name="header">
                             <div class="headerTableAndCreateBtn">                                
-                                <h4>Items de Requerimientos</h4>  
+                                <h4>Items Agregados en OC</h4>  
                                 <div class="globalFilterDiv">
                                     <img class="filtroLupa"/>
-                                    <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaDetaRequeri').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                    <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaItemOrdenCom').filter()" style="" placeholder="Filtro de Busqueda"/>        
                                 </div>                                                                                                    
                             </div>
-                        </f:facet>
-                        <!--Eventos de tabla editable-->                      
-
-                        <p:column headerText="Material" filterBy="#{detaRq.materialId.materialNombre}" filterMatchMode="contains">
-                            <h:outputText value="#{detaRq.materialId.materialNombre}" />
+                        </f:facet> 
+                        <p:column headerText="En. Rq" filterBy="#{ordenComDeta.encabezadoRequerimientoId.encabezadoRequerimientoId}" filterMatchMode="contains">
+                            <h:outputText value="#{ordenComDeta.encabezadoRequerimientoId.encabezadoRequerimientoId}" />
                         </p:column>
 
-                        <p:column headerText="Fecha" filterBy="#{detaRq.requestDetaFecha}" filterMatchMode="contains">
-                            <h:outputText value="#{detaRq.requestDetaFecha}" />
-                        </p:column>
+                        <p:column headerText="Material" filterBy="#{ordenComDeta.materialId.materialNombre}" filterMatchMode="contains">
+                            <h:outputText value="#{ordenComDeta.materialId.materialNombre}" />
+                        </p:column> 
 
-                        <p:column headerText="Cantidad" filterBy="#{detaRq.requestDetaCantidad}" filterMatchMode="contains">
-                            <h:outputText value="#{detaRq.requestDetaCantidad}" />
-                        </p:column>    
+                        <p:column headerText="Referencia" filterBy="#{ordenComDeta.materialId.materialReference}" filterMatchMode="contains">
+                            <h:outputText value="#{ordenComDeta.materialId.materialReference}" />
+                        </p:column> 
 
-                        <p:column headerText="Estado" filterBy="#{detaRq.estadoId.estadoDescrip}" filterMatchMode="contains">
-                            <h:outputText value="#{detaRq.estadoId.estadoDescrip}" />
-                        </p:column>   
-                        
-                        <p:column headerText="Acción" >
-                            <p:commandLink value="Aprobar" actionListener="#{ordenCompraBean.aprobarItemRequerimiento(detaRq)}" update="frmdialogAprob,form" rendered="#{detaRq.estadoId.estadoId==3}"/> 
-                            <br></br>
-                            <p:commandLink value="Rechazar" actionListener="#{ordenCompraBean.rechazarItemRequerimiento(detaRq)}" update="frmdialogAprob,form" rendered="#{detaRq.estadoId.estadoId==3}"/> 
-                        </p:column>
+                        <p:column headerText="Cantidad" filterBy="#{ordenComDeta.ordenCompraCantidad}" filterMatchMode="contains">
+                            <h:outputText value="#{ordenComDeta.ordenCompraCantidad}" />
+                        </p:column>                          
+
+                        <p:column headerText="Acción">                               
+                            <p:commandLink value="Agregar" actionListener="#{ordenCompraBean.agregarAOC(ordenComDeta)}" update="frmdialogCreaOC,form"/> 
+                        </p:column> 
                     </p:dataTable>
-                    <p:commandButton value="Aprobar Todo" action="#{ordenCompraBean.aprobarRequerimiento()}" update="dialogAprob,form,dialogAprob,universarGrowl" rendered="#{ordenCompraBean.editable}"/> 
-                    <p:commandButton value="Rechazar Todo" action="#{ordenCompraBean.rechazarRequerimiento()}" update="dialogAprob,form,dialogAprob,universarGrowl" rendered="#{ordenCompraBean.editable}"/> 
-                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
+
+                    
+
+                    <p:commandButton class="btnCancelar" value="Cerrar" onclick="PF('dlg1').hide();"/> 
                 </h:form>
             </p:dialog>
-            </ui:define>
+            <p:dialog id="dialogCantidadMod" header="Cantidad" widgetVar="dlg4" closable="false" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+                <h:form>
+                    <div class="contentDialog">                                                      
+                        <h:outputText value="Cantidad: "/>
+                        <p:inputNumber value="#{ordenCompraBean.cantidad}" decimalPlaces="1" required="true" minValue="1" maxValue="1000" maxlength="10" requiredMessage="La cantidad es Obligatoria"/>                                                       
+                    </div>                                              
+                    
+                </h:form>
+            </p:dialog>
+        </ui:define>
 
-        </ui:composition>
-
-    </body>
+    </ui:composition>
 </html>
