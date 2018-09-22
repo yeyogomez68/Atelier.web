@@ -8,7 +8,7 @@
 
     <ui:composition template="/WEB-INF/include/template.xhtml">
         <ui:define name="title">
-            <h:outputText value="Atelier"></h:outputText>
+            <h:outputText value="Atelier - Ciudad"></h:outputText>
         </ui:define>
 
         <ui:define name="body">
@@ -29,13 +29,14 @@
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
                             <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                            <h4>Listado de ciudades</h4>  
+                            <h4>Listado de Ciudades</h4>  
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
                                 <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaCiudades').filter()" style="" placeholder="Filtro de Busqueda"/>        
                             </div>                                                                                                    
                         </div>
                     </f:facet>
+                    
                     <!--Eventos de tabla editable-->
                     <p:ajax event="rowEdit" listener="#{ciudadManagedBean.onRowEdit}" update=":universarGrowl" />
                     <p:ajax event="rowEditCancel" listener="#{ciudadManagedBean.onRowCancel}" update=":universarGrowl" />
@@ -48,9 +49,21 @@
                         <p:cellEditor>
                             <h:outputText value="#{ciudades.ciudadNombre}" />
                             <f:facet name="output"><h:outputText value="#{ciudades.ciudadNombre}" /></f:facet>
-                            <f:facet name="input"><p:inputText id="modelInput" value="#{ciudades.ciudadNombre}"/></f:facet>
+                            <f:facet name="input">
+                                <p:inputText 
+                                    id="modelInput" 
+                                    value="#{ciudades.ciudadNombre}"
+                                    maxlength="20"
+                                    required="true"
+                                    requiredMessage="La Ciudad es obligatoria" 
+                                    validatorMessage="La Ciudad debe contener solo letras">
+                                    <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                                </p:inputText>
+                            </f:facet>
                         </p:cellEditor>                                
                     </p:column>
+                              
+                    
                     <p:column headerText="Departamento" filterBy="#{ciudades.departamentoId.departamentoNombre}" filterMatchMode="contains">
                         <p:cellEditor>
                             <h:outputText value="#{ciudades.departamentoId.departamentoNombre}" />
@@ -68,20 +81,30 @@
                         <p:rowEditor />
                     </p:column>                            
                 </p:dataTable>
+               
                 <!--</p:panel>--> 
+                </h:form>
                 <p:dialog header="Crear Departamento" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                    <h:form>
                     <div class="contentDialog">                    
+                        <h:outputText value="Ciudad: "/>
+                        <p:inputText placeholder="Nombre de Ciudad" value="#{ciudadManagedBean.ciudadCrear.ciudadNombre}"                                               
+                                     maxlength="20"
+                                     required="true"
+                                     requiredMessage="La Ciudad es obligatorio" 
+                                     validatorMessage="La Ciudad debe contener solo letras">
+                            <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                         </p:inputText>
                         <h:outputText value="Departamento: "/>
-                        <p:inputText placeholder="Nombre de Ciudad" value="#{ciudadManagedBean.ciudadCrear.ciudadNombre}" required="true"/>                                                       
-                        <h:outputText value="Departamento: "/>
-                        <p:selectOneMenu id="pais" value="#{ciudadManagedBean.departamentoId}">                                            
+                        <p:selectOneMenu id="Departamento" value="#{ciudadManagedBean.departamentoId}">                                            
                             <f:selectItems value="#{ciudadManagedBean.departamentos}" />
                         </p:selectOneMenu>
                     </div>
-                    <p:commandButton value="Crear" action="#{ciudadManagedBean.crearCiudad}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
+                    <p:commandButton value="Crear" action="#{ciudadManagedBean.crearCiudad}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                           
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
+                
+                    </h:form>
                 </p:dialog>  
-            </h:form>
-        </ui:define>
+            </ui:define>
     </ui:composition>
 </html>

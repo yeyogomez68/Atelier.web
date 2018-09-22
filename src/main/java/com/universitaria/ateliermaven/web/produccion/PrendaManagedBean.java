@@ -317,7 +317,7 @@ public class PrendaManagedBean implements Serializable {
     public void onRowEdit(RowEditEvent event) {
         Prenda prenda = (Prenda) event.getObject();
 
-        if (!prenda.getPrendaNombre().equals("") && !prendaEJB.existePrenda(Comunes.getFormat(prenda.getPrendaNombre()))) {
+        if (!prenda.getPrendaNombre().equals("") && !prendaEJB.getexistePrenda(Comunes.getFormat(prenda.getPrendaNombre()))) {
             Comunes.mensaje((prendaEJB.setModificarPrenda(prenda) ? "Se ha modificado la prenda correctamente " : "Error modificando la prenda "), prendaCrear.getPrendaNombre());
 
         }
@@ -331,7 +331,7 @@ public class PrendaManagedBean implements Serializable {
 
     public void crearPrenda() {
         String mensaje = "Se ha creado la prenda correctamente";
-        if (!prendaEJB.existePrenda(Comunes.getFormat(prendaCrear.getPrendaNombre()))) {
+        if (!prendaEJB.getexistePrenda(Comunes.getFormat(prendaCrear.getPrendaNombre()))) {
             prendaCrear.setPrendaNombre(Comunes.getFormat(prendaCrear.getPrendaNombre()));
             prendaCrear.setPrendaTipoId(prendaTipoId);
             prendaCrear.setColorId(colorId);

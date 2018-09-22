@@ -7,8 +7,9 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition template="/WEB-INF/include/template.xhtml">
+       
         <ui:define name="title">
-            <h:outputText value="Atelier"></h:outputText>
+            <h:outputText value="Atelier - Estado"></h:outputText>
         </ui:define>
         
         <ui:define name="body">
@@ -36,6 +37,7 @@
                                     </div>                                                                                                    
                                 </div>
                             </f:facet>
+                            
                             <!--Eventos de tabla editable-->
                             <p:ajax event="rowEdit" listener="#{estadoManagedBean.onRowEdit}" update=":universarGrowl" />
                             <p:ajax event="rowEditCancel" listener="#{estadoManagedBean.onRowCancel}" update=":universarGrowl" />
@@ -48,24 +50,44 @@
                                 <p:cellEditor>
                                     <h:outputText value="#{estado.estadoDescrip}" />
                                     <f:facet name="output"><h:outputText value="#{estado.estadoDescrip}" /></f:facet>
-                                    <f:facet name="input"><p:inputText id="modelInput" value="#{estado.estadoDescrip}"/></f:facet>
-                                </p:cellEditor>                                
-                            </p:column>
+                                    <f:facet name="input">
+                                        <p:inputText
+                                            id="modelInput"
+                                            value="#{estado.estadoDescrip}"
+                                            maxlength="20"
+                                            required="true"
+                                            requiredMessage="El Estado es obligatorio" 
+                                            validatorMessage="El Estado debe contener solo letras">
+                                        <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                                </p:inputText>
+                            </f:facet>
+                        </p:cellEditor>                                
+                    </p:column>
+                            
                             <!--Columna de evento editar-->
                             <p:column width="50">
                                 <p:rowEditor />
                             </p:column>                            
                         </p:dataTable>
+
                     <!--</p:panel>--> 
+                    </h:form>
                     <p:dialog header="Crear Estados" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                        <h:form>
                         <div class="contentDialog">                    
-                            <h:outputText value="Estado: "/>
-                            <p:inputText placeholder="Nombre de Estado" value="#{estadoManagedBean.nomEstado}"/>                                                       
-                        </div>
-                        <p:commandButton value="Crear" action="#{estadoManagedBean.crearEstado}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
+                            <h:outputText value="Nombre Estado: "/>
+                            <p:inputText placeholder="Nombre de Estado" value="#{estadoManagedBean.nomEstado}"                                                      
+                                         maxlength="20"
+                                        required="true"
+                                        requiredMessage="El Estado es obligatorio" 
+                                        validatorMessage="El Estado debe contener solo letras">
+                            <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                        </p:inputText>
+                    </div>
+                        <p:commandButton value="Crear" action="#{estadoManagedBean.crearEstado}" update="form,universarGrowl"/>                            
                         <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
-                    </p:dialog>  
-                </h:form>
+                      </h:form>
+              </p:dialog> 
         </ui:define>
     </ui:composition>
 </html>

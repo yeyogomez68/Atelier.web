@@ -52,12 +52,13 @@ public class UsuarioManagedBean implements Serializable{
     private List<SelectItem> estados;
     private List<SelectItem> ciudades;
     private List<SelectItem> roles;
-    
+    FacesMessage msg = null;
     private String estadoId;
     private String ciudadId;
     private String rollId;
             
     private UsuarioUtil usuarioCrear;
+    
 
     public UsuarioUtil getUsuarioCrear() {
         return usuarioCrear;
@@ -141,14 +142,22 @@ public class UsuarioManagedBean implements Serializable{
         this.estadoId = estadoId;
     }
     
-    public void onRowEdit(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Edited", ((Usuario) event.getObject()).getEstadoId().getEstadoDescrip());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        
+       
+    public void onRowEdit(RowEditEvent event) {        
+        UsuarioUtil util = new UsuarioUtil();
+        util.setUsuarioId(((Usuario) event.getObject()).getUsuarioId());
+        util.setNombre(((Usuario) event.getObject()).getUsuarioNombre());
+        util.setApellido(((Usuario) event.getObject()).getUsuarioApellido());
+        util.setEmail(((Usuario) event.getObject()).getUsuarioEmail());
+        util.setCelular(((Usuario) event.getObject()).getUsuarioCel());
+        usuarioEJB.setModificarUsuario(util);  
+        usuarios.clear();
+        getUsuarios();
     }
      
+     
     public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Cancelled", ((Usuario) event.getObject()).getEstadoId().getEstadoDescrip());
+        FacesMessage msg = new FacesMessage("Edición Cancelada", ((Usuario) event.getObject()).getEstadoId().getEstadoDescrip());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
     

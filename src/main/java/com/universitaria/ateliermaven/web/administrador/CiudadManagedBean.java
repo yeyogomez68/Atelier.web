@@ -23,8 +23,7 @@ import org.primefaces.event.RowEditEvent;
  *
  * @author SoulHunter
  */
-public class CiudadManagedBean implements
-        Serializable {
+public class CiudadManagedBean {
 
     public CiudadManagedBean() {
         ciudadCrear = new CiudadUtil();
@@ -60,7 +59,7 @@ public class CiudadManagedBean implements
     }
 
     public List<Ciudad> getCiudades() {
-        if (ciudades == null) {
+        if (ciudades == null || ciudades.isEmpty()){
             ciudades = new ArrayList<>();
             setCiudades(ciudadEJB.getCiudades());
         }
@@ -72,7 +71,7 @@ public class CiudadManagedBean implements
     }
 
     public List<SelectItem> getDepartamentos() {
-        if (departamentos == null) {
+        if (departamentos == null|| departamentos.isEmpty()){
             departamentos = new ArrayList<>();
             setDepartamentos(departamentoEJB.getSelectItemDepartamentos());
         }
@@ -109,7 +108,7 @@ public class CiudadManagedBean implements
     }
 
     public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Edit Cancelled", ((Ciudad) event.getObject()).getCiudadNombre());
+        FacesMessage msg = new FacesMessage("Edicion Cancelada", ((Ciudad) event.getObject()).getCiudadNombre());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 

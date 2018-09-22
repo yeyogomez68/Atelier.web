@@ -54,20 +54,26 @@
                                 <h:outputText value="#{usuarios.usuarioApellido}" />
                             </p:column>
                             
-                            <p:column headerText="Email" filterBy="#{usuarios.usuarioEmail}" filterMatchMode="contains">
-                                <h:outputText value="#{usuarios.usuarioEmail}" />
-                            </p:column>                
-                           
-                            <p:column headerText="Estado" filterBy="#{usuarios.estadoId.estadoDescrip}" filterMatchMode="contains">
+                            <p:column headerText="Email" filterBy="#usuarios.usuarioEmail}" filterMatchMode="contains">
                                 <p:cellEditor>
-                                    <h:outputText value="#{usuarios.estadoId.estadoDescrip}" />
-                                    <f:facet name="output"><h:outputText value="#{usuarios.estadoId.estadoDescrip}" /></f:facet>
+                                    <h:outputText value="#{usuarios.usuarioEmail}" />
+                                    <f:facet name="output"><h:outputText value="#{usuarios.usuarioEmail}" /></f:facet>
                                     <f:facet name="input">
-                                        <p:selectOneMenu id="estado" value="#{usuarioManagedBean.estadoId}">                                            
-                                            <f:selectItems value="#{usuarioManagedBean.estados}" />
-                                        </p:selectOneMenu>
+                                        <p:inputText
+                                            id="modelInput" 
+                                            value="#{usuarios.usuarioEmail}"
+                                            required="true" 
+                                            requiredMessage="El Correo es obligatorio" 
+                                            validatorMessage="Formato de Correo Incorrecto"
+                                            maxlength="50">
+                                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                        </p:inputText>
                                     </f:facet>
                                 </p:cellEditor>                                
+                            </p:column> 
+                            
+                            <p:column headerText="Estado" filterBy="#{usuarios.estadoId.estadoDescrip}" filterMatchMode="contains">                                
+                                    <h:outputText value="#{usuarios.estadoId.estadoDescrip}" />                                    
                             </p:column>
                             
                             <!--Columna de evento editar-->

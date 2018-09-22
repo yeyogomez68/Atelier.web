@@ -12,6 +12,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
 
 /**
@@ -69,16 +70,22 @@ public class TallaManagedBean {
     }
     
     
-    public void crearTalla(){        
+    public void crearTalla(){ 
+        RequestContext req = RequestContext.getCurrentInstance();
         if(getDesTalla()!=null){
             if(!tallaEJB.getExisteTalla(desTalla)){
                 if(tallaEJB.setCrearTalla(desTalla)){
-                   msg = new FacesMessage("Mensaje", "Talla Creada Exitosamente");
+                    tallas.clear();
+                    getTallas();
+                    setDesTalla("");
+                    req.update(":form");
+                    req.execute("PF('dlg1').hide();");
+                   msg = new FacesMessage("Mensaje", "La Talla Creada Exitosamente");
                 }else{
                    msg = new FacesMessage("Error", "Error al crear la Talla");
                 }                 
             }else{
-                msg = new FacesMessage("Mensaje", "La Talla ya se encuentra registrada");
+                msg = new FacesMessage("Mensaje", "La Talla ya se encuentra registrado");
             }
         }else{
             msg = new FacesMessage("Error", "El nombre de la Talla es obligatorio");

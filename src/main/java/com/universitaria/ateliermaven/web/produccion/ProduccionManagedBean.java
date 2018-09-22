@@ -272,7 +272,7 @@ public class ProduccionManagedBean implements Serializable {
 
     public void crearProduccion() {
         String mensaje = "Se ha creado la produccion correctamente";
-        if (!produccionEJB.existeProduccion(Comunes.getFormat(produccionCrear.getProduccionDescripcion()))) {
+        if (!produccionEJB.getexisteProduccion(Comunes.getFormat(produccionCrear.getProduccionDescripcion()))) {
             RequestContext req = RequestContext.getCurrentInstance();
             produccionCrear.setProduccionDescripcion(Comunes.getFormat(produccionCrear.getProduccionDescripcion()));
             produccionCrear.setEstadoId("1");

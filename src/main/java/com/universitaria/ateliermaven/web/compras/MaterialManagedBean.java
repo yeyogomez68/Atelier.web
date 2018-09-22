@@ -61,7 +61,7 @@ public class MaterialManagedBean implements Serializable {
     public List<SelectItem> getMarcas() {
         if (marcas == null) {
             marcas = new ArrayList<>();
-            setMarcas(marcaEJB.getSelectItemMarca());
+            setMarcas(marcaEJB.getSelectItemMarcas());
 
         }
         return marcas;

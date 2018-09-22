@@ -57,7 +57,7 @@ public class DepartamentoManagedBean {
     }
 
     public List<Departamento> getDepartamentos() {
-        if (departamentos == null) {
+        if (departamentos == null || departamentos.isEmpty()){
             departamentos = new ArrayList<>();
             setDepartamentos(departamentoEJB.getDepartamentos());
         }
@@ -69,7 +69,7 @@ public class DepartamentoManagedBean {
     }
 
     public List<SelectItem> getPaises() {
-        if (paises == null) {
+        if (paises == null|| paises.isEmpty()){
             paises = new ArrayList<>();
             setPaises(paisEJB.getSelectItemPaises());
         }
@@ -96,21 +96,22 @@ public class DepartamentoManagedBean {
         this.departamentoCrear = departamentoCrear;
     }
 
+        
     public void onRowEdit(RowEditEvent event) {
         Departamento departamento = (Departamento) event.getObject();
-        if (!departamento.getDepartamentoNombre().equals("") && !departamentoEJB.existeDepartamento(Comunes.getFormat(departamento.getDepartamentoNombre()))) {
+        if (!departamento.getDepartamentoNombre().equals("") && !departamentoEJB.getexisteDepartamento(Comunes.getFormat(departamento.getDepartamentoNombre()))) {
             Comunes.mensaje((departamentoEJB.setModificarDepartamento(departamento, paisId) ? "Se ha modificado el departamento correctamente " : "Error modificando el departamento "), departamentoCrear.getDepartamentoNombre());
         }
 
     }
 
     public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Edit Cancelled", ((Departamento) event.getObject()).getDepartamentoNombre());
+        FacesMessage msg = new FacesMessage("Edicion Cancelada", ((Departamento) event.getObject()).getDepartamentoNombre());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void crearDepartamento() {
-        if (!departamentoEJB.existeDepartamento(Comunes.getFormat(departamentoCrear.getDepartamentoNombre()))) {
+        if (!departamentoEJB.getexisteDepartamento(Comunes.getFormat(departamentoCrear.getDepartamentoNombre()))) {
             departamentoCrear.setDepartamentoNombre(Comunes.getFormat(departamentoCrear.getDepartamentoNombre()));
             departamentoCrear.setPaisId(paisId);
             Comunes.mensaje((departamentoEJB.setCrearDepartamento(departamentoCrear) ? "Se ha creado el departamento correctamente" : "Error creando el departamento"), departamentoCrear.getDepartamentoNombre());

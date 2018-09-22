@@ -21,12 +21,17 @@ import org.primefaces.event.RowEditEvent;
  *
  * @author SoulHunter
  */
-public class PrendaTipoManagedBean implements Serializable {
+public class PrendaTipoManagedBean {
 
+    public PrendaTipoManagedBean() {
+    }
+    
     @EJB
     private PrendaTipoEJB prendaTipoEJB;
     private List<Prendatipo> prendaTipos;
     private String nombrePrendaTipo;
+    FacesMessage msg = null;
+
 
     public PrendaTipoEJB getPrendaTipoEJB() {
         return prendaTipoEJB;
@@ -37,7 +42,7 @@ public class PrendaTipoManagedBean implements Serializable {
     }
 
     public List<Prendatipo> getPrendaTipos() {
-        if (prendaTipos == null) {
+        if (prendaTipos == null|| prendaTipos.isEmpty()) {
             prendaTipos = new ArrayList<>();
             setPrendaTipos(prendaTipoEJB.getPrendatipos());
         }
@@ -57,27 +62,40 @@ public class PrendaTipoManagedBean implements Serializable {
     }
 
     public void onRowEdit(RowEditEvent event) {
-        Comunes.mensaje((prendaTipoEJB.setModificarPrendaTipo(((Prendatipo) event.getObject()).getPrendaTipoId().toString(), Comunes.getFormat(((Prendatipo) event.getObject()).getPrendaTipoDescripcion())) ? "Se ha modificado el tipo de prenda correctamente" : "Error modificando el tipo de prenda"), nombrePrendaTipo);
+        if(prendaTipoEJB.setModificarPrendaTipo(((Prendatipo) event.getObject()).getPrendaTipoId().toString(), ((Prendatipo) event.getObject()).getPrendaTipoDescripcion())){
+            msg = new FacesMessage("Mensaje", "Se modifico el Tipo de Prenda Exitosamente");
+        }else{
+            msg = new FacesMessage("Error", "Error a modificar el Tipo de Prenda");
+        }
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Edit Cancelled", ((Prendatipo) event.getObject()).getPrendaTipoDescripcion());
+        FacesMessage msg = new FacesMessage("Edicion Cancelada", ((Prendatipo) event.getObject()).getPrendaTipoDescripcion());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void crearPrendaTipo() {
         RequestContext req = RequestContext.getCurrentInstance();
-        if (!prendaTipoEJB.existePrendaTipo(nombrePrendaTipo)) {
-            Comunes.mensaje((prendaTipoEJB.setCrearTipoPrenda(nombrePrendaTipo) ? "Se ha creado el tipo de prenda correctamente" : "Error creando el tipo de prenda"), nombrePrendaTipo);
-            prendaTipos.clear();
-            setPrendaTipos(prendaTipoEJB.getPrendatipos());
-            nombrePrendaTipo = "";
-            req.update(":form");
-            req.execute("PF('dlg1').hide();");
-
-        } else {
-            Comunes.mensaje("El tipo de prenda ya se encuentra registrado", nombrePrendaTipo);
+        if(getNombrePrendaTipo()!=null){        
+           if (!prendaTipoEJB.existePrendaTipo(nombrePrendaTipo)) {
+               if(prendaTipoEJB.setCrearTipoPrenda(nombrePrendaTipo)){
+                    prendaTipos.clear();
+                    getPrendaTipos();
+                    setNombrePrendaTipo("");
+                    req.update(":form");
+                    req.execute("PF('dlg1').hide();");
+                   msg = new FacesMessage("Mensaje", "Tipo de Prenda Creado Exitosamente");
+                }else{
+                   msg = new FacesMessage("Error", "Error al crear el Tipo de Prenda ");
+                }                 
+            }else{
+                msg = new FacesMessage("Mensaje", "El Tipo de Prenda ya se encuentra registrado");
+            }
+        }else{
+            msg = new FacesMessage("Error", "El nombre del Tipo de Prenda es obligatorio");
         }
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
-}
+    
+  }
