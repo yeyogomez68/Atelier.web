@@ -5,17 +5,13 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-
     <ui:composition template="/WEB-INF/include/template.xhtml">
         <ui:define name="title">
             <h:outputText value="Atelier"></h:outputText>
         </ui:define>
-
         <ui:define name="body">
-
             <h:form id="form">  
                 <p:panel id="panelFiltros" header="Filtros de Tipos de Prendas" >
-
                 </p:panel> 
 
                 <!--                    <p:panel id="panelLista" header="Listado" >-->
@@ -56,16 +52,24 @@
                         <p:rowEditor />
                     </p:column>                            
                 </p:dataTable>
-                <!--</p:panel>--> 
-                <p:dialog header="Crear Tipo de prenda" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+            </h:form>
+            <p:dialog header="Crear Tipo de prenda" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                <h:form id="formCrea">
                     <div class="contentDialog">                    
                         <h:outputText value="Tipo de prenda "/>
-                        <p:inputText placeholder="Nombre de tipo de prenda" value="#{prendaTipoManagedBean.nombrePrendaTipo}" required="true"/>                                                       
+                        <p:inputText placeholder="Nombre de tipo de prenda" value="#{prendaTipoManagedBean.nombrePrendaTipo}" 
+                                     required="true" 
+                                     requiredMessage="El nombre es obligatorio" 
+                                     maxlength="60" 
+                                     validatorMessage="El nombre debe contener solo letras">
+                            <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                        </p:inputText>
                     </div>
-                    <p:commandButton value="Crear" action="#{prendaTipoManagedBean.crearPrendaTipo}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
+                    <p:commandButton value="Crear" action="#{prendaTipoManagedBean.crearPrendaTipo}" update="form,formCrea,universarGrowl"/>                            
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
-                </p:dialog>  
-            </h:form>
+                </h:form>
+            </p:dialog>  
+
         </ui:define>
     </ui:composition>
 </html>

@@ -14,6 +14,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
 
 /**
@@ -65,8 +66,15 @@ public class PrendaTipoManagedBean implements Serializable {
     }
 
     public void crearPrendaTipo() {
+        RequestContext req = RequestContext.getCurrentInstance();
         if (!prendaTipoEJB.existePrendaTipo(nombrePrendaTipo)) {
             Comunes.mensaje((prendaTipoEJB.setCrearTipoPrenda(nombrePrendaTipo) ? "Se ha creado el tipo de prenda correctamente" : "Error creando el tipo de prenda"), nombrePrendaTipo);
+            prendaTipos.clear();
+            setPrendaTipos(prendaTipoEJB.getPrendatipos());
+            nombrePrendaTipo = "";
+            req.update(":form");
+            req.execute("PF('dlg1').hide();");
+
         } else {
             Comunes.mensaje("El tipo de prenda ya se encuentra registrado", nombrePrendaTipo);
         }

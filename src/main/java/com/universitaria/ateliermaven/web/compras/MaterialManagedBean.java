@@ -124,7 +124,7 @@ public class MaterialManagedBean {
     public List<SelectItem> getMaterialTipo() {
         if (materialTipo == null) {
             materialTipo = new ArrayList<>();
-            setMaterialTipo(materialEJB.getSelectItemMaterial());
+            setMaterialTipo(materialTipoEJB.getSelectItemMaterialTipo());
         }
         return materialTipo;
     }

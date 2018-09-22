@@ -67,8 +67,6 @@
                                 </f:facet>
                             </p:cellEditor>                                
                         </p:column>
-
-
                         <p:column width="50">
                             <p:rowEditor />
                         </p:column>  
@@ -78,26 +76,26 @@
                 <p:dialog header="Crear Material" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
                     <div class="contentDialog">
                         <h:outputText value="Nombre: "/>
-                        <p:inputText placeholder="Nombre de material" value="#{prendaManagedBean.prendaCrear.prendaNombre}"/>
+                        <p:inputText placeholder="Nombre de material" value="#{materialManagedBean.materialUtil.nombre}"/>
 
                         <h:outputText value="Referencia: "/>
-                        <p:inputText placeholder="Referencia de material" value="#{prendaManagedBean.prendaCrear.prendaDescripcion}"/>
+                        <p:inputText placeholder="Referencia de material" value="#{materialManagedBean.materialUtil.referencia}"/>
 
                         <h:outputText value="Ubicacion: "/>
-                        <p:inputText placeholder="Ubicacion del material" value="#{prendaManagedBean.prendaCrear.ubicacion}"/>
+                        <p:inputText placeholder="Ubicacion del material" value="#{materialManagedBean.materialUtil.ubicacion}"/>
 
                         <h:outputText value="Marca: "/>
-                        <p:selectOneMenu id="materialC" value="#{prendaManagedBean.colorId}">                                            
-                            <f:selectItems value="#{prendaManagedBean.colores}" />
+                        <p:selectOneMenu id="materialC" value="#{materialManagedBean.marca}">                                            
+                            <f:selectItems value="#{materialManagedBean.marcas}" />
                         </p:selectOneMenu>
 
                         <h:outputText value="Tipo de material: "/>
-                        <p:selectOneMenu id="materialTipoC" value="#{prendaManagedBean.materialId}">                                            
-                            <f:selectItems value="#{prendaManagedBean.materiales}" />
+                        <p:selectOneMenu id="materialTipoC" value="#{materialManagedBean.materialTipoId}">                                            
+                            <f:selectItems value="#{materialManagedBean.materialTipo}" />
                         </p:selectOneMenu>
 
                     </div>      
-                    <p:commandButton value="Crear" action="#{prendaManagedBean.crearPrenda}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
+                    <p:commandButton value="Crear" action="#{materialManagedBean.crearMaterial}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/>                            
                 </p:dialog> 
 

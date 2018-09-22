@@ -106,43 +106,58 @@
                         </p:column>  
                     </p:dataTable>
                 </p:panel> 
-
-                <p:dialog  header="Crear Prenda"  style="position:absolute" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+            </h:form>
+            <p:dialog  header="Crear Prenda"  style="position:absolute" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                <h:form id="formCrea">
                     <div class="contentDialog">
-                        
-                            <h:outputText value="Nombre: "/>
-                            <p:inputText placeholder="Nombre de Prenda" value="#{prendaManagedBean.prendaCrear.prendaNombre}"/>
+                        <h:outputText value="Nombre: "/>
+                        <p:inputText placeholder="Nombre de Prenda" 
+                                     value="#{prendaManagedBean.prendaCrear.prendaNombre}"
+                                     required="true" 
+                                     requiredMessage="El nombre es obligatorio" 
+                                     maxlength="50"
+                                     validatorMessage="El campo nombre debe contener solo letras">
+                            <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                        </p:inputText>
 
-                            <h:outputText value="Descripcion: "/>
-                            <p:inputText placeholder="Descripcion de Prenda" value="#{prendaManagedBean.prendaCrear.prendaDescripcion}"/>
+                        <h:outputText value="Descripcion: "/>
+                        <p:inputText placeholder="Descripcion de Prenda" 
+                                     value="#{prendaManagedBean.prendaCrear.prendaDescripcion}"
+                                     required="true" 
+                                     requiredMessage="La descripcion de la prenda es obligatorio" 
+                                     maxlength="300"
+                                     validatorMessage="El campo descripcion debe contener solo letras">
+                            <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                        </p:inputText>
+                        <h:outputText value="Ubicacion: "/>
+                        <p:inputText placeholder="Ubicacion de la prenda" 
+                                     value="#{prendaManagedBean.prendaCrear.ubicacion}"
+                                     required="true" 
+                                     requiredMessage="La ubicacion de la prenda es obligatorio" 
+                                     maxlength="60"/>
 
-                            <h:outputText value="Ubicacion: "/>
-                            <p:inputText placeholder="Ubicacion de la prenda" value="#{prendaManagedBean.prendaCrear.ubicacion}"/>
-
-                            <h:outputText value="URL Imagen "/>
-                            <p:inputText placeholder="URL Imagen" value="#{prendaManagedBean.prendaCrear.URL}"/>
-
-
-                            <h:outputText value="Color: "/>
-                            <p:selectOneMenu id="tipoC" value="#{prendaManagedBean.colorId}">                                            
-                                <f:selectItems value="#{prendaManagedBean.colores}" />
-                            </p:selectOneMenu>
-
-                            <h:outputText value="Tipo de Prenda: "/>
-                            <p:selectOneMenu id="tipoPrendC" value="#{prendaManagedBean.prendaTipoId}">                                            
-                                <f:selectItems value="#{prendaManagedBean.prendasTipo}" />
-                            </p:selectOneMenu>
-
-                            <h:outputText value="Ocasion: "/>
-                            <p:selectOneMenu id="ocacionC" value="#{prendaManagedBean.ocasionId}">                                            
-                                <f:selectItems value="#{prendaManagedBean.ocasiones}" />
-                            </p:selectOneMenu>
-
-                            <h:outputText value="Talla: "/>
-                            <p:selectOneMenu id="tallaC" value="#{prendaManagedBean.tallaId}">                                            
-                                <f:selectItems value="#{prendaManagedBean.tallas}" />
-                            </p:selectOneMenu>
-                        
+                        <h:outputText value="URL Imagen "/>
+                        <p:inputText placeholder="URL Imagen" 
+                                     value="#{prendaManagedBean.prendaCrear.URL}"
+                                     required="true" 
+                                     requiredMessage="La ubicacion de la prenda es obligatorio" 
+                                     maxlength="200"/>
+                        <h:outputText value="Color: "/>
+                        <p:selectOneMenu id="tipoC" value="#{prendaManagedBean.colorId}">                                            
+                            <f:selectItems value="#{prendaManagedBean.colores}" />
+                        </p:selectOneMenu>
+                        <h:outputText value="Tipo de Prenda: "/>
+                        <p:selectOneMenu id="tipoPrendC" value="#{prendaManagedBean.prendaTipoId}">                                            
+                            <f:selectItems value="#{prendaManagedBean.prendasTipo}" />
+                        </p:selectOneMenu>
+                        <h:outputText value="Ocasion: "/>
+                        <p:selectOneMenu id="ocacionC" value="#{prendaManagedBean.ocasionId}">                                            
+                            <f:selectItems value="#{prendaManagedBean.ocasiones}" />
+                        </p:selectOneMenu>
+                        <h:outputText value="Talla: "/>
+                        <p:selectOneMenu id="tallaC" value="#{prendaManagedBean.tallaId}">                                            
+                            <f:selectItems value="#{prendaManagedBean.tallas}" />
+                        </p:selectOneMenu>
                     </div>
                     <p:pickList id="PojoPickList" value="#{prendaManagedBean.materialesSelect}" var="material" required="true" requiredMessage="Debe seleccionar minimo un material"
                                 itemValue="#{material}" itemLabel="#{material.nombre}" showSourceControls="false" showTargetControls="false" showCheckbox="true" responsive="true"
@@ -160,8 +175,9 @@
                     </p:pickList>
                     <p:commandButton value="Crear" action="#{prendaManagedBean.crearPrenda}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/>
-                </p:dialog> 
-            </h:form>
+                </h:form>
+            </p:dialog> 
+
         </ui:define>
     </ui:composition>
 </html>
