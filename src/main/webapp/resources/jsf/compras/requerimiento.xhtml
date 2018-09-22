@@ -58,12 +58,11 @@
                     </p:column>    
 
                     <p:column headerText="Editar">
-                        <p:commandLink value="Modificar" actionListener="#{requerimientoManagedBean.modificarRequerimiento(requeri.encabezadoRequerimientoId)}" update="dialogModificar"/> 
+                        <p:commandLink value="Modificar" actionListener="#{requerimientoManagedBean.modificarRequerimiento(requeri)}" update="dialogModificar" rendered="#{requeri.estadoId.estadoId==3}"/> 
+                        <p:commandLink value="Ver" actionListener="#{requerimientoManagedBean.verRequerimiento(requeri)}" update="dialogVerRq" rendered="#{requeri.estadoId.estadoId!=3}"/> 
                     </p:column> 
 
                 </p:dataTable>
-
-
             </h:form>
             <p:dialog id="dialogCrear" header="Crear Requerimiento" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
                 <h:form id="frmdialogCrear">
@@ -96,19 +95,15 @@
                 </h:form>
             </p:dialog> 
 
-            <p:dialog id="dialogModificar" header="Crear Requerimiento" widgetVar="dlg2" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
-                <h:form id="frmdialogModificar">
-                    <div class="contentDialog">                    
-                        <h:outputText value="Motivo o Detalle: "/>
-                        <p:inputText value="#{requerimientoManagedBean.desrequerimiento}" required="true" requiredMessage="El motivo es Obligatorio"/>                                                       
-                    </div>                          
+            <p:dialog id="dialogModificar" header="Modificar Requerimiento" widgetVar="dlg2" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+                <h:form id="frmdialogModificar">                      
                     <p:pickList id="PojoPickList" value="#{requerimientoManagedBean.listMaterialesRq}" var="material" required="true" requiredMessage="Debe Seleccionar minimo un Material"
                                 itemValue="#{material}" itemLabel="#{material.nombre}" showSourceControls="false" showTargetControls="false" showCheckbox="true" responsive="true"
                                 showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"  addLabel="+" removeLabel="-" converter="materialPickListConverter">
 
                         <f:facet name="sourceCaption">Material</f:facet>
                         <f:facet name="targetCaption">Agregado</f:facet>
-                        <p:ajax event="transfer" listener="#{requerimientoManagedBean.onTransfer}" update="dialogCantidad"/>                        
+                        <p:ajax event="transfer" listener="#{requerimientoManagedBean.onTransferEdit}" update="dialogCantidadMod"/>                        
                         <p:column>
                             <h:outputText value="#{material.nombre}" />
                         </p:column>
@@ -122,8 +117,8 @@
                             <h:outputText value="#{material.cantidad}" />
                         </p:column> 
                     </p:pickList>
-                    <p:commandButton value="Crear" action="#{requerimientoManagedBean.actualizarRequerimiento()}" update="form,frmdialogCrear,universarGrowl"/> 
-                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
+                    <p:commandButton value="Modificar" action="#{requerimientoManagedBean.actualizarRequerimiento()}" update="form,frmdialogCrear,universarGrowl"/> 
+                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg2').hide();"/> 
                 </h:form>
             </p:dialog>
             
@@ -134,6 +129,56 @@
                         <p:inputNumber value="#{requerimientoManagedBean.cantidad}" decimalPlaces="1" required="true" minValue="1" maxValue="1000" maxlength="10" requiredMessage="La cantidad es Obligatoria"/>                                                       
                     </div>                                              
                     <p:commandButton value="Agregar" action="#{requerimientoManagedBean.cantidades()}" update="universarGrowl,:frmdialogCrear:PojoPickList"/>                     
+                </h:form>
+            </p:dialog>
+            <p:dialog id="dialogCantidadMod" header="Cantidad" widgetVar="dlg4" closable="false" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+                <h:form>
+                    <div class="contentDialog">                                                      
+                        <h:outputText value="Cantidad: "/>
+                        <p:inputNumber value="#{requerimientoManagedBean.cantidad}" decimalPlaces="1" required="true" minValue="1" maxValue="1000" maxlength="10" requiredMessage="La cantidad es Obligatoria"/>                                                       
+                    </div>                                              
+                    <p:commandButton value="Agregar" action="#{requerimientoManagedBean.cantidadesEdit()}" update="universarGrowl,:frmdialogModificar:PojoPickList"/>                     
+                </h:form>
+            </p:dialog>
+            
+            <p:dialog id="dialogVerRq" header="Items de Requerimiento" widgetVar="dlg5" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                <h:form id="frmdialogVerRq">                      
+                    <p:dataTable id="tabla" var="detaRq" value="#{requerimientoManagedBean.listaItemRq}" editable="true" widgetVar="tablaDetaRequeri"
+                                 paginator="true"
+                                 rowsPerPageTemplate="5,10,15"                                     
+                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                                 emptyMessage="No se han encontrado resultados"
+                                 rows="10">
+
+                        <f:facet name="header">
+                            <div class="headerTableAndCreateBtn">                                
+                                <h4>Items de Requerimientos</h4>  
+                                <div class="globalFilterDiv">
+                                    <img class="filtroLupa"/>
+                                    <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaDetaRequeri').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                </div>                                                                                                    
+                            </div>
+                        </f:facet>
+                        <!--Eventos de tabla editable-->                      
+
+                        <p:column headerText="Material" filterBy="#{detaRq.materialId.materialNombre}" filterMatchMode="contains">
+                            <h:outputText value="#{detaRq.materialId.materialNombre}" />
+                        </p:column>
+
+                        <p:column headerText="Fecha" filterBy="#{detaRq.requestDetaFecha}" filterMatchMode="contains">
+                            <h:outputText value="#{detaRq.requestDetaFecha}" />
+                        </p:column>
+
+                        <p:column headerText="Cantidad" filterBy="#{detaRq.requestDetaCantidad}" filterMatchMode="contains">
+                            <h:outputText value="#{detaRq.requestDetaCantidad}" />
+                        </p:column>    
+
+                        <p:column headerText="Estado" filterBy="#{detaRq.estadoId.estadoDescrip}" filterMatchMode="contains">
+                            <h:outputText value="#{detaRq.estadoId.estadoDescrip}" />
+                        </p:column>                          
+                    </p:dataTable>
+                    
+                    <p:commandButton class="btnCancelar" value="Cerrar" onclick="PF('dlg5').hide();"/> 
                 </h:form>
             </p:dialog>
         </ui:define>

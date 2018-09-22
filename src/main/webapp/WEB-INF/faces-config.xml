@@ -152,8 +152,33 @@
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
-        <managed-bean-name>cargoManagedBean</managed-bean-name>
-        <managed-bean-class>com.universitaria.ateliermaven.web.administrador.CargoManagedBean</managed-bean-class>
-    
-        <managed-bean-scope>view</managed-bean-scope></managed-bean>
+        <managed-bean-name>autorizacionManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.compras.AutorizacionManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ordenCompraBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.compras.OrdenCompraBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>stockPrendaManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.inventario.StockPrendaManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>stockMaterialesManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.inventario.StockMaterialesManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>detallePrendaManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.produccion.DetallePrendaManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>alquilerManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.alquilerventa.AlquilerManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
 </faces-config>

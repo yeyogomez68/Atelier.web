@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+
+    <ui:composition template="./../../../WEB-INF/include/template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Autorización"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="form">
+
+                <p:panel id="panelFiltros" header="Autorizaciones" >                        
+                </p:panel>                      
+
+                <p:dataTable id="tabla" var="requeri" value="#{autorizacionManagedBean.listaRequerimientos}" editable="true" widgetVar="tablaRequeri"
+                             paginator="true"
+                             rowsPerPageTemplate="5,10,15"                                     
+                             paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                             emptyMessage="No se han encontrado resultados"
+                             rows="10">
+
+                    <f:facet name="header">
+                        <div class="headerTableAndCreateBtn">                            
+                            <h4>Listado de Requerimientos</h4>  
+                            <div class="globalFilterDiv">
+                                <img class="filtroLupa"/>
+                                <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaRequeri').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                            </div>                                                                                                    
+                        </div>
+                    </f:facet>
+                    <p:column headerText="Id" filterBy="#{requeri.encabezadoRequerimientoId}" filterMatchMode="contains">
+                        <h:outputText value="#{requeri.encabezadoRequerimientoId}" />
+                    </p:column>
+
+                    <p:column headerText="Detalle" filterBy="#{requeri.encabezadoRequerimientoDeta}" filterMatchMode="contains">
+                        <h:outputText value="#{requeri.encabezadoRequerimientoDeta}" />
+                    </p:column>
+
+                    <p:column headerText="Usuario" filterBy="#{requeri.usuarioId.usuarioNombre}" filterMatchMode="contains">
+                        <h:outputText value="#{requeri.usuarioId.usuarioNombre}" />
+                    </p:column>
+
+                    <p:column headerText="Estado" filterBy="#{requeri.estadoId.estadoDescrip}" filterMatchMode="contains">
+                        <h:outputText value="#{requeri.estadoId.estadoDescrip}" />
+                    </p:column>    
+
+                    <p:column headerText="Ver">
+                        <p:commandLink value="Ver" actionListener="#{autorizacionManagedBean.verRequerimiento(requeri)}" update="dialogAprob"/> 
+                    </p:column> 
+
+                </p:dataTable>
+            </h:form>
+            <p:dialog id="dialogAprob" header="Aprobación de Items de Requerimiento" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                <h:form id="frmdialogAprob">                      
+                    <p:dataTable id="tabla" var="detaRq" value="#{autorizacionManagedBean.listaItemRq}" editable="true" widgetVar="tablaDetaRequeri"
+                                 paginator="true"
+                                 rowsPerPageTemplate="5,10,15"                                     
+                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                                 emptyMessage="No se han encontrado resultados"
+                                 rows="10">
+
+                        <f:facet name="header">
+                            <div class="headerTableAndCreateBtn">                                
+                                <h4>Items de Requerimientos</h4>  
+                                <div class="globalFilterDiv">
+                                    <img class="filtroLupa"/>
+                                    <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaDetaRequeri').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                </div>                                                                                                    
+                            </div>
+                        </f:facet>
+                        <!--Eventos de tabla editable-->                      
+
+                        <p:column headerText="Material" filterBy="#{detaRq.materialId.materialNombre}" filterMatchMode="contains">
+                            <h:outputText value="#{detaRq.materialId.materialNombre}" />
+                        </p:column>
+
+                        <p:column headerText="Fecha" filterBy="#{detaRq.requestDetaFecha}" filterMatchMode="contains">
+                            <h:outputText value="#{detaRq.requestDetaFecha}" />
+                        </p:column>
+
+                        <p:column headerText="Cantidad" filterBy="#{detaRq.requestDetaCantidad}" filterMatchMode="contains">
+                            <h:outputText value="#{detaRq.requestDetaCantidad}" />
+                        </p:column>    
+
+                        <p:column headerText="Estado" filterBy="#{detaRq.estadoId.estadoDescrip}" filterMatchMode="contains">
+                            <h:outputText value="#{detaRq.estadoId.estadoDescrip}" />
+                        </p:column>   
+                        
+                        <p:column headerText="Acción" >
+                            <p:commandLink value="Aprobar" actionListener="#{autorizacionManagedBean.aprobarItemRequerimiento(detaRq)}" update="frmdialogAprob,form" rendered="#{detaRq.estadoId.estadoId==3}"/> 
+                            <br></br>
+                            <p:commandLink value="Rechazar" actionListener="#{autorizacionManagedBean.rechazarItemRequerimiento(detaRq)}" update="frmdialogAprob,form" rendered="#{detaRq.estadoId.estadoId==3}"/> 
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton value="Aprobar Todo" action="#{autorizacionManagedBean.aprobarRequerimiento()}" update="dialogAprob,form,dialogAprob,universarGrowl" rendered="#{autorizacionManagedBean.editable}"/> 
+                    <p:commandButton value="Rechazar Todo" action="#{autorizacionManagedBean.rechazarRequerimiento()}" update="dialogAprob,form,dialogAprob,universarGrowl" rendered="#{autorizacionManagedBean.editable}"/> 
+                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
+                </h:form>
+            </p:dialog>
+        </ui:define>
+
+    </ui:composition>
+
+
+</html>

@@ -10,120 +10,97 @@
         <ui:define name="title">
             <h:outputText value="Atelier - Materiales"></h:outputText>
         </ui:define>
-        
+
         <ui:define name="body">
-            
-                <h:form id="form">  
-                    <p:panel id="panelFiltros" header="Filtro de Materiales" >
-                        
-                    </p:panel> 
-                       <!--                    <p:panel id="panelLista" header="Listado" >-->
-                        <p:dataTable var="material" value="#{materialManagedBean.materiales}" editable="true" widgetVar="tablaMateriales"
-                                     paginator="true"
-                                     rowsPerPageTemplate="5,10,15"                                     
-                                     paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
-                                     emptyMessage="No se han encontrado resultados"
-                                     rows="10">
-                            
-                            <f:facet name="header">
-                                <div class="headerTableAndCreateBtn">
-                                    <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                                    <h4>Listado de Materiales</h4>  
-                                    <div class="globalFilterDiv">
-                                        <img class="filtroLupa"/>
-                                        <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaMateriales').filter()" style="" placeholder="Filtro de Busqueda"/>        
-                                    </div>                                                                                                    
-                                </div>
-                            </f:facet>
-                            
-                            <!--Eventos de tabla editable-->
-                            <p:ajax event="rowEdit" listener="#{materialManagedBean.onRowEdit}" update=":universarGrowl" />
-                            <p:ajax event="rowEditCancel" listener="#{materialManagedBean.onRowCancel}" update=":universarGrowl" />
-                            
-                            <p:column headerText="Id" filterBy="#{material.materialId}" filterMatchMode="contains">
-                                <h:outputText value="#{material.materialId}" />
-                            </p:column>
-                            
-                            <p:column headerText="Material Nombre" filterBy="#{material.materialNombre}" filterMatchMode="contains">
-                               <p:cellEditor> 
-                                <h:outputText value="#{material.materialNombre}" />
-                                <f:facet name="output"><h:outputText value="#{material.materialNombre}" /></f:facet>
-                                <f:facet name="input">
-                                        <p:inputText
-                                            value="#{material.materialNombre}"
-                                            maxlength="20"
-                                            required="true" 
-                                            requiredMessage="La Nombre del Material es obligatoria" 
-                                            validatorMessage="El Nombre del Material debe contener solo letras">
-                                            <f:validateRegex pattern="^[a-zA-Z ]*$" />
-                                        </p:inputText>
-                                    </f:facet>
-                                </p:cellEditor> 
-                            </p:column>
-                            
-                                                                                                              
-                            <p:column headerText="Referencia" filterBy="#{material.materialReference}" filterMatchMode="contains">
-                                <p:cellEditor> 
-                                <h:outputText value="#{material.materialReference}" />
-                                <f:facet name="output"><h:outputText value="#{material.materialReference}" /></f:facet>
-                                <f:facet name="input">
-                                        <p:inputText
-                                            value="#{material.materialReference}"
-                                            maxlength="50"
-                                            required="true" 
-                                            requiredMessage="La Referencia es obligatorio" 
-                                            validatorMessage="El Apellido debe contener letras y/o numeros">
-                                            <f:validateRegex pattern="^[A-Za-z0-9 ]*$" />
-                                        </p:inputText>
-                                    </f:facet>
-                                </p:cellEditor>                                
-                            </p:column>
-                                                        
-                            <!--Columna de evento editar-->
-                            <p:column width="50">
-                                <p:rowEditor />
-                            </p:column>                            
-                        </p:dataTable>
-                </h:form>   
-                    <!--</p:panel>--> 
-                    <p:dialog header="Crear Material" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
-                        <h:form id="formCrea">
-                        <div class="contentDialog">                    
-                            <h:outputText value="Nombre Material: "/>
-                            <p:inputText placeholder="Nombre" value="#{materialManagedBean.materialCrear.nombre}"
-                                         maxlength="10" 
-                                         required="true" 
-                                         requiredMessage="El Nombre de Material es obligatoria" 
-                                         validatorMessage="El Campo Nombre debe contener solo letras">
-                                <f:validateRegex pattern="^[a-zA-Z ]*$" />
-                            </p:inputText>                
-                            
-                            
-                            <h:outputText value="Referencia Material: "/>
-                            <p:inputText placeholder="Referencia" value="#{materialManagedBean.materialCrear.referencia}"
-                                         maxlength="10" 
-                                         required="true" 
-                                         requiredMessage="La Referencia es obligatoria" 
-                                         validatorMessage="El Campo Referencia debe contener letras y/o numeros">
-                                <f:validateRegex pattern="^[A-Za-z0-9 ]*$" />
-                            </p:inputText>   
-                                                       
-                            <!--<h:outputText value="Marca: "/>
-                            <p:selectOneMenu id="marca" value="#{materialManagedBean.marcaId}">                                            
-                                <f:selectItems value="#{materialManagedBean.marcas}" />
-                            </p:selectOneMenu>
-                            
-                            <h:outputText value="Tipo Material: "/>
-                            <p:selectOneMenu id="Tipo" value="#{materialManagedBean.materialTipoId}">                                            
-                                <f:selectItems value="#{materialManagedBean.materialTipos}" />
-                            </p:selectOneMenu>-->
+
+            <h:form id="form">   
+                <p:panel id="panelLista" header="Listado" >
+                    <p:dataTable var="materiales" value="#{materialManagedBean.materiales}" editable="true" widgetVar="tablaMateriales"
+                                 paginator="true"
+                                 rowsPerPageTemplate="5,10,15"                                     
+                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                                 emptyMessage="No se han encontrado resultados"
+                                 rows="10">
+
+                        <f:facet name="header">
+                            <div class="headerTableAndCreateBtn">
+                                <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
+                                <h4>Lista de Materiales</h4>  
+                                <div class="globalFilterDiv">
+                                    <img class="filtroLupa"/>
+                                    <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaMateriales').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                </div>                                                                                                    
                             </div>
-                            
-                            <p:commandButton value="Crear" action="#{materialManagedBean.crearMaterial()}" update="form,formCrea,universarGrowl"/>                         
-                        <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
-                    </h:form>
-                   </p:dialog>  
-              </ui:define>
-        
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{materialManagedBean.onRowEdit}" update=":universarGrowl" />
+                        <p:ajax event="rowEditCancel" listener="#{prendaManagedBean.onRowCancel}" update=":universarGrowl" />                          
+
+                        <p:column headerText="Nombre" filterBy="#{materiales.materialNombre}" filterMatchMode="contains">
+                            <p:cellEditor>
+                                <h:outputText value="#{materiales.materialNombre}" />
+                                <f:facet name="output"><h:outputText value="#{materiales.materialNombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="modelInputNombre" value="#{materiales.materialNombre}"/></f:facet>
+                            </p:cellEditor>                                
+                        </p:column>
+
+                        <p:column headerText="Referencia" filterBy="#{materiales.materialReference}" filterMatchMode="contains">
+                            <p:cellEditor>
+                                <h:outputText value="#{materiales.materialReference}" />
+                                <f:facet name="output"><h:outputText value="#{materiales.materialReference}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="modelInputDescripcion" value="#{materiales.materialReference}"/></f:facet>
+                            </p:cellEditor>                                
+                        </p:column>
+
+                        <p:column headerText="Marca" filterBy="#{materiales.marcaId.marcaNombre }" filterMatchMode="contains">
+                            <h:outputText value="#{materiales.marcaId.marcaNombre}" />
+                        </p:column>
+
+                        <p:column headerText="Tipo de material" filterBy="#{materiales.materialTipoId.materialTipoDescript}" filterMatchMode="contains">
+                            <p:cellEditor>
+                                <h:outputText value="#{materiales.materialTipoId.materialTipoDescript}" />
+                                <f:facet name="output"><h:outputText value="#{materiales.materialTipoId.materialTipoDescript}" /></f:facet>
+                                <f:facet name="input">
+                                    <p:selectOneMenu id="TipodePrenda" value="#{materialManagedBean.materialTipoId}">                                            
+                                        <f:selectItems value="#{materialManagedBean.materialTipo}" />
+                                    </p:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor>                                
+                        </p:column>
+                        <p:column width="50">
+                            <p:rowEditor />
+                        </p:column>  
+                    </p:dataTable>
+                </p:panel> 
+
+                <p:dialog header="Crear Material" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                    <div class="contentDialog">
+                        <h:outputText value="Nombre: "/>
+                        <p:inputText placeholder="Nombre de material" value="#{materialManagedBean.materialUtil.nombre}"/>
+
+                        <h:outputText value="Referencia: "/>
+                        <p:inputText placeholder="Referencia de material" value="#{materialManagedBean.materialUtil.referencia}"/>
+
+                        <h:outputText value="Ubicacion: "/>
+                        <p:inputText placeholder="Ubicacion del material" value="#{materialManagedBean.materialUtil.ubicacion}"/>
+
+                        <h:outputText value="Marca: "/>
+                        <p:selectOneMenu id="materialC" value="#{materialManagedBean.marca}">                                            
+                            <f:selectItems value="#{materialManagedBean.marcas}" />
+                        </p:selectOneMenu>
+
+                        <h:outputText value="Tipo de material: "/>
+                        <p:selectOneMenu id="materialTipoC" value="#{materialManagedBean.materialTipoId}">                                            
+                            <f:selectItems value="#{materialManagedBean.materialTipo}" />
+                        </p:selectOneMenu>
+
+                    </div>      
+                    <p:commandButton value="Crear" action="#{materialManagedBean.crearMaterial}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
+                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/>                            
+                </p:dialog> 
+
+            </h:form>
+
+        </ui:define>
     </ui:composition>
 </html>

@@ -164,9 +164,9 @@ public class UsuarioManagedBean implements Serializable{
     public void crearUsuario(){
         FacesMessage msg;
         RequestContext req = RequestContext.getCurrentInstance();
-        //usuarioCrear.setEstadoId("1");
-        //usuarioCrear.setCiudadId(ciudadId);
-        //usuarioCrear.setRollId(rollId);
+        usuarioCrear.setEstadoId("1");
+        usuarioCrear.setCiudadId(ciudadId);
+        usuarioCrear.setRollId(rollId);
         if(usuarioEJB.setCrearUsuario(usuarioCrear)){
             msg = new FacesMessage("Mensaje", "Usuario Creado con exito"); 
             usuarios.clear();
