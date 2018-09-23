@@ -63,7 +63,7 @@
                     </p:column>  
 
                     <p:column headerText="Acción">                        
-                        <p:commandLink value="Ver" actionListener="#{ordenCompraBean.verOrdenCompra(ordenCom)}" update="dialogCantidadMod"/> 
+                        <p:commandLink value="Ver" actionListener="#{ordenCompraBean.verOrdenCompra(ordenCom)}" update="dialogVerRq"/> 
                     </p:column> 
 
                 </p:dataTable>
@@ -144,7 +144,7 @@
 
                         <f:facet name="header">
                             <div class="headerTableAndCreateBtn">                                
-                                <h4>Items de Requerimientos</h4>  
+                                <h4>Items de Orden de Compra</h4>  
                                 <div class="globalFilterDiv">
                                     <img class="filtroLupa"/>
                                     <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaDetaOc').filter()" style="" placeholder="Filtro de Busqueda"/>        

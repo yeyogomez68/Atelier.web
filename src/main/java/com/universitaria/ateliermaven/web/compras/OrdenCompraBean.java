@@ -162,6 +162,7 @@ public class OrdenCompraBean implements Serializable {
     public void verOrdenCompra(Ordencompra orCompra) {
         RequestContext req = RequestContext.getCurrentInstance();
         idOc = orCompra.getOrdenCompraId();
+        llenarDetalleOc();
         req.execute("PF('dlg2').show();");
     }
     

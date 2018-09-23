@@ -618,3 +618,9 @@ aside{
 #dialogAprob, #dialogVerRq{
     max-width: 800px;
 }
+.ui-slider-horizontal{
+    background-color: black;
+}
+.ui-slider-horizontal .ui-slider-handle{
+    background-color: white;
+}
