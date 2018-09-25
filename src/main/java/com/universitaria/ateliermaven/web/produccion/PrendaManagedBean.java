@@ -25,6 +25,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
@@ -84,6 +85,7 @@ public class PrendaManagedBean implements Serializable {
     private String tallaId;
     private String ocasionId;
     private String estadoId;
+    private String cantidad;
 
     private MaterialRequerimientoUtil material;
 
@@ -291,6 +293,14 @@ public class PrendaManagedBean implements Serializable {
         this.estadoId = estadoId;
     }
 
+    public String getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(String cantidad) {
+        this.cantidad = cantidad;
+    }
+
     public DualListModel<MaterialRequerimientoUtil> getMaterialesSelect() {
 
         if (materialesSelect == null || (materialesSelect.getSource().isEmpty() && materialesSelect.getTarget().isEmpty())) {
@@ -343,8 +353,7 @@ public class PrendaManagedBean implements Serializable {
             if (prendaEJB.setCrearPrenda(prendaCrear)) {
                 Prenda p = prendaEJB.traerPrendaNombre(prendaCrear.getPrendaNombre());
                 for (MaterialRequerimientoUtil mru : materialesSelect.getTarget()) {
-
-                    if (!detallePrendaEJB.setCrearDetallePrenda(mru.getMaterialId(), String.valueOf(p.getPrendaId()))) {
+                    if (!detallePrendaEJB.setCrearDetallePrenda(mru.getMaterialId(), String.valueOf(p.getPrendaId()), mru.getCantidad())) {
                         mensaje = "Se ha creado la prenda, verifique los detalles de la prenda ";
                     }
                 }
@@ -363,8 +372,30 @@ public class PrendaManagedBean implements Serializable {
             material.setMaterialId(((MaterialRequerimientoUtil) item).getMaterialId());
             material.setReferencia(((MaterialRequerimientoUtil) item).getReferencia());
             material.setMarcaId(((MaterialRequerimientoUtil) item).getMarcaId());
-            material.setCantidad("0.0");
+            material.setCantidad("0");
         }
+
+        for (MaterialRequerimientoUtil listaPrendas : materialesSelect.getTarget()) {
+            if (listaPrendas.getMaterialId() == null ? listaPrendas.getMaterialId() == null : listaPrendas.getMaterialId().equals(material.getMaterialId())) {
+                setCantidad("0");
+                RequestContext req = RequestContext.getCurrentInstance();
+                req.execute("PF('dlg2').show();");
+                break;
+            }
+        }
+
+    }
+
+    public void cantidades() {
+        for (MaterialRequerimientoUtil listaMateriales : materialesSelect.getTarget()) {
+            if (listaMateriales.getMaterialId() == null ? material.getMaterialId() == null : listaMateriales.getMaterialId().equals(material.getMaterialId())) {
+                listaMateriales.setCantidad(cantidad.toString());
+                break;
+            }
+        }
+        setCantidad("0");
+        RequestContext req = RequestContext.getCurrentInstance();
+        req.execute("PF('dlg2').hide();");
     }
 
 }

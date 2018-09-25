@@ -14,7 +14,7 @@
         <ui:define name="body">
 
             <h:form id="form">  
-                <p:panel id="panelFiltros" header="Filtros de Detalle de prenda" >
+                <p:panel id="panelFiltros" header="Detalle de prenda" >
 
                 </p:panel> 
                 <!--                    <p:panel id="panelLista" header="Listado" >-->
@@ -27,7 +27,7 @@
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
                             <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                            <h4>Listado de detalles de produccion</h4>  
+                            <h4>Listado de detalles de prenda</h4>  
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
                                 <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaProduccionDetalles').filter()" style="" placeholder="Filtro de Busqueda"/>        
@@ -41,15 +41,30 @@
                     <p:column headerText="Material" filterBy="#{prendaDetalles.materialId.materialNombre}" filterMatchMode="contains">
                         <h:outputText value="#{prendaDetalles.materialId.materialNombre}" />
                     </p:column>
+                    <p:column headerText="cantidad" filterBy="#{prendaDetalles.cantidad}" filterMatchMode="contains">
+                        <h:outputText value="#{prendaDetalles.cantidad}" />
+                    </p:column>
                     <p:column headerText="Acción" >
-                        <p:commandLink value="Eliminar" actionListener="#{detallePrendaManagedBean.eliminarDetallePrenda(prendaDetalles)}" update="form" /> 
+                        <p:commandLink value="Eliminar" actionListener="#{detallePrendaManagedBean.eliminarDetallePrenda(prendaDetalles)}" update="form,universarGrowl" /> 
                     </p:column>
                 </p:dataTable>
                 <!--</p:panel>--> 
-                <p:dialog header="Crear Nuevo Detalle" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
-                    <div class="contentDialog">                    
+            </h:form>
+
+            <p:dialog header="Crear Nuevo Detalle" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                <h:form id="dialogCrear"> 
+                    <div class="contentDialog">
+                        <h:outputText value="Cantidad: "/>
+                        <p:inputText placeholder="0" 
+                                     value="#{detallePrendaManagedBean.cantidad}" 
+                                     maxlength="10" 
+                                     required="true" 
+                                     requiredMessage="La cantidad es obligatoria" 
+                                     validatorMessage="La cantidad debe contener numerica">
+                            <f:validateRegex pattern="^\d+(\.\d{1,2})?$" />
+                        </p:inputText>
                         <h:outputText value="Prenda: "/>
-                        <p:selectOneMenu id="UsuarioAsignado" value="#{detallePrendaManagedBean.idPrenda}">                                            
+                        <p:selectOneMenu id="prenda" value="#{detallePrendaManagedBean.idPrenda}">                                            
                             <f:selectItems value="#{detallePrendaManagedBean.prendas}" />
                         </p:selectOneMenu>
                         <h:outputText value="Material: "/>
@@ -57,10 +72,11 @@
                             <f:selectItems value="#{detallePrendaManagedBean.materiales}" />
                         </p:selectOneMenu>
                     </div>
-                    <p:commandButton value="Crear" action="#{detallePrendaManagedBean.crearDetallePrenda}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>                            
+                    <p:commandButton value="Crear" action="#{detallePrendaManagedBean.crearDetallePrenda}" update="dialogCrear,universarGrowl" onclick="PF('dlg1').hide();"/>                            
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
-                </p:dialog>  
-            </h:form>
+                </h:form>
+            </p:dialog>  
+
         </ui:define>
     </ui:composition>
 </html>

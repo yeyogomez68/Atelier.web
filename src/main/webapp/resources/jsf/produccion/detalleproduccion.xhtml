@@ -49,25 +49,14 @@
                     </p:column>
 
                     <p:column headerText="Cantidad" filterBy="#{produccionDetalles.produccionDetaCant}" filterMatchMode="contains">
-
-                        <p:cellEditor>
-                            <h:outputText value="#{produccionDetalles.produccionDetaCant}" />
-                            <f:facet name="output"><h:outputText value="#{produccionDetalles.produccionDetaCant}" /></f:facet>
-                            <f:facet name="input"><p:inputText id="modelInput" value="#{produccionDetalles.produccionDetaCant}"/></f:facet>
-                        </p:cellEditor>    
-
-
+                        <h:outputText value="#{produccionDetalles.produccionDetaCant}" />
                     </p:column>
-
-
 
                     <p:column headerText="Fecha" filterBy="#{produccionDetalles.produccionDetaFecha}" filterMatchMode="contains">
                         <h:outputText value="#{produccionDetalles.produccionDetaFecha}" />
                     </p:column>
 
                     <p:column headerText="Usuario" filterBy="#{produccionDetalles.usuarioAsignado.usuarioNombre}" filterMatchMode="contains">
-
-
                         <p:cellEditor>
                             <h:outputText value="#{produccionDetalles.usuarioAsignado.usuarioNombre}" />
                             <f:facet name="output"><h:outputText value="#{produccionDetalles.usuarioAsignado.usuarioNombre}" /></f:facet>
@@ -100,22 +89,18 @@
                 <!--</p:panel>--> 
                 <p:dialog header="Crear Nuevo Detalle" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
                     <div class="contentDialog">                    
-
                         <h:outputText value="Cantidad: "/>
                         <p:inputText placeholder="Cantidad" value="#{detalleProduccionMaganedBean.detalleProduccionCrear.produccionDetaCant}"/>  
-
                         <h:outputText  value="Fecha:" />
                         <p:calendar id="popup" value="#{detalleProduccionMaganedBean.detalleProduccionCrear.produccionDetaFecha}" />
                         <h:outputText value="Material: "/>
                         <p:selectOneMenu id="material" value="#{detalleProduccionMaganedBean.materialId}">                                            
                             <f:selectItems value="#{detalleProduccionMaganedBean.materiales}" />
                         </p:selectOneMenu>
-                        
-                         <h:outputText value="Usuario Asignado: "/>
+                        <h:outputText value="Usuario Asignado: "/>
                         <p:selectOneMenu id="UsuarioAsignado" value="#{detalleProduccionMaganedBean.usuarioId}">                                            
                             <f:selectItems value="#{detalleProduccionMaganedBean.usuarios}" />
                         </p:selectOneMenu>
-                        
                         <h:outputText value="Produccion: "/>
                         <p:selectOneMenu id="produccion" value="#{detalleProduccionMaganedBean.produccionId}">                                            
                             <f:selectItems value="#{detalleProduccionMaganedBean.producciones}" />

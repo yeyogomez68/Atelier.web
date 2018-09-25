@@ -5,6 +5,7 @@
  */
 package com.universitaria.ateliermaven.web.produccion;
 
+import com.universitaria.atelier.web.jpa.Prendamaterial;
 import com.universitaria.atelier.web.jpa.Produccion;
 
 import com.universitaria.atelier.web.jpa.Usuario;
@@ -16,6 +17,7 @@ import com.universitaria.ateliermaven.ejb.UsuarioEJB;
 import com.universitaria.ateliermaven.ejb.administrador.EstadoEJB;
 import com.universitaria.ateliermaven.ejb.compras.MaterialEJB;
 import com.universitaria.ateliermaven.ejb.inventario.StockMaterialesEJB;
+import com.universitaria.ateliermaven.ejb.produccion.DetallePrendaEJB;
 import com.universitaria.ateliermaven.ejb.produccion.DetalleProduccionEJB;
 import com.universitaria.ateliermaven.ejb.produccion.PrendasEJB;
 
@@ -57,14 +59,14 @@ public class ProduccionManagedBean implements Serializable {
     private PrendasEJB prendasEJB;
     @EJB
     private StockMaterialesEJB stockMaterialesEJB;
+    @EJB
+    private DetallePrendaEJB detallePrendaEJB;
 
     private List<Produccion> producciones;
 
     private List<SelectItem> estados;
     private List<SelectItem> usuarios;
     private List<SelectItem> prendas;
-
-    private DualListModel<MaterialRequerimientoUtil> materialesSelect;
 
     private String estadoId;
     private String usuarioId;
@@ -106,6 +108,14 @@ public class ProduccionManagedBean implements Serializable {
         this.stockMaterialesEJB = stockMaterialesEJB;
     }
 
+    public DetallePrendaEJB getDetallePrendaEJB() {
+        return detallePrendaEJB;
+    }
+
+    public void setDetallePrendaEJB(DetallePrendaEJB detallePrendaEJB) {
+        this.detallePrendaEJB = detallePrendaEJB;
+    }
+
     public EstadoEJB getEstadoEJB() {
         return estadoEJB;
     }
@@ -125,6 +135,7 @@ public class ProduccionManagedBean implements Serializable {
     public List<Produccion> getProducciones() {
         if (producciones == null) {
             producciones = new ArrayList<>();
+
             setProducciones(produccionEJB.getProduccion());
         }
         return producciones;
@@ -226,21 +237,6 @@ public class ProduccionManagedBean implements Serializable {
         this.produccionCrear = produccionCrear;
     }
 
-    public DualListModel<MaterialRequerimientoUtil> getMaterialesSelect() {
-
-        if (materialesSelect == null || (materialesSelect.getSource().isEmpty() && materialesSelect.getTarget().isEmpty())) {
-            List<MaterialRequerimientoUtil> source = new ArrayList<>();
-            List<MaterialRequerimientoUtil> target = new ArrayList<>();
-            source = materialesEJB.getMaterialesRequerimiento();
-            setMaterialesSelect(new DualListModel<MaterialRequerimientoUtil>(source, target));
-        }
-        return materialesSelect;
-    }
-
-    public void setMaterialesSelect(DualListModel<MaterialRequerimientoUtil> materialesSelect) {
-        this.materialesSelect = materialesSelect;
-    }
-
     public MaterialRequerimientoUtil getPrenda() {
         return material;
     }
@@ -271,7 +267,6 @@ public class ProduccionManagedBean implements Serializable {
     }
 
     public void crearProduccion() {
-        String mensaje = "Se ha creado la produccion correctamente";
         if (!produccionEJB.getexisteProduccion(Comunes.getFormat(produccionCrear.getProduccionDescripcion()))) {
             RequestContext req = RequestContext.getCurrentInstance();
             produccionCrear.setProduccionDescripcion(Comunes.getFormat(produccionCrear.getProduccionDescripcion()));
@@ -281,70 +276,13 @@ public class ProduccionManagedBean implements Serializable {
             Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
             produccionCrear.setUsuarioCreador(user.getUsuarioId().toString());
             produccionCrear.setPrendaId(prendaId);
-            if (produccionEJB.setCrearProduccion(produccionCrear)) {
-                Produccion p = produccionEJB.traerProduccionDes(Comunes.getFormat(produccionCrear.getProduccionDescripcion()));
-                for (MaterialRequerimientoUtil pu : materialesSelect.getTarget()) {
-
-                    DetalleProduccionUtil dpu = new DetalleProduccionUtil();
-                    dpu.setMaterialId(pu.getMaterialId());
-                    dpu.setProduccionDetaCant(pu.getCantidad());
-                    dpu.setProduccionDetaFecha(produccionCrear.getProduccionFechaDate());
-                    dpu.setProduccionId(String.valueOf(p.getProduccionId()));
-                    dpu.setUsuarioId(pu.getUsuarioId());
-                    dpu.setEstadoId("1");
-                    if (!detalleProduccionEJB.setCrearDetalleProduccion(dpu)) {
-                        mensaje = "Se ha creado la produccion, verifique los detalles de la produccion ";
-                    }
-                }
-                Comunes.mensaje(mensaje, produccionCrear.getProduccionDescripcion());
-            } else {
-                Comunes.mensaje("Error creando la produccion", produccionCrear.getProduccionDescripcion());
-            }
-            limpiarLista();
-            setCantidad(0);
+            produccionCrear.setCantidad(String.valueOf(cantidad));
+            Comunes.mensaje(produccionEJB.setCrearProduccion(produccionCrear), produccionCrear.getProduccionDescripcion());
             req.update(":form");
             req.execute("PF('dlg1').hide();");
         } else {
             Comunes.mensaje("La produccion ya se encuentra registrada", produccionCrear.getProduccionDescripcion());
         }
-    }
-
-    public void onTransfer(TransferEvent event) {
-        for (Object item : event.getItems()) {
-            material = new MaterialRequerimientoUtil();
-            material.setNombre(((MaterialRequerimientoUtil) item).getNombre());
-            material.setMaterialId(((MaterialRequerimientoUtil) item).getMaterialId());
-            material.setReferencia(((MaterialRequerimientoUtil) item).getReferencia());
-            material.setMarcaId(((MaterialRequerimientoUtil) item).getMarcaId());
-            material.setCantidad("0.0");
-        }
-        for (MaterialRequerimientoUtil listaPrendas : materialesSelect.getTarget()) {
-            if (listaPrendas.getMaterialId() == null ? listaPrendas.getMaterialId() == null : listaPrendas.getMaterialId().equals(material.getMaterialId())) {
-                setCantidad(0);
-                RequestContext req = RequestContext.getCurrentInstance();
-                req.execute("PF('dlg2').show();");
-                break;
-            }
-        }
-    }
-
-    public void limpiarLista() {
-        materialesSelect.getSource().clear();
-        materialesSelect.getTarget().clear();
-        getMaterialesSelect();
-    }
-
-    public void cantidades() {
-        for (MaterialRequerimientoUtil listaMateriales : materialesSelect.getTarget()) {
-            if (listaMateriales.getMaterialId() == null ? material.getMaterialId() == null : listaMateriales.getMaterialId().equals(material.getMaterialId())) {
-                listaMateriales.setCantidad(String.valueOf(cantidad));
-                listaMateriales.setUsuarioId(usuarioId);
-                break;
-            }
-        }
-        setCantidad(0);
-        RequestContext req = RequestContext.getCurrentInstance();
-        req.execute("PF('dlg2').hide();");
     }
 
 }

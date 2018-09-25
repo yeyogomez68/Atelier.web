@@ -172,11 +172,31 @@
                         <p:column>
                             <h:outputText value="#{material.referencia}" />
                         </p:column>
+                        <p:column>
+                            <h:outputText value="#{material.cantidad}" />
+                        </p:column>
                     </p:pickList>
                     <p:commandButton value="Crear" action="#{prendaManagedBean.crearPrenda}" update="form,universarGrowl" onclick="PF('dlg1').hide();"/>
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/>
                 </h:form>
             </p:dialog> 
+
+            <p:dialog id="dialogCantidad" header="Cantidad" widgetVar="dlg2" closable="false" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+                <h:form>
+                    <div class="contentDialog">                                                      
+                        <h:outputText value="Cantidad: "/>
+                        <p:inputText placeholder="0" 
+                                     value="#{prendaManagedBean.cantidad}" 
+                                     maxlength="10" 
+                                     required="true" 
+                                     requiredMessage="La cantidad es obligatoria" 
+                                     validatorMessage="La cantidad debe contener numerica">
+                            <f:validateRegex pattern="^\d+(\.\d{1,2})?$" />
+                        </p:inputText>
+                    </div>                                              
+                    <p:commandButton value="Agregar" action="#{prendaManagedBean.cantidades()}" update="universarGrowl,formCrea:PojoPickList"/>                     
+                </h:form>
+            </p:dialog>
 
         </ui:define>
     </ui:composition>

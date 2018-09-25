@@ -35,6 +35,7 @@ public class DetallePrendaManagedBean implements Serializable {
 
     private String idMaterial;
     private String idPrenda;
+    private String cantidad;
 
     public DetallePrendaEJB getDetallePrendaEJB() {
         return detallePrendaEJB;
@@ -113,16 +114,22 @@ public class DetallePrendaManagedBean implements Serializable {
         this.idPrenda = idPrenda;
     }
 
+    public String getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(String cantidad) {
+        this.cantidad = cantidad;
+    }
+
     public void crearDetallePrenda() {
 
-        Comunes.mensaje((detallePrendaEJB.setCrearDetallePrenda(idMaterial, idPrenda) ? "Se ha creado el detalle de la prenda correctamente" : "Error creando el detalle de la prenda"), "");
+        Comunes.mensaje((detallePrendaEJB.setCrearDetallePrenda(idMaterial, idPrenda, cantidad) ? "Se ha creado el detalle de la prenda correctamente" : "Error creando el detalle de la prenda"), "");
 
     }
 
     public void eliminarDetallePrenda(Prendamaterial pm) {
-
         Comunes.mensaje((detallePrendaEJB.setBorrarDetallePrenda(pm) ? "Se ha eliminado el detalle de la prenda correctamente" : "Error eliminando el detalle de la prenda"), "");
-
     }
 
 }

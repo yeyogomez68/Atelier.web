@@ -74,7 +74,7 @@ public class StockMaterialesManagedBean {
     public void ingresarInsumo(Ordencompradeta ordenCompraDeta) {
         RequestContext req = RequestContext.getCurrentInstance();
         if (ordenCompraDetaEJB.setActualizarEstadoOrderCompraDeta(ordenCompraDeta, EstadoEnum.APROBADO.getId())) {
-            Comunes.mensaje((stockMaterialesEJB.setModificarStockMaterial(ordenCompraDeta.getMaterialId(), ordenCompraDeta.getOrdenCompraCantidad().intValue()) ? "Se ha ingresado el insumo correctamente " : "Error ingresando el insumo"), ordenCompraDeta.getMaterialId().getMaterialNombre());
+            Comunes.mensaje((stockMaterialesEJB.setModificarStockMaterial(ordenCompraDeta.getMaterialId(), ordenCompraDeta.getOrdenCompraCantidad()) ? "Se ha ingresado el insumo correctamente " : "Error ingresando el insumo"), ordenCompraDeta.getMaterialId().getMaterialNombre());
             actualizarLista();
             if (getOrdenCompras().isEmpty()) {
                 stockMateriales.clear();
@@ -91,7 +91,7 @@ public class StockMaterialesManagedBean {
 
         for (Ordencompradeta ocd : ordenCompras) {
             if (ordenCompraDetaEJB.setActualizarEstadoOrderCompraDeta(ocd, EstadoEnum.APROBADO.getId())) {
-                Comunes.mensaje((stockMaterialesEJB.setModificarStockMaterial(ocd.getMaterialId(), ocd.getOrdenCompraCantidad().intValue()) ? "Se ha ingresado el insumo correctamente " : "Error ingresando el insumo"), ocd.getMaterialId().getMaterialNombre());
+                Comunes.mensaje((stockMaterialesEJB.setModificarStockMaterial(ocd.getMaterialId(), ocd.getOrdenCompraCantidad()) ? "Se ha ingresado el insumo correctamente " : "Error ingresando el insumo"), ocd.getMaterialId().getMaterialNombre());
             } else {
                 Comunes.mensaje("No es posible ingresar el insumo", "");
             }
