@@ -42,7 +42,7 @@
                     </p:column>
 
                     <p:column headerText="Fecha de reservacion" filterBy="#{alquiler.reservacionFecha.time}" filterMatchMode="contains">
-                        <p:calendar id="fechareservacion" value="#{alquiler.reservacionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                        <p:calendar id="fechareservacion" value="#{alquiler.reservacionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                     </p:column>
 
                     <p:column headerText="Limite de reservacion" filterBy="#{alquiler.reservacionLimit}" filterMatchMode="contains">
@@ -50,7 +50,7 @@
                     </p:column>
 
                     <p:column headerText="Fecha Limite" filterBy="#{alquiler.reservacionLimitFecha.time}" filterMatchMode="contains">
-                        <p:calendar id="fechalimite" value="#{alquiler.reservacionLimitFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                        <p:calendar id="fechalimite" value="#{alquiler.reservacionLimitFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                     </p:column>
 
                     <p:column headerText="Prenda" filterBy="#{alquiler.prendaId.prendaNombre}" filterMatchMode="contains">
@@ -76,7 +76,7 @@
 
                         <f:facet name="header">
                             <div class="headerTableAndCreateBtn">                                
-                                <h4>Items reservados</h4>  
+                                <h4>Prendas reservadas</h4>  
                                 <div class="globalFilterDiv">
                                     <img class="filtroLupa"/>
                                     <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaReservacion').filter()" style="" placeholder="Filtro de Busqueda"/>        
@@ -90,17 +90,22 @@
                         </p:column>
 
                         <p:column headerText="Fecha renta" filterBy="#{reservacion.reservacionFecha.time}" filterMatchMode="contains">
-                            <p:calendar id="FechaRenta" value="#{reservacion.reservacionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                            <p:calendar id="FechaRenta" value="#{reservacion.reservacionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                         </p:column>
 
                         <p:column headerText="Fecha de reintegro" filterBy="#{reservacion.reservacionLimitFecha.time}" filterMatchMode="contains">
-                            <p:calendar id="FechaReintegro" value="#{reservacion.reservacionLimitFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                            <p:calendar id="FechaReintegro" value="#{reservacion.reservacionLimitFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                         </p:column>    
 
 
                         <p:column headerText="Valor de renta" >
                             <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="0" placeholder="0" maxValue="100000000" maxlength="10" requiredMessage="El valor es obligatorio"/>                                                       
                         </p:column> 
+
+                        <p:fileUpload value="#{alquilerManagedBean.file}" mode="simple" skinSimple="true"/>
+
+                        <p:commandButton value="Subir" ajax="false" actionListener="#{alquilerManagedBean.upload}" disabled="false" />
+
 
                         <p:column headerText="Acción" >
                             <p:commandLink value="Rentar" actionListener="#{alquilerManagedBean.entregarReservacionRenTa(reservacion)}" update="frmdialogAprob"/> 
@@ -112,7 +117,7 @@
                 </h:form>
             </p:dialog>
 
-            <p:dialog id="dialogCrear" header="Alquilar" widgetVar="dlg2" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+            <p:dialog id="dialogCrear" style="position:absolute"  header="Alquilar" widgetVar="dlg2" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
                 <h:form id="formdialogCrear">
                     <div class="contentDialog">                    
 
@@ -120,7 +125,6 @@
                         <p:inputNumber value="#{alquilerManagedBean.alquilarUtil.diaRenta}" required="true" minValue="0" placeholder="0" maxValue="366" maxlength="10" requiredMessage="La cantidad de dias es obligatoria"/>
                         <h:outputText value="Cliente: "/>
                         <p:inputNumber value="#{alquilerManagedBean.alquilarUtil.clienteId}" required="true" minValue="0" placeholder="0" maxValue="9999999999" maxlength="11" requiredMessage="La identificacion del cliente es obligatoria"/>
-
                     </div>                          
                     <p:pickList id="PojoPickList" value="#{alquilerManagedBean.prendasSelect}" var="prenda" required="true" requiredMessage="Debe seleccionar minimo un material"
                                 itemValue="#{prenda}" itemLabel="#{prenda.prendaNombre}" showSourceControls="false" showTargetControls="false" showCheckbox="true" responsive="true"
@@ -146,13 +150,27 @@
                 <h:form>
                     <div class="contentDialog">                                                      
                         <h:outputText value="Valor: "/>
-                        <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="1000" placeholder="0" maxValue="10000000" maxlength="10" requiredMessage="El valor es obligatorio"/>
+                        <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="0" placeholder="0" maxValue="10000000" maxlength="10" requiredMessage="El valor es obligatorio"/>
+
+                        <p:fileUpload fileUploadListener="#{alquilerManagedBean.subirArchivos}" 
+                                      label="Buscar Imagen" 
+                                      uploadLabel="Cargar Imagen"
+                                      cancelLabel="Cancelar"
+                                      mode="advanced" 
+                                      dragDropSupport="true" 
+                                      sizeLimit="300000" 
+                                      allowTypes="/(\.|\/)(jpe?g|png)$/" 
+                                      required="true" 
+                                      requiredMessage="Se requiere subir imagen de la prenda"
+                                      sequential="true"
+                                      />
+
+                        <p:growl id="messages" showDetail="true" />
+
                     </div>                              
                     <p:commandButton value="Agregar" action="#{alquilerManagedBean.valorTotal()}" update="universarGrowl,:formdialogCrear:PojoPickList"/>                     
                 </h:form>
             </p:dialog>
-
-
 
         </ui:define>
     </ui:composition>

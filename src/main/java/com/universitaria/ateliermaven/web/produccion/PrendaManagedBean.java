@@ -218,6 +218,9 @@ public class PrendaManagedBean implements Serializable {
     }
 
     public void setColores(List<SelectItem> colores) {
+        for (SelectItem si : colores) {
+            System.out.println("com.universitaria.ateliermaven.web.produccion.PrendaManagedBean.setColores()");
+        }
         this.colores = colores;
     }
 
@@ -325,11 +328,11 @@ public class PrendaManagedBean implements Serializable {
     }
 
     public void onRowEdit(RowEditEvent event) {
-        Prenda prenda = (Prenda) event.getObject();
-
-        if (!prenda.getPrendaNombre().equals("") && !prendaEJB.getexistePrenda(Comunes.getFormat(prenda.getPrendaNombre()))) {
-            Comunes.mensaje((prendaEJB.setModificarPrenda(prenda) ? "Se ha modificado la prenda correctamente " : "Error modificando la prenda "), prendaCrear.getPrendaNombre());
-
+        try {
+            Prenda prenda = (Prenda) event.getObject();
+            Comunes.mensaje((prendaEJB.setModificarPrenda(prenda, colorId, prendaTipoId, ocasionId) ? "Se ha modificado la prenda correctamente " : "Error modificando la prenda "), prendaCrear.getPrendaNombre());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

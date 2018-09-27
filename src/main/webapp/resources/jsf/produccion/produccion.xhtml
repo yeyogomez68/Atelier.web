@@ -14,7 +14,7 @@
         <ui:define name="body">
 
             <h:form id="form">  
-                <p:panel id="panelFiltros" header="Filtros de Produccion" >
+                <p:panel id="panelFiltros" header="Registro de producciones" >
 
                 </p:panel> 
 
@@ -29,7 +29,7 @@
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
                             <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                            <h4>Listado de produccion</h4>
+                            <h4>Lista de producciones</h4>
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
                                 <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaProducciones').filter()" style="" placeholder="Filtro de Busqueda"/>        
@@ -49,7 +49,7 @@
                     </p:column>
 
                     <p:column headerText="Fecha de Produccion" filterBy="#{producciones.produccionFecha.time}" filterMatchMode="contains">
-                        <p:calendar id="datetime" value="#{producciones.produccionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                        <p:calendar id="fechaPro" value="#{producciones.produccionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                     </p:column>
 
                     <p:column headerText="Dias" filterBy="#{producciones.produccionDiaEstimated}" filterMatchMode="contains">
@@ -92,7 +92,7 @@
                         <h:outputText value="Dias Estimados: "/>
                         <p:inputNumber value="#{produccionManagedBean.produccionCrear.produccionDiaEstimated}" required="true" minValue="0" placeholder="0" maxValue="1000" maxlength="10" requiredMessage="La cantidad de dias es obligatoria"/>
                         <h:outputText value="Fecha de produccion: "/>
-                        <p:calendar id="produccionFecha" value="#{produccionManagedBean.produccionCrear.produccionFechaDate}" pattern="dd/MM/yy HH:mm:ss" />
+                        <p:calendar  id="produccionFecha" value="#{produccionManagedBean.produccionCrear.produccionFechaDate}" pattern="dd/MM/yy HH:mm:ss" locale="es"/>
                         <h:outputText value="Prenda: "/>
                         <p:selectOneMenu id="prenda" value="#{produccionManagedBean.prendaId}">                                            
                             <f:selectItems value="#{produccionManagedBean.prendas}" />

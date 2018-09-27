@@ -14,7 +14,7 @@
         <ui:define name="body">
 
             <h:form id="form"> 
-                <p:panel id="panelFiltros" header="StockPrenda" >
+                <p:panel id="panelFiltros" header="Prendas en stock" >
 
                 </p:panel>
                 <p:dataTable var="stockprenda" value="#{stockPrendaManagedBean.stockPrendas}" editable="true" widgetVar="tablaStockPrenda"
@@ -26,8 +26,7 @@
 
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
-
-                            <h4>Listado de Prendas en stock</h4>  
+                            <h4>Lista de prendas disponibles</h4>  
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
                                 <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaStockPrenda').filter()" style="" placeholder="Filtro de Busqueda"/>        

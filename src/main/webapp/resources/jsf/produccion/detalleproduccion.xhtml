@@ -14,7 +14,7 @@
         <ui:define name="body">
 
             <h:form id="form">  
-                <p:panel id="panelFiltros" header="Filtros de Detalle de Produccion" >
+                <p:panel id="panelFiltros" header="Detalle de la produccion" >
 
                 </p:panel> 
 
@@ -29,7 +29,7 @@
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
                             <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                            <h4>Listado de detalles de produccion</h4>  
+                            <h4>Lista de detalles de produccion</h4>  
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
                                 <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaProduccionDetalles').filter()" style="" placeholder="Filtro de Busqueda"/>        
@@ -92,7 +92,7 @@
                         <h:outputText value="Cantidad: "/>
                         <p:inputText placeholder="Cantidad" value="#{detalleProduccionMaganedBean.detalleProduccionCrear.produccionDetaCant}"/>  
                         <h:outputText  value="Fecha:" />
-                        <p:calendar id="popup" value="#{detalleProduccionMaganedBean.detalleProduccionCrear.produccionDetaFecha}" />
+                        <p:calendar id="popup" value="#{detalleProduccionMaganedBean.detalleProduccionCrear.produccionDetaFecha}" locale="es" />
                         <h:outputText value="Material: "/>
                         <p:selectOneMenu id="material" value="#{detalleProduccionMaganedBean.materialId}">                                            
                             <f:selectItems value="#{detalleProduccionMaganedBean.materiales}" />

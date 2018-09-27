@@ -12,7 +12,7 @@
         </ui:define>
         <ui:define name="body">
             <h:form id="form"> 
-                <p:panel id="panelFiltros" header="StockMateriales" >
+                <p:panel id="panelFiltros" header="Materiales en stock" >
                 </p:panel>
                 <p:dataTable var="stockmateriales" value="#{stockMaterialesManagedBean.stockMateriales}" editable="true" widgetVar="tablaStockMateriales"
                              paginator="true"
@@ -23,7 +23,7 @@
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
                             <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                            <h4>Stock de materiales</h4>  
+                            <h4>Materiales disponibles</h4>  
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
                                 <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaStockMateriales').filter()" style="" placeholder="Filtro de Busqueda"/>        

@@ -42,7 +42,7 @@
                     </p:column>
 
                     <p:column headerText="Fecha de alquiler" filterBy="#{devolucion.rentaIdFecha.time}" filterMatchMode="contains">
-                        <p:calendar id="FechaAlquiler" value="#{devolucion.rentaIdFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                        <p:calendar id="FechaAlquiler" value="#{devolucion.rentaIdFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                     </p:column>
 
                     <p:column headerText="Dias" filterBy="#{devolucion.diaRenta}" filterMatchMode="contains">
@@ -50,13 +50,14 @@
                     </p:column>
 
                     <p:column headerText="Fecha de retorno" filterBy="#{devolucion.rentaReinEstadomentFecha.time}" filterMatchMode="contains">
-                        <p:calendar id="FechaRetorno" value="#{devolucion.rentaReinEstadomentFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                        <p:calendar id="FechaRetorno" value="#{devolucion.rentaReinEstadomentFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                     </p:column>
 
 
                     <p:column headerText="Cliente" filterBy="#{devolucion.clienteId.clienteIdentificacion}" filterMatchMode="contains">
                         <h:outputText value="#{devolucion.clienteId.clienteIdentificacion}" />
                     </p:column>
+
                     <p:column headerText="Acción" >
                         <p:commandLink value="Reintegro" actionListener="#{alquilerManagedBean.verRentasActivas(devolucion)}" update="dialogAprob" /> 
                     </p:column>
@@ -90,19 +91,28 @@
                         </p:column>
 
                         <p:column headerText="Fecha renta" filterBy="#{rentadeta.rentaDetaFecha.time}" filterMatchMode="contains">
-                            <p:calendar id="FechaRenta" value="#{rentadeta.rentaDetaFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                            <p:calendar id="FechaRenta" value="#{rentadeta.rentaDetaFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                         </p:column>
 
                         <p:column headerText="Fecha de reintegro" filterBy="#{rentadeta.rentaDetaReinEstadomentFecha.time}" filterMatchMode="contains">
-                            <p:calendar id="FechaReintegro" value="#{rentadeta.rentaDetaReinEstadomentFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                            <p:calendar id="FechaReintegro" value="#{rentadeta.rentaDetaReinEstadomentFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                         </p:column>    
 
                         <p:column headerText="Acción" >
+                            <p:commandLink value="Imagen" actionListener="#{imagenesManagedBean.verImagenDetalleRenta (rentadeta)}" update="imagesDialog" /> 
+                            <br></br>
                             <p:commandLink value="Reintegro" actionListener="#{alquilerManagedBean.reintegrarPrenda(rentadeta)}" update="frmdialogAprob"/> 
                         </p:column>
                     </p:dataTable>
                     <p:commandButton value="Reintegrar Todo" action="#{alquilerManagedBean.reintegrarTodo}" update="dialogAprob,form,dialogAprob,universarGrowl"/> 
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();" update="form"/> 
+                </h:form>
+            </p:dialog>
+
+            <p:dialog  header="Imagen de la prenda" widgetVar="dlg2" modal="true"
+                       resizable="false">
+                <h:form id="imagesDialog">
+                    <p:graphicImage value="#{imagenesManagedBean.image}" height="500" width="350" />
                 </h:form>
             </p:dialog>
         </ui:define>

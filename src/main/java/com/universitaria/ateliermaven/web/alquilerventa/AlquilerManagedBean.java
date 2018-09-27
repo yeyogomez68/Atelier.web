@@ -10,28 +10,42 @@ import com.universitaria.atelier.web.jpa.Rentadeta;
 import com.universitaria.atelier.web.jpa.Reservacion;
 import com.universitaria.atelier.web.jpa.Usuario;
 import com.universitaria.atelier.web.utils.AlquilarUtil;
-import com.universitaria.atelier.web.utils.MaterialRequerimientoUtil;
 import com.universitaria.atelier.web.utils.PrendaUtil;
 import com.universitaria.ateliermaven.ejb.alquilerventas.DetalleRentaEJB;
 import com.universitaria.ateliermaven.ejb.alquilerventas.RentaEJB;
 import com.universitaria.ateliermaven.ejb.alquilerventas.ReservaEJB;
 import com.universitaria.ateliermaven.ejb.produccion.PrendasEJB;
 import com.universitaria.ateliermaven.web.comunes.Comunes;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.TransferEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DualListModel;
+import org.primefaces.model.StreamedContent;
 
 /**
  *
  * @author SoulHunter
  */
 public class AlquilerManagedBean implements Serializable {
+
+    private final String pathUploads = "uploads/renta/temp";
+    private final String pathRentas = "uploads/renta/";
 
     public AlquilerManagedBean() {
         alquilarUtil = new AlquilarUtil();
@@ -51,12 +65,14 @@ public class AlquilerManagedBean implements Serializable {
     private List<Rentadeta> detalleRenta;
     private List<Reservacion> reservacionActivas;
     private List<Reservacion> reservacionClienteActivas;
+    private List<File> listadeArchivos;
 
     private DualListModel<PrendaUtil> prendasSelect;
 
     private AlquilarUtil alquilarUtil;
     private PrendaUtil prendaUtil;
     private int valor;
+    private File file;
 
     public PrendaUtil getPrendaUtil() {
         return prendaUtil;
@@ -74,13 +90,21 @@ public class AlquilerManagedBean implements Serializable {
         this.prendasEJB = prendasEJB;
     }
 
+    public List<File> getListadeArchivos() {
+        return listadeArchivos;
+    }
+
+    public void setListadeArchivos(List<File> listadeArchivos) {
+        this.listadeArchivos = listadeArchivos;
+    }
+
     public DualListModel<PrendaUtil> getPrendasSelect() {
 
         if (prendasSelect == null || (prendasSelect.getSource().isEmpty() && prendasSelect.getTarget().isEmpty())) {
             List<PrendaUtil> source = new ArrayList<>();
             List<PrendaUtil> target = new ArrayList<>();
             source = prendasEJB.getPrendasProduccionDisponibles();
-            setPrendasSelect(new DualListModel<PrendaUtil>(source, target));
+            setPrendasSelect(new DualListModel<>(source, target));
         }
 
         return prendasSelect;
@@ -180,9 +204,7 @@ public class AlquilerManagedBean implements Serializable {
 
     public void verRentasActivas(Renta renta) {
         RequestContext req = RequestContext.getCurrentInstance();
-
         setDetalleRenta(detalleRentaEJB.getRentaDetalleRenta(renta));
-
         req.execute("PF('dlg1').show();");
 
     }
@@ -228,7 +250,7 @@ public class AlquilerManagedBean implements Serializable {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
 
-        if (reservaEJB.entregarReservacionRenTa(reservacion, user, valor)) {
+        if (reservaEJB.entregarReservacionRenTa(reservacion, user, valor, listadeArchivos)) {
             reservacionClienteActivas.clear();
             setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
         }
@@ -238,7 +260,6 @@ public class AlquilerManagedBean implements Serializable {
             RequestContext req = RequestContext.getCurrentInstance();
             req.update(":form");
         }
-
     }
 
     public void liberarReservacion(Reservacion reservacion) {
@@ -248,15 +269,12 @@ public class AlquilerManagedBean implements Serializable {
             reservacionActivas.clear();
             setReservacionActivas(reservaEJB.getReservacionActivas());
         }
-
     }
 
     public void alquilarTodo() {
-
         for (Reservacion r : reservacionClienteActivas) {
             entregarReservacionRenTa(r);
         }
-
     }
 
     public void entregarReservacionVenta(Reservacion reservacion) {
@@ -281,9 +299,18 @@ public class AlquilerManagedBean implements Serializable {
 
         for (Reservacion r : reservacionClienteActivas) {
             entregarReservacionVenta(r);
-
         }
 
+    }
+    private String fileName;
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        System.out.println("com.universitaria.ateliermaven.web.alquilerventa.AlquilerManagedBean.setFileName()" + fileName);
+        this.fileName = fileName;
     }
 
     public void onTransfer(TransferEvent event) {
@@ -292,10 +319,12 @@ public class AlquilerManagedBean implements Serializable {
             prendaUtil.setPrendaNombre(((PrendaUtil) item).getPrendaNombre());
             prendaUtil.setPrendaId(((PrendaUtil) item).getPrendaId());
             prendaUtil.setValor("0.0");
+            setFileName(prendaUtil.getPrendaNombre());
         }
         for (PrendaUtil listaRenta : prendasSelect.getTarget()) {
             if (listaRenta.getPrendaId() == null ? listaRenta.getPrendaId() == null : listaRenta.getPrendaId().equals(prendaUtil.getPrendaId())) {
                 setValor(0);
+                file = null;
                 RequestContext req = RequestContext.getCurrentInstance();
                 req.execute("PF('dlg3').show();");
                 break;
@@ -307,10 +336,12 @@ public class AlquilerManagedBean implements Serializable {
         for (PrendaUtil listaPrenda : prendasSelect.getTarget()) {
             if (listaPrenda.getPrendaId() == null ? prendaUtil.getPrendaId() == null : listaPrenda.getPrendaId().equals(prendaUtil.getPrendaId())) {
                 listaPrenda.setValor(String.valueOf(valor));
+                System.out.println("com.universitaria.ateliermaven.web.alquilerventa.AlquilerManagedBean.valorTotal()" + listaPrenda.getPrendaNombre());
                 break;
             }
         }
         setValor(0);
+        file = null;
         RequestContext req = RequestContext.getCurrentInstance();
         req.execute("PF('dlg3').hide();");
     }
@@ -320,7 +351,7 @@ public class AlquilerManagedBean implements Serializable {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
 
-        if (rentaEJB.setCrearRenta(prendasSelect.getTarget(), alquilarUtil, user)) {
+        if (rentaEJB.setCrearRenta(prendasSelect.getTarget(), alquilarUtil, user, listadeArchivos)) {
             Comunes.mensaje("Se ha creado el alquiler correctamente", "");
         } else {
             Comunes.mensaje("Error creando el alquiler", "");
@@ -347,6 +378,33 @@ public class AlquilerManagedBean implements Serializable {
         setValor(0);
         req.update(":form");
         req.execute("PF('dlg2').hide();");
+    }
+
+    public void subirArchivos(FileUploadEvent event) {
+        if (listadeArchivos == null) {
+            listadeArchivos = new ArrayList<>();
+        }
+        File f = new File("uploads/images/temp");
+        if (!f.exists()) {
+            f.mkdir();
+        }
+        String name = getFileName() + event.getFile().getFileName().substring(event.getFile().getFileName().indexOf("."));
+        File fXmlFile = new File(f, name);
+        try {
+            InputStream inputStream = event.getFile().getInputstream();
+            OutputStream out = new FileOutputStream(fXmlFile);
+            byte buf[] = new byte[1024];
+            int len;
+            while ((len = inputStream.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            out.close();
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Comunes.mensaje("La imagen ", event.getFile().getFileName() + " esta cargada.");
+        listadeArchivos.add(fXmlFile);
     }
 
 }

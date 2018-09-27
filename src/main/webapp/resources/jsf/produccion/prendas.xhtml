@@ -14,7 +14,7 @@
         <ui:define name="body">
 
             <h:form id="form">   
-                <p:panel id="panelLista" header="Listado" >
+                <p:panel id="panelLista" header="Prendas registradas" >
                     <p:dataTable var="prenda" value="#{prendaManagedBean.prendas}" editable="true" widgetVar="tablaPrendas"
                                  paginator="true"
                                  rowsPerPageTemplate="5,10,15"                                     
@@ -25,7 +25,7 @@
                         <f:facet name="header">
                             <div class="headerTableAndCreateBtn">
                                 <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
-                                <h4>Listado de Prendas</h4>  
+                                <h4>Lista de prendas</h4>  
                                 <div class="globalFilterDiv">
                                     <img class="filtroLupa"/>
                                     <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaPrendas').filter()" style="" placeholder="Filtro de Busqueda"/>        
@@ -37,28 +37,32 @@
                         <p:ajax event="rowEditCancel" listener="#{prendaManagedBean.onRowCancel}" update=":universarGrowl" />                          
 
                         <p:column headerText="Nombre" filterBy="#{prenda.prendaNombre}" filterMatchMode="contains">
-                            <p:cellEditor>
-                                <h:outputText value="#{prenda.prendaNombre}" />
-                                <f:facet name="output"><h:outputText value="#{prenda.prendaNombre}" /></f:facet>
-                                <f:facet name="input"><p:inputText id="modelInputNombre" value="#{prenda.prendaNombre}"/></f:facet>
-                            </p:cellEditor>                                
+                            <h:outputText value="#{prenda.prendaNombre}" />
                         </p:column>
 
                         <p:column headerText="Descripción" filterBy="#{prenda.prendaDescripcion}" filterMatchMode="contains">
                             <p:cellEditor>
                                 <h:outputText value="#{prenda.prendaDescripcion}" />
                                 <f:facet name="output"><h:outputText value="#{prenda.prendaDescripcion}" /></f:facet>
-                                <f:facet name="input"><p:inputText id="modelInputDescripcion" value="#{prenda.prendaDescripcion}"/></f:facet>
+                                <f:facet name="input"><p:inputText id="modelInputDescripcion" 
+                                                                   placeholder="Descripcion de Prenda" 
+                                                                   value="#{prenda.prendaDescripcion}"
+                                                                   required="true" 
+                                                                   requiredMessage="La descripcion de la prenda es obligatorio" 
+                                                                   maxlength="300"
+                                                                   validatorMessage="El campo descripcion debe contener solo letras">
+                                        <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                                    </p:inputText></f:facet>
                             </p:cellEditor>                                
                         </p:column>
 
                         <p:column headerText="Color" filterBy="#{prenda.colorId.colorDescrip}" filterMatchMode="contains">
                             <p:cellEditor>
-                                <h:outputText value="#{prenda.colorId.colorDescrip}" />
+                                <h:outputText value="#{prenda.colorId.colorDescrip}"  />
                                 <f:facet name="output"><h:outputText value="#{prenda.colorId.colorDescrip}" /></f:facet>
                                 <f:facet name="input">
                                     <p:selectOneMenu id="color" value="#{prendaManagedBean.colorId}">                                            
-                                        <f:selectItems value="#{prendaManagedBean.colores}" />
+                                        <f:selectItems value="#{prendaManagedBean.colores}"/>
                                     </p:selectOneMenu>
                                 </f:facet>
                             </p:cellEditor>                                
@@ -85,20 +89,7 @@
                                         <f:selectItems value="#{prendaManagedBean.ocasiones}" />
                                     </p:selectOneMenu>
                                 </f:facet>
-                            </p:cellEditor>                                
-                        </p:column>
-
-
-                        <p:column headerText="Estado" filterBy="#{prenda.estadoId.estadoDescrip}" filterMatchMode="contains">
-                            <p:cellEditor>
-                                <h:outputText value="#{prenda.estadoId.estadoDescrip}" />
-                                <f:facet name="output"><h:outputText value="#{prenda.estadoId.estadoDescrip}" /></f:facet>
-                                <f:facet name="input">
-                                    <p:selectOneMenu id="Estado" value="#{prendaManagedBean.estadoId}">                                            
-                                        <f:selectItems value="#{prendaManagedBean.estados}" />
-                                    </p:selectOneMenu>
-                                </f:facet>
-                            </p:cellEditor>                                
+                            </p:cellEditor>
                         </p:column>
 
                         <p:column width="50">

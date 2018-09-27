@@ -42,7 +42,7 @@
                     </p:column>
 
                     <p:column headerText="Fecha de reservacion" filterBy="#{alquiler.reservacionFecha.time}" filterMatchMode="contains">
-                        <p:calendar id="fechareservacion" value="#{alquiler.reservacionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                        <p:calendar id="fechareservacion" value="#{alquiler.reservacionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                     </p:column>
 
                     <p:column headerText="Limite de reservacion" filterBy="#{alquiler.reservacionLimit}" filterMatchMode="contains">
@@ -50,7 +50,7 @@
                     </p:column>
 
                     <p:column headerText="Fecha Limite" filterBy="#{alquiler.reservacionLimitFecha.time}" filterMatchMode="contains">
-                        <p:calendar id="fechalimite" value="#{alquiler.reservacionLimitFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                        <p:calendar id="fechalimite" value="#{alquiler.reservacionLimitFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                     </p:column>
 
                     <p:column headerText="Prenda" filterBy="#{alquiler.prendaId.prendaNombre}" filterMatchMode="contains">
@@ -90,11 +90,11 @@
                         </p:column>
 
                         <p:column headerText="Fecha renta" filterBy="#{reservacion.reservacionFecha.time}" filterMatchMode="contains">
-                            <p:calendar id="FechaRenta" value="#{reservacion.reservacionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                            <p:calendar id="FechaRenta" value="#{reservacion.reservacionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                         </p:column>
 
                         <p:column headerText="Fecha de reintegro" filterBy="#{reservacion.reservacionLimitFecha.time}" filterMatchMode="contains">
-                            <p:calendar id="FechaReintegro" value="#{reservacion.reservacionLimitFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true"/>
+                            <p:calendar id="FechaReintegro" value="#{reservacion.reservacionLimitFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                         </p:column>    
 
 
