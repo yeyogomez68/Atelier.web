@@ -14,7 +14,7 @@
         <ui:define name="body">
 
             <h:form id="form">  
-                <p:panel id="panelFiltros" header="Filtros de Alquiler" >
+                <p:panel id="panelFiltros" header="Reservas y alquiler" >
 
                 </p:panel> 
 
@@ -29,7 +29,7 @@
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
                             <p:commandButton type="button" value="+" onclick="PF('dlg2').show();"/>
-                            <h4>Listado de prendas para alquiler</h4>
+                            <h4>Lista reserva de prendas</h4>
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
                                 <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaAlquiler').filter()" style="" placeholder="Filtro de Busqueda"/>        
@@ -43,10 +43,6 @@
 
                     <p:column headerText="Fecha de reservacion" filterBy="#{alquiler.reservacionFecha.time}" filterMatchMode="contains">
                         <p:calendar id="fechareservacion" value="#{alquiler.reservacionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
-                    </p:column>
-
-                    <p:column headerText="Limite de reservacion" filterBy="#{alquiler.reservacionLimit}" filterMatchMode="contains">
-                        <h:outputText value="#{alquiler.reservacionLimit}" />
                     </p:column>
 
                     <p:column headerText="Fecha Limite" filterBy="#{alquiler.reservacionLimitFecha.time}" filterMatchMode="contains">
@@ -89,23 +85,18 @@
                             <h:outputText value="#{reservacion.prendaId.prendaNombre}" />
                         </p:column>
 
-                        <p:column headerText="Fecha renta" filterBy="#{reservacion.reservacionFecha.time}" filterMatchMode="contains">
+                        <p:column headerText="Fecha de reservacion" filterBy="#{reservacion.reservacionFecha.time}" filterMatchMode="contains">
                             <p:calendar id="FechaRenta" value="#{reservacion.reservacionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                         </p:column>
 
-                        <p:column headerText="Fecha de reintegro" filterBy="#{reservacion.reservacionLimitFecha.time}" filterMatchMode="contains">
-                            <p:calendar id="FechaReintegro" value="#{reservacion.reservacionLimitFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
-                        </p:column>    
+                        <p:column headerText="Dias de renta: " >
+                            <p:inputNumber value="#{alquilerManagedBean.diasRenta}" required="true" minValue="0" placeholder="0" maxValue="366" maxlength="10" requiredMessage="los dias de renta son obligatorios"/>
+                        </p:column> 
 
 
                         <p:column headerText="Valor de renta" >
                             <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="0" placeholder="0" maxValue="100000000" maxlength="10" requiredMessage="El valor es obligatorio"/>                                                       
                         </p:column> 
-
-                        <p:fileUpload value="#{alquilerManagedBean.file}" mode="simple" skinSimple="true"/>
-
-                        <p:commandButton value="Subir" ajax="false" actionListener="#{alquilerManagedBean.upload}" disabled="false" />
-
 
                         <p:column headerText="Acción" >
                             <p:commandLink value="Rentar" actionListener="#{alquilerManagedBean.entregarReservacionRenTa(reservacion)}" update="frmdialogAprob"/> 
@@ -113,7 +104,21 @@
                             <p:commandLink value="Liberar" actionListener="#{alquilerManagedBean.liberarReservacion(reservacion)}" update="frmdialogAprob"/> 
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();" update="form"/> 
+                    <p:fileUpload fileUploadListener="#{alquilerManagedBean.subirArchivos}" 
+                                  label="Buscar Imagen" 
+                                  uploadLabel="Cargar Imagen"
+                                  cancelLabel="Cancelar"
+                                  mode="advanced" 
+                                  dragDropSupport="true"
+                                  fileLimit="1"
+                                  sizeLimit="250000"
+                                  allowTypes="/(\.|\/)(jpe?g|png)$/" 
+                                  required="true" 
+                                  requiredMessage="Se requiere subir imagen de la prenda"
+                                  sequential="true"
+                                  />
+                    <p:growl id="messages" showDetail="true" />
+                    <p:commandButton class="btnCancelar" value="Cancelar" action="#{alquilerManagedBean.cancelar}"  onclick="PF('dlg1').hide();" update="form,frmdialogAprob"/> 
                 </h:form>
             </p:dialog>
 
@@ -146,8 +151,8 @@
                 </h:form>
             </p:dialog> 
 
-            <p:dialog id="dialogCantidad" header="Valor" widgetVar="dlg3" closable="false" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
-                <h:form>
+            <p:dialog id="dialogvalor" header="Valor" widgetVar="dlg3" closable="false" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+                <h:form id="valueform">
                     <div class="contentDialog">                                                      
                         <h:outputText value="Valor: "/>
                         <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="0" placeholder="0" maxValue="10000000" maxlength="10" requiredMessage="El valor es obligatorio"/>
@@ -168,7 +173,7 @@
                         <p:growl id="messages" showDetail="true" />
 
                     </div>                              
-                    <p:commandButton value="Agregar" action="#{alquilerManagedBean.valorTotal()}" update="universarGrowl,:formdialogCrear:PojoPickList"/>                     
+                    <p:commandButton value="Agregar" action="#{alquilerManagedBean.valorTotal()}" update="universarGrowl,:formdialogCrear:PojoPickList,valueform"/>                     
                 </h:form>
             </p:dialog>
 

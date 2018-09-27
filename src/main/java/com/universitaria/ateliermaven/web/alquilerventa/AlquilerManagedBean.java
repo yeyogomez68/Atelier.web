@@ -44,9 +44,6 @@ import org.primefaces.model.StreamedContent;
  */
 public class AlquilerManagedBean implements Serializable {
 
-    private final String pathUploads = "uploads/renta/temp";
-    private final String pathRentas = "uploads/renta/";
-
     public AlquilerManagedBean() {
         alquilarUtil = new AlquilarUtil();
         prendaUtil = new PrendaUtil();
@@ -71,8 +68,16 @@ public class AlquilerManagedBean implements Serializable {
 
     private AlquilarUtil alquilarUtil;
     private PrendaUtil prendaUtil;
-    private int valor;
-    private File file;
+    private String valor;
+    private String diasRenta;
+
+    public String getDiasRenta() {
+        return diasRenta;
+    }
+
+    public void setDiasRenta(String diasRenta) {
+        this.diasRenta = diasRenta;
+    }
 
     public PrendaUtil getPrendaUtil() {
         return prendaUtil;
@@ -114,11 +119,11 @@ public class AlquilerManagedBean implements Serializable {
         this.prendasSelect = prendasSelect;
     }
 
-    public int getValor() {
+    public String getValor() {
         return valor;
     }
 
-    public void setValor(int valor) {
+    public void setValor(String valor) {
         this.valor = valor;
     }
 
@@ -239,7 +244,7 @@ public class AlquilerManagedBean implements Serializable {
 
     public void verEntregarAlquiler(Reservacion reservacion) {
         RequestContext req = RequestContext.getCurrentInstance();
-
+        setFileName(reservacion.getPrendaId().getPrendaNombre());
         setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
         if (reservacionClienteActivas != null && !reservacionClienteActivas.isEmpty()) {
             req.execute("PF('dlg1').show();");
@@ -247,28 +252,51 @@ public class AlquilerManagedBean implements Serializable {
     }
 
     public void entregarReservacionRenTa(Reservacion reservacion) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
-
-        if (reservaEJB.entregarReservacionRenTa(reservacion, user, valor, listadeArchivos)) {
-            reservacionClienteActivas.clear();
-            setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
-        }
-        if (getReservacionClienteActivas().isEmpty()) {
+        if (listadeArchivos != null && !listadeArchivos.isEmpty()) {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
+            if (reservaEJB.entregarReservacionRenTa(reservacion, user, Integer.parseInt(valor), Integer.parseInt(diasRenta), listadeArchivos)) {
+                reservacionClienteActivas.clear();
+                limpiarListaArchivos();
+                setValor("");
+                setDiasRenta("");
+                setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
+            }
             reservacionActivas.clear();
             setReservacionActivas(reservaEJB.getReservacionActivas());
             RequestContext req = RequestContext.getCurrentInstance();
-            req.update(":form");
+            req.update("form");
+            req.execute("PF('dlg1').hide();");
+        } else {
+            Comunes.mensaje("Por favor cargue la imagen de la prenda: ", reservacion.getPrendaId().getPrendaNombre());
+        }
+    }
+
+    private void limpiarListaArchivos() {
+        try {
+            File f = new File(filePath);
+            for (String string : f.list()) {
+                File fileRemove = new File(string);
+                if (fileRemove.exists()) {
+                    fileRemove.delete();
+                }
+            }
+            listadeArchivos.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void liberarReservacion(Reservacion reservacion) {
+        RequestContext req = RequestContext.getCurrentInstance();
         if (reservaEJB.liberarReservacion(reservacion)) {
             reservacionClienteActivas.clear();
             setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
-            reservacionActivas.clear();
-            setReservacionActivas(reservaEJB.getReservacionActivas());
         }
+        reservacionActivas.clear();
+        setReservacionActivas(reservaEJB.getReservacionActivas());
+        req.update("form");
+        req.execute("PF('dlg1').hide();");
     }
 
     public void alquilarTodo() {
@@ -281,7 +309,7 @@ public class AlquilerManagedBean implements Serializable {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
 
-        if (reservaEJB.entregarReservacionVenta(reservacion, user, valor)) {
+        if (reservaEJB.entregarReservacionVenta(reservacion, user, Integer.parseInt(valor))) {
             reservacionClienteActivas.clear();
             setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
         }
@@ -296,11 +324,9 @@ public class AlquilerManagedBean implements Serializable {
     }
 
     public void venderTodo() {
-
         for (Reservacion r : reservacionClienteActivas) {
             entregarReservacionVenta(r);
         }
-
     }
     private String fileName;
 
@@ -323,8 +349,7 @@ public class AlquilerManagedBean implements Serializable {
         }
         for (PrendaUtil listaRenta : prendasSelect.getTarget()) {
             if (listaRenta.getPrendaId() == null ? listaRenta.getPrendaId() == null : listaRenta.getPrendaId().equals(prendaUtil.getPrendaId())) {
-                setValor(0);
-                file = null;
+                setValor("");
                 RequestContext req = RequestContext.getCurrentInstance();
                 req.execute("PF('dlg3').show();");
                 break;
@@ -340,8 +365,7 @@ public class AlquilerManagedBean implements Serializable {
                 break;
             }
         }
-        setValor(0);
-        file = null;
+        setValor("");
         RequestContext req = RequestContext.getCurrentInstance();
         req.execute("PF('dlg3').hide();");
     }
@@ -358,7 +382,7 @@ public class AlquilerManagedBean implements Serializable {
         }
         prendasSelect.getTarget().clear();
         prendasSelect.getSource().clear();
-        setValor(0);
+        setValor("");
         req.update(":form");
         req.execute("PF('dlg2').hide();");
     }
@@ -375,16 +399,18 @@ public class AlquilerManagedBean implements Serializable {
         }
         prendasSelect.getTarget().clear();
         prendasSelect.getSource().clear();
-        setValor(0);
+        setValor("");
         req.update(":form");
         req.execute("PF('dlg2').hide();");
     }
+
+    private String filePath = "uploads/images/temp";
 
     public void subirArchivos(FileUploadEvent event) {
         if (listadeArchivos == null) {
             listadeArchivos = new ArrayList<>();
         }
-        File f = new File("uploads/images/temp");
+        File f = new File(filePath);
         if (!f.exists()) {
             f.mkdir();
         }
@@ -405,6 +431,12 @@ public class AlquilerManagedBean implements Serializable {
         }
         Comunes.mensaje("La imagen ", event.getFile().getFileName() + " esta cargada.");
         listadeArchivos.add(fXmlFile);
+    }
+
+    public void cancelar() {
+        setValor("");
+        setDiasRenta("");
+
     }
 
 }
