@@ -47,11 +47,37 @@
                             </p:column>
                             
                             <p:column headerText="Nombre" filterBy="#{usuarios.usuarioNombre}" filterMatchMode="contains">
+                                <p:cellEditor>
                                 <h:outputText value="#{usuarios.usuarioNombre}" />
+                                <f:facet name="output"><h:outputText value="#{usuarios.usuarioNombre}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText
+                                            value="#{usuarios.usuarioNombre}"
+                                            required="true" 
+                                            requiredMessage="El Nombre es obligatorio" 
+                                            validatorMessage="El Nombre debe contener solo letras"
+                                            maxlength="50">
+                                            <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                                        </p:inputText>
+                                    </f:facet>
+                            </p:cellEditor>  
                             </p:column>
                             
                             <p:column headerText="Apellido" filterBy="#{usuarios.usuarioApellido}" filterMatchMode="contains">
+                                <p:cellEditor>
                                 <h:outputText value="#{usuarios.usuarioApellido}" />
+                                <f:facet name="output"><h:outputText value="#{usuarios.usuarioApellido}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText
+                                            value="#{usuarios.usuarioApellido}"
+                                            required="true" 
+                                            requiredMessage="El Apellido es obligatorio" 
+                                            validatorMessage="El Apellido debe contener solo letras"
+                                            maxlength="50">
+                                            <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                                        </p:inputText>
+                                    </f:facet>
+                                 </p:cellEditor>    
                             </p:column>
                             
                             <p:column headerText="Email" filterBy="#usuarios.usuarioEmail}" filterMatchMode="contains">
