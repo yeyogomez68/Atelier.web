@@ -44,10 +44,11 @@ public class RequerimientoManagedBean implements Serializable{
     private List<Requestdeta> listaItemRq;
     
     private int idReque;
-    private String DetaReque;    
+    private String detaReque;    
     
     private String idRequerimientoModifica;
     private String desrequerimiento;
+    private String estado;
     private boolean dialogModifi=false;
     private boolean dialogCrear=false;
     
@@ -63,6 +64,14 @@ public class RequerimientoManagedBean implements Serializable{
     public RequerimientoManagedBean() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public String getIdRequerimientoModifica() {
@@ -110,11 +119,11 @@ public class RequerimientoManagedBean implements Serializable{
     }
 
     public String getDetaReque() {
-        return DetaReque;
+        return detaReque;
     }
 
-    public void setDetaReque(String DetaReque) {
-        this.DetaReque = DetaReque;
+    public void setDetaReque(String detaReque) {
+        this.detaReque = detaReque;
     }
    
     public DualListModel<MaterialRequerimientoUtil> getListMateriales() {
@@ -307,7 +316,8 @@ public class RequerimientoManagedBean implements Serializable{
     public void verRequerimiento(Encabezadorequerimiento requi){
         RequestContext req = RequestContext.getCurrentInstance();        
         this.idReque = requi.getEncabezadoRequerimientoId();
-        this.DetaReque = requi.getEncabezadoRequerimientoDeta(); 
+        this.detaReque = requi.getEncabezadoRequerimientoDeta(); 
+        this.estado = requi.getEstadoId().getEstadoDescrip();
         llenarDetaRq();
         req.execute("PF('dlg5').show();");
     }
