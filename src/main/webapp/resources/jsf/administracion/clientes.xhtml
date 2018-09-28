@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+        <ui:composition template="./../../../WEB-INF/include/template.xhtml">
+
+                
+            <ui:define name="title">
+            <h:outputText value="Atelier - Clientes"></h:outputText>
+        </ui:define>
+                        
+            <ui:define name="body">
+               
+                 <h:form id="form"> 
+                    <p:panel id="panelFiltros" header="Clientes" >
+                        
+                    </p:panel>
+                     <p:dataTable var="clientes" value="#{clienteManagedBean.clientes}" editable="true" widgetVar="tablaClientes"
+                                     paginator="true"
+                                     rowsPerPageTemplate="5,10,15"                                     
+                                     paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
+                                     emptyMessage="No se han encontrado resultados"
+                                     rows="10">
+                            
+                            <f:facet name="header">
+                                <div class="headerTableAndCreateBtn">
+                                    <p:commandButton type="button" value="+" onclick="PF('dlg1').show();"/>
+                                    <h4>Listado de Clientes</h4>  
+                                    <div class="globalFilterDiv">
+                                        <img class="filtroLupa"/>
+                                        <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaClientes').filter()" style="" placeholder="Filtro de Busqueda"/>        
+                                    </div>                                                                                                    
+                                </div>
+                            </f:facet>
+                            <!--Eventos de tabla editable-->
+                            <p:ajax event="rowEdit" listener="#{clienteManagedBean.onRowEdit}" update=":universarGrowl" />
+                            <p:ajax event="rowEditCancel" listener="#{clienteManagedBean.onRowCancel}" update=":universarGrowl" />
+                            
+                            <p:column headerText="Id" filterBy="#{clientes.clienteId}" filterMatchMode="contains">
+                                <h:outputText value="#{clientes.clienteId}" />
+                            </p:column>
+                            
+                            <p:column headerText="Identificación" filterBy="#{clientes.clienteIdentificacion}" filterMatchMode="contains">
+                                <h:outputText value="#{clientes.clienteIdentificacion}" />
+                            </p:column>
+                                                       
+                            
+                            <p:column headerText="Nombre" filterBy="#{clientes.clienteNombre}" filterMatchMode="contains">
+                                <p:cellEditor>
+                                <h:outputText value="#{clientes.clienteNombre}" />
+                                <f:facet name="output"><h:outputText value="#{clientes.clienteNombre}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText
+                                            
+                                            value="#{clientes.clienteNombre}"
+                                            required="true" 
+                                            requiredMessage="El Nombre es obligatorio" 
+                                            validatorMessage="El Nombre debe contener solo letras"
+                                            maxlength="50">
+                                            <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>  
+                            </p:column>
+                            
+                            
+                            <p:column headerText="Apellido" filterBy="#{clientes.clienteApellido}" filterMatchMode="contains">
+                                <p:cellEditor>
+                                <h:outputText value="#{clientes.clienteApellido}" />
+                                <f:facet name="output"><h:outputText value="#{clientes.clienteApellido}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText
+                                            
+                                            value="#{clientes.clienteApellido}"
+                                            required="true" 
+                                            requiredMessage="El Apellido es obligatorio" 
+                                            validatorMessage="El Apellido debe contener solo letras"
+                                            maxlength="50">
+                                            <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>    
+                            </p:column>
+                            
+                                                        
+                            <p:column headerText="Email" filterBy="#clientes.clienteEmail}" filterMatchMode="contains">
+                                <p:cellEditor>
+                                    <h:outputText value="#{clientes.clienteEmail}" />
+                                    <f:facet name="output"><h:outputText value="#{clientes.clienteEmail}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText
+                                            id="modelInput" 
+                                            value="#{clientes.clienteEmail}"
+                                            required="true" 
+                                            requiredMessage="El Correo es obligatorio" 
+                                            validatorMessage="Formato de Correo Incorrecto"
+                                            maxlength="50">
+                                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>                                
+                            </p:column> 
+                            
+                            <p:column headerText="Estado" filterBy="#{clientes.estadoId.estadoDescrip}" filterMatchMode="contains">                                
+                                    <h:outputText value="#{clientes.estadoId.estadoDescrip}" />                                    
+                            </p:column>
+                            
+                            <!--Columna de evento editar-->
+                            <p:column width="50">
+                                <p:rowEditor />
+                            </p:column>                            
+                        </p:dataTable>
+                    <!--</p:panel>-->                       
+                </h:form>
+                <p:dialog header="Crear Cliente" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+                    <h:form id="formCrea">
+                        <div class="contentDialog">                   
+                            <h:outputText value="Identificación: "/>
+                            <p:inputText placeholder="Identificación" 
+                                         value="#{clienteManagedBean.clienteCrear.identificacion}" 
+                                         maxlength="10" 
+                                         required="true" 
+                                         requiredMessage="La Identificación es obligatoria" 
+                                         validatorMessage="La Identificación debe contener solo numeros">
+                                <f:validateRegex pattern="^\d+$" />
+                            </p:inputText>                                
+                            
+                            <h:outputText value="Nombre: "/>
+                            <p:inputText placeholder="Nombre" value="#{clienteManagedBean.clienteCrear.nombre}" 
+                                         required="true" 
+                                         requiredMessage="El Nombre es obligatorio" 
+                                         maxlength="50"
+                                         validatorMessage="El Campo Nombre debe contener solo letras">
+                                <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                            </p:inputText>
+                            
+                            <h:outputText value="Apellido: "/>
+                            <p:inputText placeholder="Apellido" value="#{clienteManagedBean.clienteCrear.apellido}" 
+                                         required="true" 
+                                         maxlength="50"
+                                         requiredMessage="El Apellido es obligatorio" 
+                                         validatorMessage="El Apellido debe contener solo letras">
+                                <f:validateRegex pattern="^[a-zA-Z ]*$" />
+                            </p:inputText>
+                            
+                            <h:outputText value="Email: "/>
+                            <p:inputText placeholder="Email" value="#{clienteManagedBean.clienteCrear.email}" 
+                                         required="true" 
+                                         requiredMessage="El Correo es obligatorio" 
+                                         validatorMessage="Formato de Correo Incorrecto"
+                                         maxlength="50">
+                                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            </p:inputText>
+                            
+                            <h:outputText value="Password: "/>
+                            <p:password placeholder="Password" value="#{clienteManagedBean.clienteCrear.password}" 
+                                        required="true" 
+                                        requiredMessage="El Password es obligatorio"
+                                        maxlength="50"/>
+                            
+                            <h:outputText value="Dirección: "/>
+                            <p:inputText placeholder="Direccion" value="#{clienteManagedBean.clienteCrear.direccion}" 
+                                         required="true" 
+                                         requiredMessage="La Direccion es obligatoria"
+                                         maxlength="50"/>
+                            
+                            <h:outputText value="Celular: "/>
+                            <p:inputText placeholder="Celular" value="#{clienteManagedBean.clienteCrear.celular}"  
+                                         maxlength="10" 
+                                         required="true" 
+                                         requiredMessage="El Celular es obligatoria" 
+                                         validatorMessage="El Celular debe contener solo numeros">
+                                <f:validateRegex pattern="^\d+$" />
+                            </p:inputText>
+                            
+                            <h:outputText value="Ciudad: "/>
+                            <p:selectOneMenu id="ciudad" value="#{clienteManagedBean.ciudadId}">                                            
+                                <f:selectItems value="#{clienteManagedBean.ciudades}" />
+                            </p:selectOneMenu>
+                            
+                            <h:outputText value="Roll: "/>
+                            <p:selectOneMenu id="roll" value="#{clienteManagedBean.rollId}">                                            
+                                <f:selectItems value="#{clienteManagedBean.roles}" />
+                            </p:selectOneMenu>         
+                        </div>
+                        <p:commandButton value="Crear" action="#{clienteManagedBean.crearCliente}" update="form,formCrea,universarGrowl"/>                            
+                        <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
+                    </h:form>
+                </p:dialog>
+            
+            </ui:define>
+
+        </ui:composition>
+
+</html>
