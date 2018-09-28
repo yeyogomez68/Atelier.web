@@ -258,7 +258,10 @@ public class AlquilerManagedBean implements Serializable {
         try {
             RequestContext req = RequestContext.getCurrentInstance();
             setFileName(reservacion.getPrendaId().getPrendaNombre());
-            setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
+            List<Reservacion> data = new ArrayList<>();
+            data.add(reservacion);
+
+            setReservacionClienteActivas(data);
             if (reservacionClienteActivas != null && !reservacionClienteActivas.isEmpty()) {
                 req.execute("PF('dlg1').show();");
             }
@@ -275,17 +278,19 @@ public class AlquilerManagedBean implements Serializable {
             if (listadeArchivos != null && !listadeArchivos.isEmpty()) {
                 FacesContext facesContext = FacesContext.getCurrentInstance();
                 Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
+                System.out.println("com.universitaria.ateliermaven.web.alquilerventa.AlquilerManagedBean.entregarReservacionRenTa()");
                 if (reservaEJB.entregarReservacionRenTa(reservacion, user, Integer.parseInt(valor), Integer.parseInt(diasRenta), listadeArchivos)) {
                     reservacionClienteActivas.clear();
                     limpiarListaArchivos();
                     setValor("");
                     setDiasRenta("");
-                    setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
                 }
                 reservacionActivas.clear();
                 setReservacionActivas(reservaEJB.getReservacionActivas());
                 RequestContext req = RequestContext.getCurrentInstance();
+                req.update("frmdialogAprob");
                 req.update("form");
+
                 if (getReservacionClienteActivas().isEmpty()) {
                     req.execute("PF('dlg1').hide();");
                 }
@@ -323,6 +328,7 @@ public class AlquilerManagedBean implements Serializable {
             }
             reservacionActivas.clear();
             setReservacionActivas(reservaEJB.getReservacionActivas());
+            req.update("frmdialogAprob");
             req.update("form");
             req.execute("PF('dlg1').hide();");
         } catch (Exception e) {
@@ -342,11 +348,10 @@ public class AlquilerManagedBean implements Serializable {
         try {
             FacesContext facesContext = FacesContext.getCurrentInstance();
             Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
-            System.err.println("Entre aqui");
             if (reservaEJB.entregarReservacionVenta(reservacion, user, Integer.parseInt(valor))) {
                 System.out.println("com.universitaria.ateliermaven.web.alquilerventa.AlquilerManagedBean.entregarReservacionVenta()");
                 reservacionClienteActivas.clear();
-                setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
+                setValor("");
             }
 
             if (getReservacionClienteActivas().isEmpty()) {
@@ -354,6 +359,7 @@ public class AlquilerManagedBean implements Serializable {
                 setReservacionActivas(reservaEJB.getReservacionActivas());
                 RequestContext req = RequestContext.getCurrentInstance();
                 req.update("form");
+                req.execute("PF('dlg1').hide();");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -409,6 +415,7 @@ public class AlquilerManagedBean implements Serializable {
                     break;
                 }
             }
+            System.out.println("3 valor");
             setValor("");
             RequestContext req = RequestContext.getCurrentInstance();
             req.execute("PF('dlg3').hide();");
@@ -432,6 +439,7 @@ public class AlquilerManagedBean implements Serializable {
             }
             prendasSelect.getTarget().clear();
             prendasSelect.getSource().clear();
+            System.out.println("4 valor");
             setValor("");
             req.update(":form");
             req.execute("PF('dlg2').hide();");
@@ -455,6 +463,7 @@ public class AlquilerManagedBean implements Serializable {
             }
             prendasSelect.getTarget().clear();
             prendasSelect.getSource().clear();
+            System.out.println("5 valor");
             setValor("");
             alquilarUtil = new AlquilarUtil();
             req.update(":form");
@@ -495,6 +504,7 @@ public class AlquilerManagedBean implements Serializable {
     }
 
     public void cancelar() {
+        System.out.println("6 valor");
         setValor("");
         setDiasRenta("");
 
