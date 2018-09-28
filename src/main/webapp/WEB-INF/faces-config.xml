@@ -186,4 +186,9 @@
         <managed-bean-class>com.universitaria.ateliermaven.web.alquilerventa.ImagenesManagedBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>clienteManagedBean</managed-bean-name>
+        <managed-bean-class>com.universitaria.ateliermaven.web.administrador.ClienteManagedBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
 </faces-config>
