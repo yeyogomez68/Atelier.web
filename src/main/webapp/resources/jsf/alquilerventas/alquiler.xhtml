@@ -29,7 +29,7 @@
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
                             <p:commandButton type="button" value="+" onclick="PF('dlg2').show();"/>
-                            <h4>Lista reserva de prendas</h4>
+                            <h4>Prendas reservadas</h4>
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
                                 <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaAlquiler').filter()" style="" placeholder="Filtro de Busqueda"/>        
@@ -95,7 +95,7 @@
 
 
                         <p:column headerText="Valor de renta" >
-                            <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="0" placeholder="0" maxValue="100000000" maxlength="10" requiredMessage="El valor es obligatorio"/>                                                       
+                            <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="0" placeholder="0" maxValue="100000000" maxlength="10" requiredMessage="El valor es obligatorio"/>
                         </p:column> 
 
                         <p:column headerText="Acción" >

@@ -62,20 +62,20 @@ public class AlquilerManagedBean implements Serializable {
     private List<Rentadeta> detalleRenta;
     private List<Reservacion> reservacionActivas;
     private List<Reservacion> reservacionClienteActivas;
-    private List<File> listadeArchivos;
+    private List<File> listadeArchivos = new ArrayList<>();
 
     private DualListModel<PrendaUtil> prendasSelect;
 
     private AlquilarUtil alquilarUtil;
     private PrendaUtil prendaUtil;
-    private String valor;
-    private String diasRenta;
+    private int valor;
+    private int diasRenta;
 
-    public String getDiasRenta() {
+    public int getDiasRenta() {
         return diasRenta;
     }
 
-    public void setDiasRenta(String diasRenta) {
+    public void setDiasRenta(int diasRenta) {
         this.diasRenta = diasRenta;
     }
 
@@ -119,11 +119,11 @@ public class AlquilerManagedBean implements Serializable {
         this.prendasSelect = prendasSelect;
     }
 
-    public String getValor() {
+    public int getValor() {
         return valor;
     }
 
-    public void setValor(String valor) {
+    public void setValor(int valor) {
         this.valor = valor;
     }
 
@@ -208,68 +208,100 @@ public class AlquilerManagedBean implements Serializable {
     }
 
     public void verRentasActivas(Renta renta) {
-        RequestContext req = RequestContext.getCurrentInstance();
-        setDetalleRenta(detalleRentaEJB.getRentaDetalleRenta(renta));
-        req.execute("PF('dlg1').show();");
+        try {
+            RequestContext req = RequestContext.getCurrentInstance();
+            setDetalleRenta(detalleRentaEJB.getRentaDetalleRenta(renta));
+            req.execute("PF('dlg1').show();");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
     public void reintegrarPrenda(Rentadeta rentadetalle) {
-        if (detalleRentaEJB.reintegrarPrenda(rentadetalle)) {
-            System.out.println("com.universitaria.ateliermaven.web.alquilerventa.AlquilerManagedBean.reintegrarPrenda()");
-            detalleRenta.clear();
-            setDetalleRenta(detalleRentaEJB.getRentaDetalleRenta(rentadetalle.getRentaId()));
-            if (detalleRenta.isEmpty()) {
-                rentaEJB.reintegrarRenta(rentadetalle.getRentaId());
-                rentasActivas.clear();
-                setRentasActivas(rentaEJB.getRentasActivas());
+        try {
+            if (detalleRentaEJB.reintegrarPrenda(rentadetalle)) {
+                System.out.println("com.universitaria.ateliermaven.web.alquilerventa.AlquilerManagedBean.reintegrarPrenda()");
+                detalleRenta.clear();
+                setDetalleRenta(detalleRentaEJB.getRentaDetalleRenta(rentadetalle.getRentaId()));
+                if (detalleRenta.isEmpty()) {
+                    rentaEJB.reintegrarRenta(rentadetalle.getRentaId());
+                    rentasActivas.clear();
+                    setRentasActivas(rentaEJB.getRentasActivas());
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     public void reintegrarTodo() {
-        boolean error = false;
-        for (Rentadeta rd : detalleRenta) {
-            if (!detalleRentaEJB.reintegrarPrenda(rd)) {
-                error = true;
+
+        try {
+            boolean error = false;
+            for (Rentadeta rd : detalleRenta) {
+                if (!detalleRentaEJB.reintegrarPrenda(rd)) {
+                    error = true;
+                }
             }
+            if (!error) {
+                rentaEJB.reintegrarRenta(detalleRenta.get(0).getRentaId());
+                rentasActivas.clear();
+                setRentasActivas(rentaEJB.getRentasActivas());
+            }
+            detalleRenta.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (!error) {
-            rentaEJB.reintegrarRenta(detalleRenta.get(0).getRentaId());
-            rentasActivas.clear();
-            setRentasActivas(rentaEJB.getRentasActivas());
-        }
-        detalleRenta.clear();
+
     }
 
     public void verEntregarAlquiler(Reservacion reservacion) {
-        RequestContext req = RequestContext.getCurrentInstance();
-        setFileName(reservacion.getPrendaId().getPrendaNombre());
-        setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
-        if (reservacionClienteActivas != null && !reservacionClienteActivas.isEmpty()) {
-            req.execute("PF('dlg1').show();");
+        try {
+            RequestContext req = RequestContext.getCurrentInstance();
+            setFileName(reservacion.getPrendaId().getPrendaNombre());
+            setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
+            if (reservacionClienteActivas != null && !reservacionClienteActivas.isEmpty()) {
+                req.execute("PF('dlg1').show();");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     public void entregarReservacionRenTa(Reservacion reservacion) {
-        if (listadeArchivos != null && !listadeArchivos.isEmpty()) {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
-            if (reservaEJB.entregarReservacionRenTa(reservacion, user, Integer.parseInt(valor), Integer.parseInt(diasRenta), listadeArchivos)) {
-                reservacionClienteActivas.clear();
-                limpiarListaArchivos();
-                setValor("");
-                setDiasRenta("");
-                setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
+
+        try {
+            if (valor > 0 && diasRenta > 0) {
+                if (listadeArchivos != null && !listadeArchivos.isEmpty()) {
+                    FacesContext facesContext = FacesContext.getCurrentInstance();
+                    Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
+                    if (reservaEJB.entregarReservacionRenTa(reservacion, user, valor, diasRenta, listadeArchivos)) {
+                        reservacionClienteActivas.clear();
+                        limpiarListaArchivos();
+                        setValor(0);
+                        setDiasRenta(0);
+                        setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
+                    }
+                    reservacionActivas.clear();
+                    setReservacionActivas(reservaEJB.getReservacionActivas());
+                    RequestContext req = RequestContext.getCurrentInstance();
+                    req.update("form");
+                    if (getReservacionClienteActivas().isEmpty()) {
+                        req.execute("PF('dlg1').hide();");
+                    }
+                } else {
+                    Comunes.mensaje("Por favor cargue la imagen de la prenda: ", reservacion.getPrendaId().getPrendaNombre());
+                }
+            } else {
+                Comunes.mensaje("Por favor valide que el valor y los dias de renta sean mayores a 0 para la prenda: ", reservacion.getPrendaId().getPrendaNombre());
             }
-            reservacionActivas.clear();
-            setReservacionActivas(reservaEJB.getReservacionActivas());
-            RequestContext req = RequestContext.getCurrentInstance();
-            req.update("form");
-            req.execute("PF('dlg1').hide();");
-        } else {
-            Comunes.mensaje("Por favor cargue la imagen de la prenda: ", reservacion.getPrendaId().getPrendaNombre());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     private void limpiarListaArchivos() {
@@ -288,15 +320,21 @@ public class AlquilerManagedBean implements Serializable {
     }
 
     public void liberarReservacion(Reservacion reservacion) {
-        RequestContext req = RequestContext.getCurrentInstance();
-        if (reservaEJB.liberarReservacion(reservacion)) {
-            reservacionClienteActivas.clear();
-            setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
+
+        try {
+            RequestContext req = RequestContext.getCurrentInstance();
+            if (reservaEJB.liberarReservacion(reservacion)) {
+                reservacionClienteActivas.clear();
+                setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
+            }
+            reservacionActivas.clear();
+            setReservacionActivas(reservaEJB.getReservacionActivas());
+            req.update("form");
+            req.execute("PF('dlg1').hide();");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        reservacionActivas.clear();
-        setReservacionActivas(reservaEJB.getReservacionActivas());
-        req.update("form");
-        req.execute("PF('dlg1').hide();");
+
     }
 
     public void alquilarTodo() {
@@ -306,19 +344,31 @@ public class AlquilerManagedBean implements Serializable {
     }
 
     public void entregarReservacionVenta(Reservacion reservacion) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
 
-        if (reservaEJB.entregarReservacionVenta(reservacion, user, Integer.parseInt(valor))) {
-            reservacionClienteActivas.clear();
-            setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
-        }
+        try {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
+            System.err.println("Entre aqui");
+            if (valor > 0) {
+                if (reservaEJB.entregarReservacionVenta(reservacion, user, valor)) {
+                    System.out.println("com.universitaria.ateliermaven.web.alquilerventa.AlquilerManagedBean.entregarReservacionVenta()");
+                    reservacionClienteActivas.clear();
+                    setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
+                }
 
-        if (getReservacionClienteActivas().isEmpty()) {
-            reservacionActivas.clear();
-            setReservacionActivas(reservaEJB.getReservacionActivas());
-            RequestContext req = RequestContext.getCurrentInstance();
-            req.update(":form");
+                if (getReservacionClienteActivas().isEmpty()) {
+                    reservacionActivas.clear();
+                    setReservacionActivas(reservaEJB.getReservacionActivas());
+                    RequestContext req = RequestContext.getCurrentInstance();
+                    req.update("form");
+                }
+
+            } else {
+                Comunes.mensaje("Por favor valide que el valor sea mayor a 0 de la prenda: ", reservacion.getPrendaId().getPrendaNombre());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
@@ -335,88 +385,110 @@ public class AlquilerManagedBean implements Serializable {
     }
 
     public void setFileName(String fileName) {
-        System.out.println("com.universitaria.ateliermaven.web.alquilerventa.AlquilerManagedBean.setFileName()" + fileName);
         this.fileName = fileName;
     }
 
     public void onTransfer(TransferEvent event) {
-        for (Object item : event.getItems()) {
-            prendaUtil = new PrendaUtil();
-            prendaUtil.setPrendaNombre(((PrendaUtil) item).getPrendaNombre());
-            prendaUtil.setPrendaId(((PrendaUtil) item).getPrendaId());
-            prendaUtil.setValor("0.0");
-            setFileName(prendaUtil.getPrendaNombre());
-        }
-        for (PrendaUtil listaRenta : prendasSelect.getTarget()) {
-            if (listaRenta.getPrendaId() == null ? listaRenta.getPrendaId() == null : listaRenta.getPrendaId().equals(prendaUtil.getPrendaId())) {
-                setValor("");
-                RequestContext req = RequestContext.getCurrentInstance();
-                req.execute("PF('dlg3').show();");
-                break;
+
+        try {
+            for (Object item : event.getItems()) {
+                prendaUtil = new PrendaUtil();
+                prendaUtil.setPrendaNombre(((PrendaUtil) item).getPrendaNombre());
+                prendaUtil.setPrendaId(((PrendaUtil) item).getPrendaId());
+                prendaUtil.setValor("0.0");
+                setFileName(prendaUtil.getPrendaNombre());
             }
+            for (PrendaUtil listaRenta : prendasSelect.getTarget()) {
+                if (listaRenta.getPrendaId() == null ? listaRenta.getPrendaId() == null : listaRenta.getPrendaId().equals(prendaUtil.getPrendaId())) {
+                    setValor(0);
+                    RequestContext req = RequestContext.getCurrentInstance();
+                    req.execute("PF('dlg3').show();");
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     public void valorTotal() {
-        for (PrendaUtil listaPrenda : prendasSelect.getTarget()) {
-            if (listaPrenda.getPrendaId() == null ? prendaUtil.getPrendaId() == null : listaPrenda.getPrendaId().equals(prendaUtil.getPrendaId())) {
-                listaPrenda.setValor(String.valueOf(valor));
-                System.out.println("com.universitaria.ateliermaven.web.alquilerventa.AlquilerManagedBean.valorTotal()" + listaPrenda.getPrendaNombre());
-                break;
+
+        try {
+            for (PrendaUtil listaPrenda : prendasSelect.getTarget()) {
+                if (listaPrenda.getPrendaId() == null ? prendaUtil.getPrendaId() == null : listaPrenda.getPrendaId().equals(prendaUtil.getPrendaId())) {
+                    listaPrenda.setValor(String.valueOf(valor));
+                    break;
+                }
             }
+            setValor(0);
+            RequestContext req = RequestContext.getCurrentInstance();
+            req.execute("PF('dlg3').hide();");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        setValor("");
-        RequestContext req = RequestContext.getCurrentInstance();
-        req.execute("PF('dlg3').hide();");
+
     }
 
     public void crearRenta() {
-        RequestContext req = RequestContext.getCurrentInstance();
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
 
-        if (rentaEJB.setCrearRenta(prendasSelect.getTarget(), alquilarUtil, user, listadeArchivos)) {
-            Comunes.mensaje("Se ha creado el alquiler correctamente", "");
-        } else {
-            Comunes.mensaje("Error creando el alquiler", "");
+        try {
+            RequestContext req = RequestContext.getCurrentInstance();
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
+
+            if (rentaEJB.setCrearRenta(prendasSelect.getTarget(), alquilarUtil, user, listadeArchivos)) {
+                Comunes.mensaje("Se ha creado el alquiler correctamente", "");
+            } else {
+                Comunes.mensaje("Error creando el alquiler", "");
+            }
+            prendasSelect.getTarget().clear();
+            prendasSelect.getSource().clear();
+            setValor(0);
+            req.update(":form");
+            req.execute("PF('dlg2').hide();");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        prendasSelect.getTarget().clear();
-        prendasSelect.getSource().clear();
-        setValor("");
-        req.update(":form");
-        req.execute("PF('dlg2').hide();");
+
     }
 
     public void crearVenta() {
-        RequestContext req = RequestContext.getCurrentInstance();
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
 
-        if (rentaEJB.setCrearVenta(prendasSelect.getTarget(), alquilarUtil, user)) {
-            Comunes.mensaje("Se ha creado el alquiler correctamente", "");
-        } else {
-            Comunes.mensaje("Error creando el alquiler", "");
+        try {
+            RequestContext req = RequestContext.getCurrentInstance();
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
+
+            if (rentaEJB.setCrearVenta(prendasSelect.getTarget(), alquilarUtil, user)) {
+                Comunes.mensaje("Se ha registrado la venta correctamente", "");
+            } else {
+                Comunes.mensaje("Error registrando la venta", "");
+            }
+            prendasSelect.getTarget().clear();
+            prendasSelect.getSource().clear();
+            setValor(0);
+            alquilarUtil = new AlquilarUtil();
+            req.update(":form");
+            req.execute("PF('dlg2').hide();");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        prendasSelect.getTarget().clear();
-        prendasSelect.getSource().clear();
-        setValor("");
-        req.update(":form");
-        req.execute("PF('dlg2').hide();");
+
     }
 
-    private String filePath = "uploads/images/temp";
+    private final String filePath = "uploads/images/temp";
 
     public void subirArchivos(FileUploadEvent event) {
-        if (listadeArchivos == null) {
-            listadeArchivos = new ArrayList<>();
-        }
-        File f = new File(filePath);
-        if (!f.exists()) {
-            f.mkdir();
-        }
-        String name = getFileName() + event.getFile().getFileName().substring(event.getFile().getFileName().indexOf("."));
-        File fXmlFile = new File(f, name);
+
         try {
+            File f = new File(filePath);
+            if (!f.exists()) {
+                f.mkdir();
+            }
+            String name = getFileName() + event.getFile().getFileName().substring(event.getFile().getFileName().indexOf("."));
+            File fXmlFile = new File(f, name);
+
             InputStream inputStream = event.getFile().getInputstream();
             OutputStream out = new FileOutputStream(fXmlFile);
             byte buf[] = new byte[1024];
@@ -426,16 +498,17 @@ public class AlquilerManagedBean implements Serializable {
             }
             out.close();
             inputStream.close();
+            Comunes.mensaje("La imagen ", event.getFile().getFileName() + " esta cargada.");
+            listadeArchivos.add(fXmlFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Comunes.mensaje("La imagen ", event.getFile().getFileName() + " esta cargada.");
-        listadeArchivos.add(fXmlFile);
+
     }
 
     public void cancelar() {
-        setValor("");
-        setDiasRenta("");
+        setValor(0);
+        setDiasRenta(0);
 
     }
 

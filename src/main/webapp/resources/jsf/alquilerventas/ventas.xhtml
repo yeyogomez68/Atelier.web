@@ -12,12 +12,9 @@
         </ui:define>
 
         <ui:define name="body">
-
             <h:form id="form">  
-                <p:panel id="panelFiltros" header="Filtros de ventas" >
-
+                <p:panel id="panelFiltros" header="Venta de prendas" >
                 </p:panel> 
-
                 <!--                    <p:panel id="panelLista" header="Listado" >-->
                 <p:dataTable var="alquiler" value="#{alquilerManagedBean.reservacionActivas}" editable="true" widgetVar="tablaAlquiler"
                              paginator="true"
@@ -29,7 +26,7 @@
                     <f:facet name="header">
                         <div class="headerTableAndCreateBtn">
                             <p:commandButton type="button" value="+" onclick="PF('dlg2').show();"/>
-                            <h4>Listado de prendas para vender</h4>
+                            <h4>Prendas reservadas</h4>
                             <div class="globalFilterDiv">
                                 <img class="filtroLupa"/>
                                 <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaAlquiler').filter()" style="" placeholder="Filtro de Busqueda"/>        
@@ -40,43 +37,36 @@
                     <p:column headerText="Cliente" filterBy="#{alquiler.clienteId.clienteIdentificacion}" filterMatchMode="contains">
                         <h:outputText value="#{alquiler.clienteId.clienteIdentificacion}" />
                     </p:column>
-
                     <p:column headerText="Fecha de reservacion" filterBy="#{alquiler.reservacionFecha.time}" filterMatchMode="contains">
                         <p:calendar id="fechareservacion" value="#{alquiler.reservacionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                     </p:column>
-
-                    <p:column headerText="Limite de reservacion" filterBy="#{alquiler.reservacionLimit}" filterMatchMode="contains">
-                        <h:outputText value="#{alquiler.reservacionLimit}" />
-                    </p:column>
-
                     <p:column headerText="Fecha Limite" filterBy="#{alquiler.reservacionLimitFecha.time}" filterMatchMode="contains">
                         <p:calendar id="fechalimite" value="#{alquiler.reservacionLimitFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                     </p:column>
-
                     <p:column headerText="Prenda" filterBy="#{alquiler.prendaId.prendaNombre}" filterMatchMode="contains">
                         <h:outputText value="#{alquiler.prendaId.prendaNombre}" />
                     </p:column>
                     <p:column headerText="Acción" >
-                        <p:commandLink value="Entregar" actionListener="#{alquilerManagedBean.verEntregarAlquiler(alquiler)}" update="dialogEntregarReservacion" /> 
+                        <p:commandLink value="Entregar" actionListener="#{alquilerManagedBean.verEntregarAlquiler(alquiler)}" update="frmdialogvender" /> 
                     </p:column>
                     <!--Columna de evento editar-->
                 </p:dataTable>
                 <!--</p:panel>--> 
             </h:form>
 
-
-            <p:dialog id="dialogEntregarReservacion" header="Entregar Reservacion" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
-                <h:form id="frmdialogAprob">                      
-                    <p:dataTable id="tabla" var="reservacion" value="#{alquilerManagedBean.reservacionClienteActivas}" editable="true" widgetVar="tablaReservacion"
+         <p:dialog id="dialogEntregarReservacion" header="Vender prenda" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
+                <h:form id="frmdialogvender">                      
+                    <p:dataTable id="tabla" var="reservacion" 
+                                 value="#{alquilerManagedBean.reservacionClienteActivas}" 
+                                 editable="true" widgetVar="tablaReservacion"
                                  paginator="true"
                                  rowsPerPageTemplate="5,10,15"                                     
                                  paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}  {RowsPerPageDropdown}"                                     
                                  emptyMessage="No se han encontrado resultados"
                                  rows="10">
-
                         <f:facet name="header">
                             <div class="headerTableAndCreateBtn">                                
-                                <h4>Items reservados</h4>  
+                                <h4>Prendas reservadas</h4>  
                                 <div class="globalFilterDiv">
                                     <img class="filtroLupa"/>
                                     <p:inputText id="globalFilter" class="globalFilter"  onkeyup="PF('tablaReservacion').filter()" style="" placeholder="Filtro de Busqueda"/>        
@@ -84,46 +74,50 @@
                             </div>
                         </f:facet>
                         <!--Eventos de tabla editable-->                      
-
                         <p:column headerText="Prenda" filterBy="#{reservacion.prendaId.prendaNombre}" filterMatchMode="contains">
                             <h:outputText value="#{reservacion.prendaId.prendaNombre}" />
                         </p:column>
-
-                        <p:column headerText="Fecha renta" filterBy="#{reservacion.reservacionFecha.time}" filterMatchMode="contains">
+                        <p:column headerText="Fecha de reservacion" filterBy="#{reservacion.reservacionFecha.time}" filterMatchMode="contains">
                             <p:calendar id="FechaRenta" value="#{reservacion.reservacionFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
                         </p:column>
-
-                        <p:column headerText="Fecha de reintegro" filterBy="#{reservacion.reservacionLimitFecha.time}" filterMatchMode="contains">
-                            <p:calendar id="FechaReintegro" value="#{reservacion.reservacionLimitFecha.time}" pattern="dd/MM/yy HH:mm:ss" disabled="true" locale="es"/>
-                        </p:column>    
-
-
-                        <p:column headerText="Valor de renta" >
-                            <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="0" placeholder="0" maxValue="100000000" maxlength="10" requiredMessage="El valor es obligatorio"/>                                                       
+                        <p:column headerText="Valor de prenda" >
+                            <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="0" placeholder="0" maxValue="100000000" maxlength="10" requiredMessage="El valor es obligatorio"/>
                         </p:column> 
-
                         <p:column headerText="Acción" >
-                            <p:commandLink value="Vender" actionListener="#{alquilerManagedBean.entregarReservacionVenta(reservacion)}" update="frmdialogAprob"/> 
+                            <p:commandLink value="Vender" actionListener="#{alquilerManagedBean.entregarReservacionVenta(reservacion)}" update="frmdialogvender"/> 
                             <br></br>
-                            <p:commandLink value="Liberar" actionListener="#{alquilerManagedBean.liberarReservacion(reservacion)}" update="frmdialogAprob"/> 
+                            <p:commandLink value="Liberar" actionListener="#{alquilerManagedBean.liberarReservacion(reservacion)}" update="frmdialogvender"/> 
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();" update="form"/> 
+                    
+                    <p:fileUpload fileUploadListener="#{alquilerManagedBean.subirArchivos}" 
+                                  label="Buscar Imagen" 
+                                  uploadLabel="Cargar Imagen"
+                                  cancelLabel="Cancelar"
+                                  mode="advanced" 
+                                  dragDropSupport="true"
+                                  fileLimit="1"
+                                  sizeLimit="250000"
+                                  allowTypes="/(\.|\/)(jpe?g|png)$/" 
+                                  required="true" 
+                                  requiredMessage="Se requiere subir imagen de la prenda"
+                                  sequential="true"
+                                  />
+                     <p:growl id="messages" showDetail="true" />
+                     
+                    <p:commandButton class="btnCancelar" value="Cancelar" action="#{alquilerManagedBean.cancelar}"  onclick="PF('dlg1').hide();" update="form,frmdialogvender"/> 
                 </h:form>
             </p:dialog>
 
-            <p:dialog id="dialogCrear" header="Alquilar" widgetVar="dlg2" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
+            <p:dialog id="dialogCrear" header="Vender" widgetVar="dlg2" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
                 <h:form id="formdialogCrear">
                     <div class="contentDialog">                    
-
                         <h:outputText value="Cliente: "/>
                         <p:inputNumber value="#{alquilerManagedBean.alquilarUtil.clienteId}" required="true" minValue="0" placeholder="0" maxValue="9999999999" maxlength="11" requiredMessage="La identificacion del cliente es obligatoria"/>
-
                     </div>                          
                     <p:pickList id="PojoPickList" value="#{alquilerManagedBean.prendasSelect}" var="prenda" required="true" requiredMessage="Debe seleccionar minimo un material"
                                 itemValue="#{prenda}" itemLabel="#{prenda.prendaNombre}" showSourceControls="false" showTargetControls="false" showCheckbox="true" responsive="true"
                                 showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"  addLabel="+" removeLabel="-" converter="prendasPickListConverter">
-
                         <f:facet name="sourceCaption">Prendas</f:facet>
                         <f:facet name="targetCaption">Seleccion</f:facet>
                         <p:ajax event="transfer" listener="#{alquilerManagedBean.onTransfer}" />                        
@@ -133,25 +127,20 @@
                         <p:column>
                             <h:outputText value="#{prenda.valor}" />
                         </p:column>
-
                     </p:pickList>
                     <p:commandButton value="Vender" action="#{alquilerManagedBean.crearVenta}" update="form,formdialogCrear,universarGrowl" /> 
                     <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg2').hide();"/> 
                 </h:form>
             </p:dialog> 
-
             <p:dialog id="dialogCantidad" header="Valor" widgetVar="dlg3" closable="false" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
                 <h:form>
                     <div class="contentDialog">                                                      
                         <h:outputText value="Valor: "/>
-                        <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="1000" placeholder="0" maxValue="10000000" maxlength="10" requiredMessage="El valor es obligatorio"/>
+                        <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="0" placeholder="0" maxValue="10000000" maxlength="10" requiredMessage="El valor es obligatorio"/>
                     </div>                              
                     <p:commandButton value="Agregar" action="#{alquilerManagedBean.valorTotal()}" update="universarGrowl,:formdialogCrear:PojoPickList"/>                     
                 </h:form>
             </p:dialog>
-
-
-
         </ui:define>
     </ui:composition>
 </html>
