@@ -166,7 +166,7 @@ public class ClienteManagedBean {
         RequestContext req = RequestContext.getCurrentInstance();
         clienteCrear.setEstadoId("1");
         clienteCrear.setCiudadId(ciudadId);
-        clienteCrear.setRollId(rollId);
+        clienteCrear.setRollId("3");
         if(clienteEJB.setCrearCliente(clienteCrear)){
             msg = new FacesMessage("Mensaje", "Cliente Creado con exito"); 
             clientes.clear();

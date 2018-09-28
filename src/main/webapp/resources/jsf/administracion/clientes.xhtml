@@ -182,11 +182,7 @@
                             <p:selectOneMenu id="ciudad" value="#{clienteManagedBean.ciudadId}">                                            
                                 <f:selectItems value="#{clienteManagedBean.ciudades}" />
                             </p:selectOneMenu>
-                            
-                            <h:outputText value="Roll: "/>
-                            <p:selectOneMenu id="roll" value="#{clienteManagedBean.rollId}">                                            
-                                <f:selectItems value="#{clienteManagedBean.roles}" />
-                            </p:selectOneMenu>         
+                                                   
                         </div>
                         <p:commandButton value="Crear" action="#{clienteManagedBean.crearCliente}" update="form,formCrea,universarGrowl"/>                            
                         <p:commandButton class="btnCancelar" value="Cancelar" onclick="PF('dlg1').hide();"/> 
