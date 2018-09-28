@@ -353,7 +353,6 @@ public class AlquilerManagedBean implements Serializable {
                 reservacionClienteActivas.clear();
                 setValor("");
             }
-
             if (getReservacionClienteActivas().isEmpty()) {
                 reservacionActivas.clear();
                 setReservacionActivas(reservaEJB.getReservacionActivas());
