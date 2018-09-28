@@ -17,8 +17,7 @@ import com.universitaria.ateliermaven.ejb.alquilerventas.ReservaEJB;
 import com.universitaria.ateliermaven.ejb.produccion.PrendasEJB;
 import com.universitaria.ateliermaven.web.comunes.Comunes;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,16 +26,14 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.TransferEvent;
-import org.primefaces.model.DefaultStreamedContent;
+
 import org.primefaces.model.DualListModel;
-import org.primefaces.model.StreamedContent;
 
 /**
  *
@@ -68,14 +65,14 @@ public class AlquilerManagedBean implements Serializable {
 
     private AlquilarUtil alquilarUtil;
     private PrendaUtil prendaUtil;
-    private int valor;
-    private int diasRenta;
+    private String valor;
+    private String diasRenta;
 
-    public int getDiasRenta() {
+    public String getDiasRenta() {
         return diasRenta;
     }
 
-    public void setDiasRenta(int diasRenta) {
+    public void setDiasRenta(String diasRenta) {
         this.diasRenta = diasRenta;
     }
 
@@ -119,11 +116,11 @@ public class AlquilerManagedBean implements Serializable {
         this.prendasSelect = prendasSelect;
     }
 
-    public int getValor() {
+    public String getValor() {
         return valor;
     }
 
-    public void setValor(int valor) {
+    public void setValor(String valor) {
         this.valor = valor;
     }
 
@@ -274,29 +271,26 @@ public class AlquilerManagedBean implements Serializable {
     public void entregarReservacionRenTa(Reservacion reservacion) {
 
         try {
-            if (valor > 0 && diasRenta > 0) {
-                if (listadeArchivos != null && !listadeArchivos.isEmpty()) {
-                    FacesContext facesContext = FacesContext.getCurrentInstance();
-                    Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
-                    if (reservaEJB.entregarReservacionRenTa(reservacion, user, valor, diasRenta, listadeArchivos)) {
-                        reservacionClienteActivas.clear();
-                        limpiarListaArchivos();
-                        setValor(0);
-                        setDiasRenta(0);
-                        setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
-                    }
-                    reservacionActivas.clear();
-                    setReservacionActivas(reservaEJB.getReservacionActivas());
-                    RequestContext req = RequestContext.getCurrentInstance();
-                    req.update("form");
-                    if (getReservacionClienteActivas().isEmpty()) {
-                        req.execute("PF('dlg1').hide();");
-                    }
-                } else {
-                    Comunes.mensaje("Por favor cargue la imagen de la prenda: ", reservacion.getPrendaId().getPrendaNombre());
+
+            if (listadeArchivos != null && !listadeArchivos.isEmpty()) {
+                FacesContext facesContext = FacesContext.getCurrentInstance();
+                Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
+                if (reservaEJB.entregarReservacionRenTa(reservacion, user, Integer.parseInt(valor), Integer.parseInt(diasRenta), listadeArchivos)) {
+                    reservacionClienteActivas.clear();
+                    limpiarListaArchivos();
+                    setValor("");
+                    setDiasRenta("");
+                    setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
+                }
+                reservacionActivas.clear();
+                setReservacionActivas(reservaEJB.getReservacionActivas());
+                RequestContext req = RequestContext.getCurrentInstance();
+                req.update("form");
+                if (getReservacionClienteActivas().isEmpty()) {
+                    req.execute("PF('dlg1').hide();");
                 }
             } else {
-                Comunes.mensaje("Por favor valide que el valor y los dias de renta sean mayores a 0 para la prenda: ", reservacion.getPrendaId().getPrendaNombre());
+                Comunes.mensaje("Por favor cargue la imagen de la prenda: ", reservacion.getPrendaId().getPrendaNombre());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -349,24 +343,18 @@ public class AlquilerManagedBean implements Serializable {
             FacesContext facesContext = FacesContext.getCurrentInstance();
             Usuario user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
             System.err.println("Entre aqui");
-            if (valor > 0) {
-                if (reservaEJB.entregarReservacionVenta(reservacion, user, valor)) {
-                    System.out.println("com.universitaria.ateliermaven.web.alquilerventa.AlquilerManagedBean.entregarReservacionVenta()");
-                    reservacionClienteActivas.clear();
-                    setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
-                }
-
-                if (getReservacionClienteActivas().isEmpty()) {
-                    reservacionActivas.clear();
-                    setReservacionActivas(reservaEJB.getReservacionActivas());
-                    RequestContext req = RequestContext.getCurrentInstance();
-                    req.update("form");
-                }
-
-            } else {
-                Comunes.mensaje("Por favor valide que el valor sea mayor a 0 de la prenda: ", reservacion.getPrendaId().getPrendaNombre());
+            if (reservaEJB.entregarReservacionVenta(reservacion, user, Integer.parseInt(valor))) {
+                System.out.println("com.universitaria.ateliermaven.web.alquilerventa.AlquilerManagedBean.entregarReservacionVenta()");
+                reservacionClienteActivas.clear();
+                setReservacionClienteActivas(reservaEJB.getReservacionClienteActivas(reservacion.getClienteId()));
             }
 
+            if (getReservacionClienteActivas().isEmpty()) {
+                reservacionActivas.clear();
+                setReservacionActivas(reservaEJB.getReservacionActivas());
+                RequestContext req = RequestContext.getCurrentInstance();
+                req.update("form");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -400,7 +388,7 @@ public class AlquilerManagedBean implements Serializable {
             }
             for (PrendaUtil listaRenta : prendasSelect.getTarget()) {
                 if (listaRenta.getPrendaId() == null ? listaRenta.getPrendaId() == null : listaRenta.getPrendaId().equals(prendaUtil.getPrendaId())) {
-                    setValor(0);
+                    setValor("");
                     RequestContext req = RequestContext.getCurrentInstance();
                     req.execute("PF('dlg3').show();");
                     break;
@@ -421,7 +409,7 @@ public class AlquilerManagedBean implements Serializable {
                     break;
                 }
             }
-            setValor(0);
+            setValor("");
             RequestContext req = RequestContext.getCurrentInstance();
             req.execute("PF('dlg3').hide();");
         } catch (Exception e) {
@@ -444,7 +432,7 @@ public class AlquilerManagedBean implements Serializable {
             }
             prendasSelect.getTarget().clear();
             prendasSelect.getSource().clear();
-            setValor(0);
+            setValor("");
             req.update(":form");
             req.execute("PF('dlg2').hide();");
         } catch (Exception e) {
@@ -467,7 +455,7 @@ public class AlquilerManagedBean implements Serializable {
             }
             prendasSelect.getTarget().clear();
             prendasSelect.getSource().clear();
-            setValor(0);
+            setValor("");
             alquilarUtil = new AlquilarUtil();
             req.update(":form");
             req.execute("PF('dlg2').hide();");
@@ -507,8 +495,8 @@ public class AlquilerManagedBean implements Serializable {
     }
 
     public void cancelar() {
-        setValor(0);
-        setDiasRenta(0);
+        setValor("");
+        setDiasRenta("");
 
     }
 
