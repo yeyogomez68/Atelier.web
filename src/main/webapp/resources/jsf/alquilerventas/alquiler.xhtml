@@ -157,7 +157,10 @@
                         <h:outputText value="Valor: "/>
                         <p:inputNumber value="#{alquilerManagedBean.valor}" required="true" minValue="0" placeholder="0" maxValue="10000000" maxlength="10" requiredMessage="El valor es obligatorio"/>
 
-                        <p:fileUpload fileUploadListener="#{alquilerManagedBean.subirArchivos}" 
+                        
+
+                    </div>   
+                    <p:fileUpload fileUploadListener="#{alquilerManagedBean.subirArchivos}" 
                                       label="Buscar Imagen" 
                                       uploadLabel="Cargar Imagen"
                                       cancelLabel="Cancelar"
@@ -171,8 +174,6 @@
                                       />
 
                         <p:growl id="messages" showDetail="true" />
-
-                    </div>                              
                     <p:commandButton value="Agregar" action="#{alquilerManagedBean.valorTotal()}" update="universarGrowl,:formdialogCrear:PojoPickList,valueform"/>                     
                 </h:form>
             </p:dialog>

@@ -96,7 +96,15 @@
             </p:dialog> 
 
             <p:dialog id="dialogModificar" header="Modificar Requerimiento" widgetVar="dlg2" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true">
-                <h:form id="frmdialogModificar">                      
+                <h:form id="frmdialogModificar">    
+                    <div class="contentDialog2">                    
+                        <p:outputLabel value="Id RQ: "/>
+                        <h:outputText value="#{requerimientoManagedBean.idReque}"/> 
+                        <p:outputLabel value="Motivo o Detalle: "/>
+                        <h:outputText value="#{requerimientoManagedBean.detaReque}"/> 
+                        <p:outputLabel value="Estado: "/>
+                        <h:outputText value="#{requerimientoManagedBean.estado}"/> 
+                    </div> 
                     <p:pickList id="PojoPickList" value="#{requerimientoManagedBean.listMaterialesRq}" var="material" required="true" requiredMessage="Debe Seleccionar minimo un Material"
                                 itemValue="#{material}" itemLabel="#{material.nombre}" showSourceControls="false" showTargetControls="false" showCheckbox="true" responsive="true"
                                 showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"  addLabel="+" removeLabel="-" converter="materialPickListConverter">

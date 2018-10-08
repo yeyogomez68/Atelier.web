@@ -59,7 +59,15 @@
                 </p:dataTable>
             </h:form>
             <p:dialog id="dialogAprob" header="Aprobación de Items de Requerimiento" widgetVar="dlg1" modal="true" showEffect="explode" hideEffect="bounce" minHeight="100" resizable="false" responsive="true" >
-                <h:form id="frmdialogAprob">                      
+                <h:form id="frmdialogAprob">   
+                    <div class="contentDialog2">                    
+                        <p:outputLabel value="Id RQ: "/>
+                        <h:outputText value="#{autorizacionManagedBean.idReque}"/> 
+                        <p:outputLabel value="Motivo o Detalle: "/>
+                        <h:outputText value="#{autorizacionManagedBean.detaReque}"/> 
+                        <p:outputLabel value="Estado: "/>
+                        <h:outputText value="#{autorizacionManagedBean.estado}"/> 
+                    </div> 
                     <p:dataTable id="tabla" var="detaRq" value="#{autorizacionManagedBean.listaItemRq}" editable="true" widgetVar="tablaDetaRequeri"
                                  paginator="true"
                                  rowsPerPageTemplate="5,10,15"                                     

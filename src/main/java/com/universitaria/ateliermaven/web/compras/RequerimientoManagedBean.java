@@ -211,7 +211,10 @@ public class RequerimientoManagedBean implements Serializable{
     public void modificarRequerimiento(Encabezadorequerimiento requeri){
         RequestContext req = RequestContext.getCurrentInstance();        
         setIdRequerimientoModifica(String.valueOf(requeri.getEncabezadoRequerimientoId()));
-        listMaterialesRq = new DualListModel<>();        
+        listMaterialesRq = new DualListModel<>();   
+        this.idReque = requeri.getEncabezadoRequerimientoId();
+        this.detaReque = requeri.getEncabezadoRequerimientoDeta(); 
+        this.estado = requeri.getEstadoId().getEstadoDescrip();
         if(listMaterialesRq == null || (listMaterialesRq.getSource().isEmpty() && listMaterialesRq.getTarget().isEmpty())){            
             List<MaterialRequerimientoUtil> source = new ArrayList<>();
             List<MaterialRequerimientoUtil> target = new ArrayList<>();      

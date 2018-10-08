@@ -634,3 +634,17 @@ aside{
 .ui-slider-horizontal .ui-slider-handle{
     background-color: white;
 }
+.ui-fileupload-choose{
+    border: 1px solid #1f89ce;
+    color: #FFFFFF;
+    background: #2399e5;
+    width: 100%;
+}
+.ui-button-icon-only .ui-button-text{
+    display: none;
+}
+.ui-button-icon-only{
+    width: 30px;
+    height: 30px;
+    background-color: white;
+}

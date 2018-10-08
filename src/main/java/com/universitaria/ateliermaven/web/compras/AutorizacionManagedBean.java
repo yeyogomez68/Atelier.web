@@ -35,6 +35,7 @@ public class AutorizacionManagedBean {
     private List<Requestdeta> listaItemRq;
     private int idReque;
     private String DetaReque;
+    private String estado;
     private boolean editable=true;
 
     /**
@@ -43,6 +44,14 @@ public class AutorizacionManagedBean {
     public AutorizacionManagedBean() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         user = (Usuario) facesContext.getExternalContext().getSessionMap().get("user");
+    }
+    
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public List<Encabezadorequerimiento> getListaRequerimientos() {
@@ -114,7 +123,8 @@ public class AutorizacionManagedBean {
             setEditable(true);
         }
         this.idReque = requi.getEncabezadoRequerimientoId();
-        this.DetaReque = requi.getEncabezadoRequerimientoDeta(); 
+        this.DetaReque = requi.getEncabezadoRequerimientoDeta();
+        this.estado = requi.getEstadoId().getEstadoDescrip();
         llenarDetaRq();
         req.execute("PF('dlg1').show();");
     }
